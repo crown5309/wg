@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.GoodsClassDao">
+
+    <insert id="addGoodsClass" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO goods_class
+            (class_name,class_img_url,parent_id,class_level,show_order)
+        VALUES
+            (#{className},#{classImgUrl},#{parentId},#{classLevel},#{showOrder})
+    </insert>
+
+    <select id="countGoodsClass" resultType="Integer">
+        SELECT count(0)
+        FROM goods_class w
+    </select>
+
+    <select id="listGoodsClass" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id            id,
+            w.class_name    className,
+            w.class_img_url classImgUrl,
+            w.class_level   classLevel,
+            w.parent_id     parentId,
+            w.show_order    showOrder
+        FROM goods_class w
+        <where>
+        	  <choose>
+		        <when test="parentId!=0">
+		           	parent_id=#{parentId}
+		        </when>
+		        <otherwise>
+		           class_level=1
+		        </otherwise>
+    </choose>
+        </where>
+        ORDER BY w.show_order
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+
+    <update id="updateGoodsClass" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE goods_class
+        SET
+            class_name = #{className},class_img_url=#{classImgUrl},show_order=#{showOrder}
+        WHERE id = #{id}
+    </update>
+<select id="getAllGoodsClass" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id            id,
+            w.class_name    className,
+            w.class_img_url classImgUrl,
+            w.class_level   classLevel,
+            w.parent_id     parentId
+        FROM goods_class w
+    where app_id=#{appId}
+        ORDER BY w.show_order
+       
+    </select>
+</mapper>
