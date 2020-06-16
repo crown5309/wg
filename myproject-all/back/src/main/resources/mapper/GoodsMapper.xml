@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.GoodsDao">
+
+    <insert id="addGoods" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO goods
+            (goods_name,price,sku_store,banner_url,detail_url,
+            multi_index,class_id1,class_id2,class_id3,app_id
+            )
+        VALUES
+            (#{goodsName},#{price},#{skuStore},#{bannerUrl},#{detailUrl},
+            #{multiIndex},#{classId1},#{classId2},#{classId3},#{appId}
+            )
+    </insert>
+    <select id="getAllGoodsByState" resultType="com.alibaba.fastjson.JSONObject">
+    	select goods_name goodsName,id goodsId,banner_url bannerUrl,price,sku_store skuStore
+    	from goods where state=#{state} and app_id=#{appId} 
+    	<if test="classId!='' and classId !=null">
+    		and class_id3=#{classId}
+    	</if>
+    	limit #{pageNo},#{pageSize}
+    </select>
+    <update id="updateGoodsByIds">    
+        update goods   set     
+            state=#{state} 
+        where id in     
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+         #{item}   
+        </foreach>
+	</update>  
+	<select id="getGoodsById" resultType="com.alibaba.fastjson.JSONObject">
+    	select goods_name goodsName,id goodsId,banner_url bannerUrl,price,sku_store skuStore,
+    	detail_url detailUrl,multi_index multiIndex 
+    	from goods where id=#{appId} 
+    </select>
+</mapper>
