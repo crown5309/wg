@@ -42,10 +42,10 @@ public class OrderServiceImpl implements OrderService {
 
 		// 从session获取用户信息
 
-		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
-		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		/* Session session = SecurityUtils.getSubject().getSession(); JSONObject
+		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);*/
 
-		String userId = userInfo.getString("userId");
+		String userId ="11";// userInfo.getString("userId");
 		//订单id
 		String orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 		List<String> orderIds=new ArrayList<String>();//返回订单列表id
@@ -65,7 +65,6 @@ public class OrderServiceImpl implements OrderService {
 			BigDecimal practicePay=null;//实际价
 			for(StoreGoodsList sg:list) {//订单拆分对应商家
 				goodsList =(List<JSONObject>) sg.get("goodsList");
-				 String uuid = UUIDUtil.uuid();
 				 totalPay=new BigDecimal(0);//总价
 			     discountPay=new BigDecimal(0);//优惠价
 				 practicePay=new BigDecimal(0);//实际价
@@ -75,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
 						}
 					 map=new HashMap<String, BigDecimal>();
 					 orderGoods = new JSONObject();
-					 setOrderGoods(orderId, 0, goods, orderGoods, uuid);
+					 setOrderGoods(orderId, 0, goods, orderGoods);
 					 getPrice(map,goods,goods.getIntValue("count"));
 					 totalPay= totalPay.add(map.get("totalPay"));
 					 discountPay= totalPay.add(map.get("discountPay"));
@@ -113,8 +112,7 @@ public class OrderServiceImpl implements OrderService {
 			getPrice(map,goods,count);
 			// 商品订单表保存
 			JSONObject orderGoods = new JSONObject();
-			String uuid = UUIDUtil.uuid();
-			setOrderGoods(orderId, count, goods, orderGoods, uuid);
+			setOrderGoods(orderId, count, goods, orderGoods);
 			orderGoodsDao.insertOrderGoods(orderGoods);
 			// 订单表保存
 			JSONObject order = new JSONObject();
@@ -143,7 +141,8 @@ public class OrderServiceImpl implements OrderService {
 		order.put("state","1");
 	}
 
-	private void setOrderGoods(String orderId, int count, JSONObject goods, JSONObject orderGoods, String uuid) {
+	private void setOrderGoods(String orderId, int count, JSONObject goods, JSONObject orderGoods) {
+		String uuid = UUIDUtil.uuid();
 		orderGoods.put("orderGoodsId", uuid);
 		if(count==0) {
 			orderGoods.put("count", goods.get("count"));

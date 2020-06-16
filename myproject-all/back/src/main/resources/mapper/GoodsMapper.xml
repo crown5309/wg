@@ -34,13 +34,13 @@
     	detail_url detailUrl,multi_index multiIndex ,store_id storeId
     	from goods where id=#{appId} 
     </select>
-    <update id="updateGoodsStoreSku"  parameterType="java.util.List">  
-    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+    <update id="updateGoodsStoreSku"  parameterType="java.util.List">
+        <foreach collection="list" item="item"  separator=";">
         update goods
         <set>
-            sku_store=sku_store-#{count}
+            sku_store=sku_store-#{item.count}
         </set>
-        where id=#{goodsId} and sku_store=sku_store-#{count} >0
+        where id=#{item.goodsId} and sku_store-#{item.count} >0
     </foreach>      
 </update>
     <update id="updateGoodStoreCount" >

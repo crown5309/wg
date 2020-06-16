@@ -12,6 +12,7 @@
 			<id column="goodsName" property="goodsName" />
 			<id column="count" property="count" />
 			<id column="price" property="price" />
+			<id column="skuStore" property="skuStore" />
 		</collection>
 	</resultMap>
 	<select id="getStoreList" resultMap="storeGoodsList">
@@ -21,7 +22,8 @@
 		g.goods_name goodsName,
 		g.price,
 		s.id store_id,
-		s.store_name storeName
+		s.store_name storeName,
+		g.sku_store skuStore
 		FROM
 		shop_cart cart
 		INNER JOIN goods g ON cart.goods_id = g.id

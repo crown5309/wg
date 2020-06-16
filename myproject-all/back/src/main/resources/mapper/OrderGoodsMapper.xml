@@ -11,7 +11,6 @@
     					#{item.orderGoodsId},
     					#{item.goodsId},
     					#{item.count},
-    					#{item.totalPay},
     					#{item.storeId},
     					#{item.orderId},
     					#{item.price}

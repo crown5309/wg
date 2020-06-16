@@ -3,22 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.OrderDao">
 	<insert id="insertOrderBatch" parameterType="java.util.List" useGeneratedKeys="false">
-    			insert into order
+    			insert into shop_order
     			(order_id,user_id,total_pay,discount_pay,practice_pay,state)
     			values
     			<foreach collection="list" item="item" index="index" separator=",">
     				(
-    					#{item.order_id},
-    					#{item.user_id},
-    					#{item.total_pay},
-    					#{item.discount_pay},
-    					#{item.practice_pay},
+    					#{item.orderId},
+    					#{item.userId},
+    					#{item.totalPay},
+    					#{item.discountPay},
+    					#{item.practicePay},
     					#{item.state}
     				)
     		     </foreach>		
     </insert>    
     <insert id="insertOrder" parameterType="com.alibaba.fastjson.JSONObject" >
-    			insert into order
+    			insert into shop_order
     			(order_id,user_id,total_pay,discount_pay,practice_pay,state)
     			values
     				(
