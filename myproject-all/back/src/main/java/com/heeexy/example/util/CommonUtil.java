@@ -44,7 +44,16 @@ public class CommonUtil {
 		resultJson.put("info", new JSONObject());
 		return resultJson;
 	}
-
+	/**
+	 * 返回错误信息JSON
+	 */
+	public static JSONObject errorJson(String mgs) {
+		JSONObject resultJson = new JSONObject();
+		resultJson.put("code", "tip");
+		resultJson.put("msg", mgs);
+		resultJson.put("info", new JSONObject());
+		return resultJson;
+	}
 	/**
 	 * 查询分页结果后的封装工具方法
 	 *

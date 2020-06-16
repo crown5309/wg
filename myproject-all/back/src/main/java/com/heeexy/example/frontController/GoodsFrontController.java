@@ -16,16 +16,13 @@ public class GoodsFrontController {
 	@Autowired
 	private GoodsService goodservice;
 
-	/**
-	 * 查询商品分类列表
-	 */
+	
 	@RequestMapping("/addGoods")
 	public Object addGoods(HttpServletRequest request) {
 		return  CommonUtil.successJson(goodservice.addGoods(CommonUtil.request2Json(request)));
 	}
-	/**
-	 * 查询商品分类列表
-	 */
+	
+	
 	@RequestMapping("/getAllGoodsByState")
 	public Object getAllGoodsClass(String state,int pageSize,int pageNo,String appId,String classId) {
 		return  CommonUtil.successJson(goodservice.getAllGoodsByState(state,pageSize,pageNo,appId,classId));
@@ -35,9 +32,7 @@ public class GoodsFrontController {
 	public Object getGoodsById(String goodsId) {
 		return  CommonUtil.successJson(goodservice.getGoodsById(goodsId));
 	}
-	/**
-	 * 查询商品分类列表
-	 */
+	
 	@RequestMapping("/updateGoodsByIds")
 	public Object updateGoodsByIds(String state,String ids) {
 		return  CommonUtil.successJson(goodservice.updateGoodsByIds(state,ids));

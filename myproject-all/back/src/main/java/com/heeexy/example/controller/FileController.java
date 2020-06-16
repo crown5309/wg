@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.config.system.ServerConfig;
-import com.heeexy.example.service.goodsClassService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.DateUtil;
-import com.heeexy.example.util.OrderCodeFactory;
+import com.heeexy.example.util.OrderIdFactory;
 @RestController
 public class FileController {
 	@Value("${imgPath}")
@@ -39,7 +36,7 @@ public class FileController {
         System.out.println("getContentType-->" + contentType);*/
         String format = DateUtil.format(new Date(), "yyyMMdd")+"/";
 		String filePath = imgPath+format;
-		String substring = OrderCodeFactory.getOrderIdByUUId()+fileName.substring(fileName.lastIndexOf("."));
+		String substring = OrderIdFactory.getOrderIdByUUId()+fileName.substring(fileName.lastIndexOf("."));
         try {
 			uploadFile(file.getBytes(), filePath,substring);
         } catch (Exception e) {

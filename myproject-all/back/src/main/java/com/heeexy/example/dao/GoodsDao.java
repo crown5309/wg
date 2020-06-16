@@ -16,4 +16,8 @@ public interface GoodsDao {
 
 	JSONObject getGoodsById(String goodsId);
 
+	String updateGoodsStoreSku(List<JSONObject> orderGoodList);
+
+	int updateGoodStoreCount(@Param("goodsId")String goodsId,@Param("count") int count);
+
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.CartDao">
+
+	<resultMap id="storeGoodsList"
+		type="com.heeexy.example.entity.StoreGoodsList">
+		<id column="store_id" property="store_id" />
+		<result column="storeName" property="storeName" />
+		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
+			<id column="goodsId" property="goodsId" />
+			<id column="goodsName" property="goodsName" />
+			<id column="count" property="count" />
+			<id column="price" property="price" />
+		</collection>
+	</resultMap>
+	<select id="getStoreList" resultMap="storeGoodsList">
+		SELECT
+		cart.count count,
+		cart.goods_id goodsId,
+		g.goods_name goodsName,
+		g.price,
+		s.id store_id,
+		s.store_name storeName
+		FROM
+		shop_cart cart
+		INNER JOIN goods g ON cart.goods_id = g.id
+		INNER JOIN store s ON g.store_id = s.id
+	</select>
+</mapper>
