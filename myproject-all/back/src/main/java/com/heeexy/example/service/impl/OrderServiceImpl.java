@@ -41,11 +41,11 @@ public class OrderServiceImpl implements OrderService {
 	public Object submitOrder(String goodsId, String goodsCount, String cartIds) {
 
 		// 从session获取用户信息
-		/*
-		 * Session session = SecurityUtils.getSubject().getSession(); JSONObject
-		 * userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
-		 */
-		String userId = "11";//userInfo.getString("userId");
+
+		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
+		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+
+		String userId = userInfo.getString("userId");
 		//订单id
 		String orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 		List<String> orderIds=new ArrayList<String>();//返回订单列表id
@@ -63,8 +63,8 @@ public class OrderServiceImpl implements OrderService {
 			BigDecimal totalPay=null;//总价
 			BigDecimal discountPay=null;//优惠价
 			BigDecimal practicePay=null;//实际价
-			for(StoreGoodsList l:list) {//订单拆分对应商家
-				 goodsList = l.getGoodsList();
+			for(StoreGoodsList sg:list) {//订单拆分对应商家
+				goodsList =(List<JSONObject>) sg.get("goodsList");
 				 String uuid = UUIDUtil.uuid();
 				 totalPay=new BigDecimal(0);//总价
 			     discountPay=new BigDecimal(0);//优惠价
