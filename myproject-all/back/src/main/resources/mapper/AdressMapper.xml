@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.AddressDao">
+
+    <insert id="addAddress" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO shop_address
+            (name,province,city,country,detail,user_id,telephone,is_default)
+        VALUES
+            (#{name},#{province},#{city},#{country},#{detail},#{userId},#{telephone},#{is_default})
+    </insert>
+
+    <select id="getaddressById" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+           name,province,city,country,detail,user_id,telephone,is_default,id
+        FROM shop_address 
+        WHERE id = #{id}
+    </select>
+ <select id="getAddressList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+           name,province,city,country,detail,user_id,telephone,is_default,id
+        FROM shop_address 
+        WHERE user_id = #{userId}
+    </select>
+    <update id="updateAddress" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE shop_address
+        SET
+            name = #{name}, province = #{province}, country = #{country}, detail = #{detail}, 
+            user_id = #{userId}, telephone = #{telephone},is_default = #{is_default}
+        WHERE id = #{id}
+    </update>
+    <update id="updateAddressIsDefault" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE shop_address
+        SET
+           is_default = 0
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

@@ -42,10 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
 		// 从session获取用户信息
 
-		/* Session session = SecurityUtils.getSubject().getSession(); JSONObject
-		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);*/
-
-		String userId ="11";// userInfo.getString("userId");
+		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
+		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		String userId =userInfo.getString("userId");
 		//订单id
 		String orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 		List<String> orderIds=new ArrayList<String>();//返回订单列表id

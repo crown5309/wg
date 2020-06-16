@@ -37,7 +37,9 @@ public class LoginController {
 	 */
 	@PostMapping("/frontAuth")
 	public JSONObject frontAuth(HttpServletRequest request) {
-		return loginService.frontAuth(CommonUtil.request2Json(request));
+		JSONObject frontAuth = loginService.frontAuth(CommonUtil.request2Json(request));
+		frontAuth.put("sessionId", request.getSession().getId());
+		return frontAuth;
 	}
 	/**
 	 * 查询当前登录用户的信息

@@ -52,7 +52,8 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/login/frontAuth", "anon");
 		filterChainDefinitionMap.put("/uploadimg", "anon");
 		filterChainDefinitionMap.put("/img/**", "anon");
-		filterChainDefinitionMap.put("/front/**", "anon");
+		filterChainDefinitionMap.put("/front/getGoodsById", "anon");
+		filterChainDefinitionMap.put("/front/getAllGoodsClass", "anon");
 		filterChainDefinitionMap.put("/error", "anon");
 		filterChainDefinitionMap.put("/**", "authc");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
