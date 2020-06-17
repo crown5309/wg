@@ -41,11 +41,11 @@
 		<result column="practicePay" property="practicePay" />
 		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsId" property="goodsId" />
-			<id column="goodsName" property="goodsName" />
-			<id column="count" property="count" />
-			<id column="price" property="price" />
-			<id column="orderPrice" property="orderPrice" />
-			<id column="state" property="state" />
+			<result column="goodsName" property="goodsName" />
+			<result column="count" property="count" />
+			<result column="price" property="price" />
+			<result column="orderPrice" property="orderPrice" />
+			<result column="state" property="state" />
 		</collection>
 	</resultMap>
 	<select id="getAllInfoOrderByOrderIds" resultMap="orderMap">
