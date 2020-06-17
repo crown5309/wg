@@ -31,7 +31,7 @@
 	</update>  
 	<select id="getGoodsById" resultType="com.alibaba.fastjson.JSONObject">
     	select goods_name goodsName,id goodsId,banner_url bannerUrl,price,sku_store skuStore,
-    	detail_url detailUrl,multi_index multiIndex ,store_id storeId
+    	detail_url detailUrl,multi_index multiIndex ,store_id storeId,state
     	from goods where id=#{appId} 
     </select>
     <update id="updateGoodsStoreSku"  parameterType="java.util.List">
@@ -44,6 +44,6 @@
     </foreach>      
 </update>
     <update id="updateGoodStoreCount" >
-    		update goods set sku_store=sku_store-#{count} where id=#{goodsId} and sku_store=sku_store-#{count} >0
+    		update goods set sku_store=sku_store-#{count} where id=#{goodsId} and sku_store=sku_store-#{count} &gt;=0
     </update>
 </mapper>

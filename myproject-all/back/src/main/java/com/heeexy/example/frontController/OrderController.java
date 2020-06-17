@@ -32,7 +32,7 @@ public class OrderController {
 	 */
 	@RequestMapping("/submitOrder")
 	public Object submitOrder(String goodsId,String count,String cartIds) {
-		return  CommonUtil.successJson(orderService.submitOrder(goodsId,count,cartIds));
+		return  orderService.submitOrder(goodsId,count,cartIds);
 	}
 	/**
 	 * 获取支付信息
@@ -40,8 +40,8 @@ public class OrderController {
 	 * @return
 	 */
 	@RequestMapping("/getOrderInfo")
-	public Object getOrderInfo(String orderIds) {
-		return  CommonUtil.successJson(orderService.getOrderInfo(orderIds));
+	public Object getOrderInfo(String orderIds,String addressId) {
+		return  orderService.getOrderInfo(orderIds,addressId);
 	}
 	/**
 	 * 支付

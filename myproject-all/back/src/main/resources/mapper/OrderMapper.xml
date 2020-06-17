@@ -22,12 +22,12 @@
     			(order_id,user_id,total_pay,discount_pay,practice_pay,state)
     			values
     				(
-    					#{item.order_id},
-    					#{item.user_id},
-    					#{item.total_pay},
-    					#{item.discount_pay},
-    					#{item.practice_pay},
-    					#{item.state}
+    					#{orderId},
+    					#{userId},
+    					#{totalPay},
+    					#{discountPay},
+    					#{practicePay},
+    					#{state}
     				)	
     </insert>
 
@@ -46,6 +46,7 @@
 			<result column="price" property="price" />
 			<result column="orderPrice" property="orderPrice" />
 			<result column="state" property="state" />
+			<result column="bannerUrl" property="bannerUrl" />
 		</collection>
 	</resultMap>
 	<select id="getAllInfoOrderByOrderIds" resultMap="orderMap">
@@ -61,13 +62,14 @@
 		o_goods.price orderPrice,
 		g.banner_url  bannerUrl,
 		o_goods.count count,
-		g.state state
+		g.state state,
+		g.banner_url bannerUrl
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
 		INNER JOIN goods g ON o_goods.goods_id = g.id
 		INNER JOIN store s ON g.store_id = s.id
-	where order_id in
+	where o.order_id in
 	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
 		#{id}
 	</foreach>

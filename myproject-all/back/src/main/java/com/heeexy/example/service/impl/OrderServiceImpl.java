@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.jdom.JDOMException;
@@ -108,18 +109,18 @@ public class OrderServiceImpl implements OrderService {
 				orderList.add(order);
 				 
 			}
+			// 批量扣减库存
+			for(JSONObject o:orderGoodList){
+				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( o.getString("goodsId"), o.getInteger("count"));
+				if(!(updateGoodStoreCount>0)) {
+					return CommonUtil.errorJson("库存不足");
+				}
+			}
 			//订单表批量保存
 			orderDao.insertOrderBatch(orderList);
 			// 商品订单表批量保存
 			orderGoodsDao.insertGoodsBatch(orderGoodList);
-			// 批量扣减库存
-			for(JSONObject o:orderGoodList){
-				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( o.getString("goodsId"), o.getInteger("count"));
-				if(updateGoodStoreCount<0) {
-					throw new RuntimeException(o.getString("goodsName")+"库存不足");
-				}
-			}
-			goodsDao.updateGoodsStoreSku(orderGoodList);
+		
 		} else {
 			orderIds.add(orderId);
 			int count=0;
@@ -131,8 +132,17 @@ public class OrderServiceImpl implements OrderService {
 			if (count <= 0) {
 				return CommonUtil.errorJson("购买数不能小于0");
 			}
+			
 			JSONObject goods = goodsDao.getGoodsById(goodsId);
+			if(goods.getIntValue("state")!=2){
+				return CommonUtil.errorJson(goods.getString("goodsName")+"商品未上架");
+			}
 			if(goods.getIntValue("skuStore")<count) {
+				return CommonUtil.errorJson("库存不足");
+			}
+			int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), count);
+			//扣减库存
+			if(!(updateGoodStoreCount>0)) {
 				return CommonUtil.errorJson("库存不足");
 			}
 			//获取订单总价，优惠价，实付金额
@@ -149,13 +159,9 @@ public class OrderServiceImpl implements OrderService {
 			BigDecimal practicePay = map.get("practicePay");
 			setOrder(userId, orderId, order, totalPay, discountPay, practicePay);
 			orderDao.insertOrder(order);
-			//扣减库存
-			int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), count);
-			if(updateGoodStoreCount<0) {
-				throw new RuntimeException("库存不足");
-			}
 		}
-		return orderIds;
+		String join = StringUtils.join(orderIds, ",");
+		return CommonUtil.successJson(join);
 	}
 
 	@Override
@@ -268,9 +274,10 @@ public class OrderServiceImpl implements OrderService {
 		for(OrderInfo sg:OrderInfoList){
 			goodsList =(List<JSONObject>) sg.get("goodsList");
 			totalPay= totalPay.add(sg.getBigDecimal("totalPay"));
-			discountPay= totalPay.add(sg.getBigDecimal("discountPay"));
-			practicePay= totalPay.add(sg.getBigDecimal("practicePay"));
+			discountPay= discountPay.add(sg.getBigDecimal("discountPay"));
+			practicePay= practicePay.add(sg.getBigDecimal("practicePay"));
 			for(JSONObject goods:goodsList) {
+				goods.put("bannerUrl", goods.getString("bannerUrl").split(","));
 				if(goods.getIntValue("state")!=2){
 					return CommonUtil.errorJson(goods.getString("goodsName")+"商品未上架");
 				}
@@ -283,17 +290,24 @@ public class OrderServiceImpl implements OrderService {
 		info.put("discountPay",discountPay);
 		info.put("practicePay",practicePay);
 		info.put("OrderInfoList", OrderInfoList);
-		return info;
+		return CommonUtil.successJson(info);
 	}
 
 	@Override
-	public Object getOrderInfo(String orderIds) {
+	public Object getOrderInfo(String orderIds,String addressId) {
 		JSONObject info = getOrderInfoByIds(orderIds);
 		// 从session获取用户信息
 		Session session = SecurityUtils.getSubject().getSession(); JSONObject
 		userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
 		String userId =userInfo.getString("userId");
-		JSONObject address=addressDao.getaddressDefault(userId);
+		JSONObject address=null;
+		if(StringTools.isNullOrEmpty(addressId)) {
+			
+			address=addressDao.getaddressDefault(userId);
+		}else {
+			address=addressDao.getaddressById(addressId);
+		}
+		
 		info.put("address", address);
 		return info;
 	}

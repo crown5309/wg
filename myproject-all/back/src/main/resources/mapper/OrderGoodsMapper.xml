@@ -22,13 +22,12 @@
     			(order_goods_id,goods_id,count,store_id,order_id,price)
     			values
     				(
-    					#{item.orderGoodsId},
-    					#{item.goodsId},
-    					#{item.count},
-    					#{item.totalPay},
-    					#{item.storeId},
-    					#{item.orderId},
-    					#{item.price}
+    					#{orderGoodsId},
+    					#{goodsId},
+    					#{count},
+    					#{storeId},
+    					#{orderId},
+    					#{price}
     				)	
     </insert>    
 </mapper>

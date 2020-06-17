@@ -12,7 +12,7 @@ public interface AddressDao {
 
 	List<JSONObject> getAddressList(Integer integer);
 
-	Object getaddressById(String addressId);
+	JSONObject getaddressById(String addressId);
 
 	void updateAddressIsDefault(JSONObject request2Json);
 
