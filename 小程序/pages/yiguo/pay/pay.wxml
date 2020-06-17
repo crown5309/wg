@@ -1,0 +1,44 @@
+<view class="order_address" bindtap="bindaddress" wx:if="{{addressShow}}">
+    <view class="select_address" ><text class="iconfont icon-map_line-">点击去选择地址</text></view>
+    <view><text class="iconfont icon-arrowright"></text></view>
+</view>
+<view class="Receiving_address" bindtap="bindaddress" wx:if="{{!addressShow}}">
+    <view>
+        <view class="name_iphone">{{address.province}}{{address.city}}{{address.country}}</view>
+        <view class="address">{{address.detail}}</view>
+        <view class="name_iphone">{{address.name}} {{address.telephone}}</view>
+    </view>
+    <view><text class="iconfont icon-arrowright"></text></view>
+</view>
+ 
+<view class="goods_msg"  wx:if="{{!oneGoodsShow}}">
+    <view class="goods_img"><image src="{{goods.bannerUrl[0]}}" mode="widthFix"></image></view>
+    <view class="goods_content">共1件 <text class="iconfont icon-arrowright">></text></view>
+</view>
+ <view class="goods_msg" wx:if="{{oneGoodsShow}}">
+    <view class="goods_img"><image src="{{goods.bannerUrl[0]}}" mode="widthFix"></image></view>
+     <view class="goods_img">{{goods.goodsName}}</view>
+    <view class="goods_content">共1件 <text class="iconfont icon-arrowright">></text></view>
+</view>
+<view class="msg_list">
+    <view class="msg_item">
+        <view>商品原价</view>
+        <view>{{orderinfo.totalPay}}</view>
+    </view>
+    <view class="msg_item">
+        <view>商品优惠</view>
+        <view>{{orderinfo.discountPay}}</view>
+    </view>
+    <view class="Total">
+       合计 <text class="Total_price">{{orderinfo.practicePay}}</text>
+    </view>
+</view>
+ 
+<view class="order_pay">
+    <view class="pay_money">付款 <text class="Total_price">{{orderinfo.practicePay}}</text></view>
+    <view class="submit_order" bindtap="bindSubmitOrder">支付</view>
+</view>
+
+
+
+

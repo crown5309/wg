@@ -1,0 +1,53 @@
+ <view class="swiper-tab">
+  <view wx:for="{{navTab}}" wx:key="{{index}}" class="swiper-tab-list {{currentTab==index ? 'on_pdd' : ''}}" data-current="{{index}}" bindtap="switchNav">{{item}}</view>
+</view>
+<view class="c_t60"></view>  
+
+<view class="scroll">
+<scroll-view class="scroll" scroll-y="true">
+  <view class="separate"></view>
+  <view wx:for="{{carts}}">
+    <view class="cart_container">  
+      <view  wx:if="{{!item.isSelect}}">
+            <icon class="item-select" bindtap="switchSelect" data-index="{{index}}" data-id="{{index}}"  type="circle" size="20"></icon>
+      </view>
+      <view wx:elif="{{item.isSelect}}">
+            <icon class="item-select" bindtap="switchSelect" data-index="{{index}}" data-id="{{index}}"  type="success" color="#f0145a" size="20"></icon>
+      </view>
+
+      <image class="item-image" src="{{item.bannerUrl[0]}}"></image>
+      <import src="../template/template.wxml" />
+      <view class="column">
+        <text class="title">{{item.goodsName}}</text>
+         <!-- <image bindtap="delGoods" id="img{{index}}" data-index="{{index}}" src="../../../images/del.png"></image>  -->
+       
+        <view class="row">
+          <text class="sku-price">￥{{item.price}}</text>
+           <view class="sku">
+              库存{{item.skuStore}} 
+          </view>
+        </view>
+
+      </view>
+    </view>
+    <view class="separate"></view>
+  </view>
+</scroll-view>
+</view>
+ <view class="bottom_total" hidden="{{hidden}}" style="display:{{currentTab==0 ? 'block' : 'none'}}">
+  <view class="bottom_line"></view>
+
+  <view class="row" >
+
+    <!-- <view  wx:if="{{!isAllSelect}}">
+            <icon class="item-allselect" bindtap="allSelect" type="circle" size="20"></icon>
+      </view>
+      <view wx:elif="{{isAllSelect}}">
+            <icon class="item-allselect" bindtap="allSelect" type="success" color="#f0145a" size="20"></icon>
+      </view> -->
+    <!-- <text class="small_text">全选</text> -->
+    <!-- <text>合计:￥ </text>
+    <text class="price">{{totalMoney}}</text> -->
+    <button class="button-red" bindtap="toBuy" formType="submit">审核      </button>
+  </view>
+</view> 

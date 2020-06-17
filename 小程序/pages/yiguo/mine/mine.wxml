@@ -1,0 +1,56 @@
+<view class="mine-box">
+    <view class="bg">
+  <view class="head">
+    <view class="headIcon">
+      <image src="{{userInfo.avatarUrl}}" style="width:70px;height:70px;"></image>
+    </view>
+    <view class="login">
+      {{userInfo.nickname}}
+    </view>
+  </view>
+  <button class="button" open-type="getUserInfo" wx:if="{{hasUserInfo}}" bindgetuserinfo="doAuthorization"> 微信登录 </button>
+</view>
+ 
+<view class="hr"></view>
+<view class='item'>
+  <view class="title">个人信息</view>
+  <view class="detail2">
+    <text>></text>
+  </view>
+</view>
+<view class="line"></view>
+ 
+<view class='item'  bindtap='gotoOrder'>
+  <view class="title">我的订单</view>
+  <view class="detail2">
+    <text>></text>
+  </view>
+</view>
+<view class="line"></view>
+<view class="line"></view>
+<view class="item" bindtap='gotoaddressList'>
+  <view class="title" >收货地址</view>
+  <view class="detail2">
+    <text> ></text>
+  </view>
+</view>
+<view class="line"></view>
+<view class="item">
+  <view class="title">设置</view>
+  <view class="detail2">
+    <text> </text>
+  </view>
+</view>
+<view class="hr"></view>
+    <view class="btn">
+        <ul>
+        <block wx:for="{{mine_list}}" wx:for-item="mine" wx:key="index" >
+            <navigator url="{{mine.router}}" hover-class="navigator-hover"><image src="{{mine.pic_url}}"></image><span>{{mine.title}}</span></navigator>
+        </block>
+        </ul>
+    </view>
+
+    <view class="footer"><button type="warn"  bindtap="quit" > 退出登录</button></view>
+    
+
+</view>
