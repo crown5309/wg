@@ -6,7 +6,7 @@
    
     <select id="getParamInfo" resultType="com.alibaba.fastjson.JSONObject">
          SELECT
-           s1.value,s1.code from sys_param s inner join sys_param s1 on s.id=s1.parent_id where app_id=#{appId} and code=#{code}
+           s1.value,s1.code from sys_param s inner join sys_param s1 on s.id=s1.parent_id where s1.app_id=#{appId} and s.code=#{code}
     </select>
  
 </mapper>

@@ -174,7 +174,7 @@ public class OrderServiceImpl implements OrderService {
         String openid = userInfo.getString("openId");
         String appid = userInfo.getString("appId");
         //得到小程序传过来的价格，注意这里的价格必须为整数，1代表1分，所以传过来的值必须*100；
-        BigDecimal fee = info.getBigDecimal("practicePay").multiply(new BigDecimal(100));
+        BigDecimal fee = info.getJSONObject("info").getBigDecimal("practicePay").multiply(new BigDecimal(100));
         //订单编号
         String did =OrderIdFactory.getOrderIdByUUIdAndDate();
          //获取商户相关信息
@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
         //将packageP数据返回给小程序
         //更新订单信息
         orderDao.updateOrderState(orderIds.split(","),did,7);
-		return CommonUtil.errorJson("下单失败");
+		return CommonUtil.errorJson(map.get("return_msg").toString());
 	}
 
 	private JSONObject getOrderInfoByIds(String orderIds) {
