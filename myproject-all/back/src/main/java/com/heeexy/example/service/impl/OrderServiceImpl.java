@@ -209,7 +209,7 @@ public class OrderServiceImpl implements OrderService {
 			ip = "127.0.0.1";
 		}
 		packageParams.put("spbill_create_ip", ip);
-        packageParams.put("notify_url", base+"/notify");//支付返回地址，不用纠结这个东西，我就是随便写了一个接口，内容什么都没有
+        packageParams.put("notify_url", base+"/weixin/callback");//支付返回地址，
         packageParams.put("trade_type", "JSAPI");//这个api有，固定的
         packageParams.put("openid", openid);//openid
         //获取sign
@@ -253,10 +253,6 @@ public class OrderServiceImpl implements OrderService {
         }
         
         //将packageP数据返回给小程序
-		/*
-		 * Gson gson = new Gson(); String json = gson.toJson(packageP); PrintWriter pw =
-		 * response.getWriter(); System.out.println(json); pw.write(json); pw.close();
-		 */
         //更新订单信息
         orderDao.updateOrderState(orderIds.split(","),did,7);
 		return CommonUtil.errorJson("下单失败");
