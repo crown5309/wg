@@ -41,5 +41,7 @@
            is_default = 0
         WHERE user_id = #{userId}
     </update>
-
+	<delete id="deleteAddressById">
+		delete from shop_address where id=#{id}
+	</delete>
 </mapper>

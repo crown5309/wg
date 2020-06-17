@@ -31,5 +31,8 @@ public class AddressFrontController {
 	public Object getAddressById(String addressId) {
 		return  CommonUtil.successJson(addresService.getaddressById(addressId));
 	}
-	
+	@RequestMapping("/deleteAddressById")
+	public Object deleteAddressById(String addressId) {
+		return  CommonUtil.successJson(addresService.deleteAddressById(addressId));
+	}
 }

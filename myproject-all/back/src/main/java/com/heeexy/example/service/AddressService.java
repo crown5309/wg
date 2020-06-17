@@ -10,4 +10,6 @@ public interface AddressService {
 
 	Object getaddressById(String addressId);
 
+	Object deleteAddressById(String addressId);
+
 }

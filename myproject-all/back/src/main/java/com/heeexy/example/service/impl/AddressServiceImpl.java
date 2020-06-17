@@ -53,4 +53,11 @@ public class AddressServiceImpl  implements AddressService	 {
 		return addressDao.getaddressById(addressId);
 	}
 
+	@Override
+	public Object deleteAddressById(String addressId) {
+		// TODO Auto-generated method stub
+		addressDao.deleteAddressById(addressId);
+		return CommonUtil.successJson();
+	}
+
 }
