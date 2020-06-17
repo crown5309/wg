@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.SysParamDao">
+
+   
+    <select id="getParamInfo" resultType="com.alibaba.fastjson.JSONObject">
+         SELECT
+           s1.value,s1.code from sys_param s inner join sys_param s1 on s.id=s1.parent_id where app_id=#{appId} and code=#{code}
+    </select>
+ 
+</mapper>

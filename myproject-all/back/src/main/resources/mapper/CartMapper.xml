@@ -23,10 +23,15 @@
 		g.price,
 		s.id store_id,
 		s.store_name storeName,
-		g.sku_store skuStore
+		g.sku_store skuStore,
+		g.state
 		FROM
 		shop_cart cart
 		INNER JOIN goods g ON cart.goods_id = g.id
 		INNER JOIN store s ON g.store_id = s.id
+		where cart.cart_id in
+		<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
 	</select>
 </mapper>

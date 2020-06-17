@@ -16,6 +16,12 @@
         FROM shop_address 
         WHERE id = #{id}
     </select>
+    <select id="getaddressDefault" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+           name,province,city,country,detail,user_id,telephone,is_default,id
+        FROM shop_address 
+        WHERE user_id= #{userId} and is_default=1
+    </select> 
  <select id="getAddressList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
            name,province,city,country,detail,user_id,telephone,is_default,id

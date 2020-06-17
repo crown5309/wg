@@ -30,4 +30,56 @@
     					#{item.state}
     				)	
     </insert>
+
+	<resultMap id="orderMap"
+			   type="com.heeexy.example.entity.OrderInfo">
+		<id column="orderId" property="orderId" />
+		<result column="storeName" property="storeName" />
+		<result column="storeId" property="storeId" />
+		<result column="totalPay" property="totalPay" />
+		<result column="discountPay" property="discountPay" />
+		<result column="practicePay" property="practicePay" />
+		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
+			<id column="goodsId" property="goodsId" />
+			<id column="goodsName" property="goodsName" />
+			<id column="count" property="count" />
+			<id column="price" property="price" />
+			<id column="orderPrice" property="orderPrice" />
+			<id column="state" property="state" />
+		</collection>
+	</resultMap>
+	<select id="getAllInfoOrderByOrderIds" resultMap="orderMap">
+		SELECT
+		o.order_id  orderId,
+		o.total_pay totalPay,
+		o.discount_pay discountPay,
+		o.practice_pay practicePay,
+		s.store_name storeName,
+		s.id storeId,
+		g.goods_name goodsName,
+		g.price price,
+		o_goods.price orderPrice,
+		g.banner_url  bannerUrl,
+		o_goods.count count,
+		g.state state
+		FROM
+		shop_order o
+		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
+		INNER JOIN goods g ON o_goods.goods_id = g.id
+		INNER JOIN store s ON g.store_id = s.id
+	where order_id in
+	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+		#{id}
+	</foreach>
+	</select>
+	<update id="updateOrderState">
+	   update shop_order set state=#{state},out_trade_no=#{out_trade_no} where order_id in
+	   <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+		#{id}
+	</foreach>
+	</update>
+	<update id="updateByOutTradeNo">
+	   update shop_order set state=#{state} where out_trade_no =#{out_trade_no}
+	 
+	</update>
 </mapper>

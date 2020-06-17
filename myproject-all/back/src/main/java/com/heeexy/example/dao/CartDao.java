@@ -6,6 +6,6 @@ import com.heeexy.example.entity.StoreGoodsList;
 
 public interface CartDao {
 
-	List<StoreGoodsList> getStoreList(String cartIds);
+	List<StoreGoodsList> getStoreList(String[] cartIds);
 
 }

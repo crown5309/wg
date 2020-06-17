@@ -16,4 +16,6 @@ public interface AddressDao {
 
 	void updateAddressIsDefault(JSONObject request2Json);
 
+	JSONObject getaddressDefault(String userId);
+
 }
