@@ -11,4 +11,6 @@ public interface OrderService {
 	Object getOrderInfo(String orderIds,String addressId);
 
 	void updateByOutTradeNo(String out_trade_no, int i);
+
+	Object getOrderInfoByState(String state);
 }

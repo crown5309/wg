@@ -2,6 +2,8 @@ package com.heeexy.example.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.alibaba.fastjson.JSONObject;
 
 public interface AddressDao {
@@ -18,5 +20,7 @@ public interface AddressDao {
 
 	JSONObject getaddressDefault(String userId);
 	void deleteAddressById(String addressId);
+
+	void insertOrderAddressBatch(@Param("list")List<JSONObject> orderAddressList);
 
 }

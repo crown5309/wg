@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.OrderLogDao">
+	<insert id="insertOrderLogBatch" parameterType="java.util.List" useGeneratedKeys="false">
+    			insert into shop_order_log
+    			(state,state_name,user_id)
+    			values
+    			<foreach collection="list" item="item" index="index" separator=",">
+    				(
+    					#{item.state},
+    					#{item.stateName},
+    					#{item.userId}
+    				)
+    		     </foreach>		
+    </insert>    
+    <insert id="insertOrderLog" parameterType="com.alibaba.fastjson.JSONObject" >
+    			insert into shop_order_log
+    			(state,state_name,user_id)
+    			values
+    				(
+    					#{state},
+    					#{stateName},
+    					#{userId}
+    				)	
+    </insert>
+</mapper>

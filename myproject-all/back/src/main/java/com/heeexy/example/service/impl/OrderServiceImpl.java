@@ -26,6 +26,7 @@ import com.heeexy.example.dao.CartDao;
 import com.heeexy.example.dao.GoodsDao;
 import com.heeexy.example.dao.OrderDao;
 import com.heeexy.example.dao.OrderGoodsDao;
+import com.heeexy.example.dao.OrderLogDao;
 import com.heeexy.example.dao.SysParamDao;
 import com.heeexy.example.entity.OrderInfo;
 import com.heeexy.example.entity.StoreGoodsList;
@@ -50,6 +51,8 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDao orderDao;
 	@Autowired
 	private OrderGoodsDao orderGoodsDao;
+	@Autowired
+	private OrderLogDao orderLogDao;
 	@Autowired
 	private AddressDao addressDao;
 	@Autowired
@@ -78,6 +81,8 @@ public class OrderServiceImpl implements OrderService {
 			JSONObject order=null;
 			List<JSONObject> orderGoodList=new ArrayList<JSONObject>();//需要插入的商品集合
 			JSONObject orderGoods=null;
+			List<JSONObject> orderLogList=new ArrayList<JSONObject>();//需要插入的订单日志集合
+			JSONObject orderLog=null;
 			Map<String,BigDecimal> map=null;
 			BigDecimal totalPay=null;//总价
 			BigDecimal discountPay=null;//优惠价
@@ -106,6 +111,12 @@ public class OrderServiceImpl implements OrderService {
 				 // 订单表保存
 				 order= new JSONObject();
 				setOrder(userId, orderId, order, totalPay, discountPay, practicePay);
+				orderLog=new JSONObject();
+				orderLog.put("state", "1");
+				orderLog.put("stateName", "提交提单");
+				orderLog.put("userId", userId);
+				orderLog.put("orderId", orderId);
+				orderLogList.add(orderLog);
 				orderList.add(order);
 				 
 			}
@@ -120,6 +131,8 @@ public class OrderServiceImpl implements OrderService {
 			orderDao.insertOrderBatch(orderList);
 			// 商品订单表批量保存
 			orderGoodsDao.insertGoodsBatch(orderGoodList);
+			//订单日志
+			orderLogDao.insertOrderLogBatch(orderLogList);
 		
 		} else {
 			orderIds.add(orderId);
@@ -159,13 +172,22 @@ public class OrderServiceImpl implements OrderService {
 			BigDecimal practicePay = map.get("practicePay");
 			setOrder(userId, orderId, order, totalPay, discountPay, practicePay);
 			orderDao.insertOrder(order);
+			JSONObject orderLog = new JSONObject();
+			orderLog.put("state", "1");
+			orderLog.put("stateName", "提交提单");
+			orderLog.put("userId", userId);
+			orderLog.put("orderId", orderId);
+			//插入订单日志
+			orderLogDao.insertOrderLog(orderLog);
 		}
 		String join = StringUtils.join(orderIds, ",");
 		return CommonUtil.successJson(join);
 	}
 
 	@Override
+	@Transactional
 	public Object pay(String orderIds, String addressId,String remarks,HttpServletRequest request) {
+		JSONObject address=addressDao.getaddressById(addressId);
 		JSONObject info = getOrderInfoByIds(orderIds);
 		// 支付
         //得到openid
@@ -173,6 +195,7 @@ public class OrderServiceImpl implements OrderService {
 		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
         String openid = userInfo.getString("openId");
         String appid = userInfo.getString("appId");
+        String userId =userInfo.getString("userId");
         //得到小程序传过来的价格，注意这里的价格必须为整数，1代表1分，所以传过来的值必须*100；
         BigDecimal fee = info.getJSONObject("info").getBigDecimal("practicePay").multiply(new BigDecimal(100));
         //订单编号
@@ -254,13 +277,49 @@ public class OrderServiceImpl implements OrderService {
             //得到paySign
             String paySign = PayCommonUtil.createSign("UTF-8", packageP, key);
             packageP.put("paySign", paySign);
+            inserOrderLog(orderIds, userId,6,"下单成功",address);
             return CommonUtil.successJson(packageP);
         }
         
         //将packageP数据返回给小程序
         //更新订单信息
         orderDao.updateOrderState(orderIds.split(","),did,7);
+        inserOrderLog(orderIds, userId,7,"下单失败",address);
 		return CommonUtil.errorJson(map.get("return_msg").toString());
+	}
+
+	private void inserOrderLog(String orderIds, String userId,int state,String stateName,JSONObject address) {
+		List<JSONObject> orderLogList=new ArrayList<JSONObject>();//需要插入的订单日志集合
+		JSONObject orderLog=null;
+		List<JSONObject> orderAddressList=new ArrayList<JSONObject>();//需要插入的订单日志集合
+		JSONObject orderAddress=null;
+		for(String s:orderIds.split(",")) {
+			orderLog=new JSONObject();
+			orderLog.put("state", state);
+			orderLog.put("stateName", stateName);
+			orderLog.put("userId", userId);
+			orderLog.put("orderId", s);
+			orderLogList.add(orderLog);
+			if(address!=null) {
+				orderAddress.put("name", address.get("name"));
+				orderAddress.put("province", address.get("province"));
+				orderAddress.put("city", address.get("city"));
+				orderAddress.put("country", address.get("country"));
+				orderAddress.put("detail", address.get("detail"));
+				orderAddress.put("userId", address.get("userId"));
+				orderAddress.put("telephone", address.get("telephone"));
+				orderAddress.put("orderId", s);
+				orderAddressList.add(orderAddress);
+			}
+	
+		}
+        //订单日志
+		 orderLogDao.insertOrderLogBatch(orderLogList);
+		 //
+		 if(address!=null) {
+			 addressDao.insertOrderAddressBatch(orderAddressList); 
+		 }
+		
 	}
 
 	private JSONObject getOrderInfoByIds(String orderIds) {
@@ -349,9 +408,54 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional
 	public void updateByOutTradeNo(String out_trade_no, int state) {
 		// TODO Auto-generated method stub
+		//获取orderId 集合
+		 List<String> list=orderDao.getOrderIdsByOutTradeNo(out_trade_no);
+	
+		inserOrderLog(StringUtils.join(list, ","), "0",2,"支付成功",null);
+		
 	     orderDao.updateByOutTradeNo(out_trade_no,state);
+	}
+
+	@Override
+	public Object getOrderInfoByState(String state) {
+		// TODO Auto-generated method stub
+	//	1 待支付 2.待发货 3.待收货 4.交易失败 5.交易完成 6.下单成功 7下单失败 8支付成功 9支付失败 10退款中 11退款完成  12退货中
+		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
+		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		String userId =userInfo.getString("userId");
+		List<JSONObject> list=orderDao.getOrderInfoByState(state,userId);
+		for(int i=0;i<list.size();i++) {
+			Integer stateInt = list.get(i).getInteger("state");
+			if(stateInt==1) {
+				list.get(i).put("stateName", "待支付");
+			}else if(stateInt==2) {
+				list.get(i).put("stateName", "待发货");
+			}else if(stateInt==3) {
+				list.get(i).put("stateName", "待收货");
+			}else if(stateInt==5) {
+				list.get(i).put("stateName", "交易完成");
+			}else if(stateInt==6) {
+				list.get(i).put("stateName", "下单成功");
+			}else if(stateInt==7) {
+				list.get(i).put("stateName", "下单失败");
+			}else if(stateInt==8) {
+				list.get(i).put("stateName", "支付成功");
+			}else if(stateInt==9) {
+				list.get(i).put("stateName", "支付失败");
+			}
+			else if(stateInt==10) {
+				list.get(i).put("stateName", "退款中");
+			}
+			else if(stateInt==11) {
+				list.get(i).put("stateName", "退款完成");
+			}else if(stateInt==12) {
+				list.get(i).put("stateName", "退货中");
+			}
+		}
+		return CommonUtil.successJson(list);
 	}
 
 }

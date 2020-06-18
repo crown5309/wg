@@ -84,4 +84,22 @@
 	   update shop_order set state=#{state} where out_trade_no =#{out_trade_no}
 	 
 	</update>
+	<select id="getOrderIdsByOutTradeNo" resultType="string">
+		select order_id from shop_order where out_trade_no =#{out_trade_no}
+	</select>
+	<select id="getOrderInfoByState" resultType="com.alibaba.fastjson.JSONObject">
+		SELECT
+		o.order_id  orderId,
+		o.total_pay totalPay,
+		o.discount_pay discountPay,
+		o.practice_pay practicePay,
+		o_goods.price orderPrice,
+		o_goods.count count
+		FROM
+		shop_order o
+	where  o.user_id=#{userId}
+	   <if test="state!=null and state !=''">
+	   and o.state=#{state} 
+	   </if>
+	</select>
 </mapper>

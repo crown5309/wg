@@ -98,5 +98,13 @@ public class OrderController {
         out.flush();
         out.close();
     }
-
+	/**
+	 * 根据状态查询订单
+	 * @param state
+	 * @return
+	 */
+	@RequestMapping("/getOrderInfoByState")
+	public Object getOrderInfoByState(String state) {
+		return  orderService.getOrderInfoByState(state);
+	}
 }

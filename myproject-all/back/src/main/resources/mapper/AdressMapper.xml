@@ -44,4 +44,22 @@
 	<delete id="deleteAddressById">
 		delete from shop_address where id=#{id}
 	</delete>
+	
+	<insert id="insertOrderAddressBatch" parameterType="java.util.List" useGeneratedKeys="false">
+    			insert into shop_order_address
+    			(name,province,city,country,detail,user_id,telephone,order_id)
+    			values
+    			<foreach collection="list" item="item" index="index" separator=",">
+    				(
+    					#{item.name},
+    					#{item.province},
+    					#{item.city},
+    					#{item.country},
+    					#{item.detail},
+    					#{item.userId},
+    					#{item.telephone},
+    					#{item.orderId}
+    				)
+    		     </foreach>		
+    </insert>
 </mapper>
