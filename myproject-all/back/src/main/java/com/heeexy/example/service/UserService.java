@@ -53,4 +53,8 @@ public interface UserService {
 	 * 删除角色
 	 */
 	JSONObject deleteRole(JSONObject jsonObject);
+
+	Object getWeiXinUserInfo(String code, String appid);
+
+	void updateMobile(String appid, String phone);
 }

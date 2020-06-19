@@ -1,9 +1,12 @@
 package com.heeexy.example.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.SysParamDao;
 import com.heeexy.example.dao.UserDao;
 import com.heeexy.example.service.UserService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.HttpClientUtils;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,6 +28,8 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private SysParamDao sysParamDao;
 
 	/**
 	 * 用户列表
@@ -49,8 +56,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * 查询所有的角色
-	 * 在添加/修改用户的时候要使用此方法
+	 * 查询所有的角色 在添加/修改用户的时候要使用此方法
 	 */
 	@Override
 	public JSONObject getAllRoles() {
@@ -108,11 +114,11 @@ public class UserServiceImpl implements UserService {
 		List<Integer> newPerms = (List<Integer>) jsonObject.get("permissions");
 		JSONObject roleInfo = userDao.getRoleAllInfo(jsonObject);
 		Set<Integer> oldPerms = (Set<Integer>) roleInfo.get("permissionIds");
-		//修改角色名称
+		// 修改角色名称
 		dealRoleName(jsonObject, roleInfo);
-		//添加新权限
+		// 添加新权限
 		saveNewPermission(roleId, newPerms, oldPerms);
-		//移除旧的不再拥有的权限
+		// 移除旧的不再拥有的权限
 		removeOldPermission(roleId, newPerms, oldPerms);
 		return CommonUtil.successJson();
 	}
@@ -172,5 +178,23 @@ public class UserServiceImpl implements UserService {
 		userDao.removeRole(jsonObject);
 		userDao.removeRoleAllPermission(jsonObject);
 		return CommonUtil.successJson();
+	}
+
+	@Override
+	public Object getWeiXinUserInfo(String code, String appid) {
+		// TODO Auto-generated method stub
+		// 获取密钥
+		String secret=sysParamDao.getValueByCode("key");
+		String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret
+				+ "&js_code=" + code + "&grant_type=authorization_code";
+		String data = HttpClientUtils.doGet(url, null);
+		JSONObject jo = JSON.parseObject(data);
+		return CommonUtil.successJson(jo);
+	}
+
+	@Override
+	public void updateMobile(String appid, String phone) {
+		// TODO Auto-generated method stub
+		userDao.updateMobile(appid,phone);
 	}
 }

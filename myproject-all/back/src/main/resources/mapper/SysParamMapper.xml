@@ -8,5 +8,8 @@
          SELECT
            s1.value,s1.code from sys_param s inner join sys_param s1 on s.id=s1.parent_id where s1.app_id=#{appId} and s.code=#{code}
     </select>
- 
+ <select id="getValueByCode" resultType="string">
+         SELECT
+           s1.value  from sys_param s1 where s1.app_id=#{appId} and s1.code=#{code}
+    </select>
 </mapper>

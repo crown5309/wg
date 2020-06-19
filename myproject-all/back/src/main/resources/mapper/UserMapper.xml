@@ -208,4 +208,7 @@
          WHERE open_id=#{open_id}
          AND delete_status='1';
     </select>
+    <update id="updateMobile">
+    	update sys_user set telephone=#{phone} where app_id=#{appid}
+    </update>
 </mapper>

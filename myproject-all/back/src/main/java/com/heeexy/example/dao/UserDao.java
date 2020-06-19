@@ -94,4 +94,6 @@ public interface UserDao {
 	void addUserfrontAuth(JSONObject request2Json);
 
 	String getUserByOppenId(String string);
+
+	void updateMobile(@Param("appid")String appid,@Param("phone") String phone);
 }
