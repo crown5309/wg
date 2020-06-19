@@ -2,6 +2,7 @@ package com.heeexy.example.config.shiro;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.LoginService;
+import com.heeexy.example.service.PermissionService;
 import com.heeexy.example.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -27,7 +28,8 @@ public class UserRealm extends AuthorizingRealm {
 
 	@Autowired
 	private LoginService loginService;
-
+	@Autowired
+	private PermissionService permissionService;
 	@Override
 	@SuppressWarnings("unchecked")
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -56,6 +58,8 @@ public class UserRealm extends AuthorizingRealm {
 			//没找到帐号
 			throw new UnknownAccountException();
 		}
+		JSONObject userPermission = permissionService.getUserPermission(loginName);
+		user.put("userPermission", userPermission);
 		//交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
 				user.getString("username"),

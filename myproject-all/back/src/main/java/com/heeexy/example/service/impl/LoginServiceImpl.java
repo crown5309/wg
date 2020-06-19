@@ -37,7 +37,7 @@ public class LoginServiceImpl implements LoginService {
 	 * 登录表单提交
 	 */
 	@Override
-	public JSONObject authLogin(JSONObject jsonObject,String type) {
+	public JSONObject authLogin(JSONObject jsonObject, String type) {
 		String username = jsonObject.getString("username");
 		String password = jsonObject.getString("password");
 		JSONObject info = new JSONObject();
@@ -65,7 +65,7 @@ public class LoginServiceImpl implements LoginService {
 	 */
 	@Override
 	public JSONObject getInfo() {
-		//从session获取用户信息
+		// 从session获取用户信息
 		Session session = SecurityUtils.getSubject().getSession();
 		JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
 		String username = userInfo.getString("username");
@@ -98,9 +98,13 @@ public class LoginServiceImpl implements LoginService {
 		String exist = userDao.getUserByOppenId(request2Json.get("openId").toString());
 		if (StringTools.isNullOrEmpty(exist)) {
 			userDao.addUserfrontAuth(request2Json);
-			
+
 		}
-		authLogin(request2Json,"");
-		return  getInfo();
+		authLogin(request2Json, "");
+		Subject subject = SecurityUtils.getSubject();
+		Session session = subject.getSession();
+		session.setTimeout(-1l);// 小程序登录 永不超时
+		JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		return userInfo;
 	}
 }
