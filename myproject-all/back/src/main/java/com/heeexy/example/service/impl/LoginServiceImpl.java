@@ -104,7 +104,7 @@ public class LoginServiceImpl implements LoginService {
 		Subject subject = SecurityUtils.getSubject();
 		Session session = subject.getSession();
 		session.setTimeout(-1l);// 小程序登录 永不超时
-		JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
-		return userInfo;
+		JSONObject userPermission = permissionService.getUserPermission( request2Json.get("nickName").toString());
+		return CommonUtil.successJson(userPermission);
 	}
 }

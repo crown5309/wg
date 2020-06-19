@@ -58,8 +58,6 @@ public class UserRealm extends AuthorizingRealm {
 			//没找到帐号
 			throw new UnknownAccountException();
 		}
-		JSONObject userPermission = permissionService.getUserPermission(loginName);
-		user.put("userPermission", userPermission);
 		//交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
 				user.getString("username"),
