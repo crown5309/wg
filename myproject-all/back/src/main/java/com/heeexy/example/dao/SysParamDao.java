@@ -10,6 +10,6 @@ public interface SysParamDao {
 
 	List<JSONObject> getParamInfo(@Param("appId")String appId ,@Param("code") String code);
 
-	String getValueByCode(String string);
+	String getValueByCode(@Param("appId")String appId ,@Param("code") String code);
 
 }

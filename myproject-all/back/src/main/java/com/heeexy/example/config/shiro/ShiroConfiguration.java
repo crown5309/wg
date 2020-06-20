@@ -49,12 +49,12 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/static/**", "anon");
 		filterChainDefinitionMap.put("/login/auth", "anon");
 		filterChainDefinitionMap.put("/login/logout", "anon");
-		filterChainDefinitionMap.put("/login/frontAuth", "anon");
+		filterChainDefinitionMap.put("/user/auth", "anon");
 		filterChainDefinitionMap.put("/uploadimg", "anon");
 		filterChainDefinitionMap.put("/img/**", "anon");
 		filterChainDefinitionMap.put("/front/getGoodsById", "anon");
 		filterChainDefinitionMap.put("/front/getAllGoodsClass", "anon");
-
+		filterChainDefinitionMap.put("/user/getPathCode", "anon");
 		filterChainDefinitionMap.put("/front/weixin/callback", "anon");
 
 		filterChainDefinitionMap.put("/front/getAllGoodsByState", "anon");

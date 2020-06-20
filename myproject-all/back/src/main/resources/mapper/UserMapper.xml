@@ -65,7 +65,7 @@
   <insert id="addUserfrontAuth" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
         (username, password, nickname, role_id,app_id,open_id,avatar_url) VALUES
-            (#{username}, #{password}, #{nickname}, #{roleId},#{appId},#{openId},#{avatarUrl})
+            (#{username}, #{password}, #{nickName}, #{roleId},#{appid},#{openid},#{avatarUrl})
     </insert>
     <update id="updateUser">
         UPDATE sys_user

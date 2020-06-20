@@ -7,7 +7,14 @@ import com.heeexy.example.dao.UserDao;
 import com.heeexy.example.service.UserService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.HttpClientUtils;
+import com.heeexy.example.util.StringTools;
 import com.heeexy.example.util.constants.ErrorEnum;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,20 +188,53 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Object getWeiXinUserInfo(String code, String appid) {
+	public JSONObject getWeiXinUserInfo(JSONObject js) {
 		// TODO Auto-generated method stub
 		// 获取密钥
-		String secret=sysParamDao.getValueByCode("key");
-		String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret
-				+ "&js_code=" + code + "&grant_type=authorization_code";
+		String secret=sysParamDao.getValueByCode(js.getString("appid"),"key");
+		String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + js.getString("appid") + "&secret=" + secret
+				+ "&js_code=" + js.getString("code") + "&grant_type=authorization_code";
 		String data = HttpClientUtils.doGet(url, null);
 		JSONObject jo = JSON.parseObject(data);
-		return CommonUtil.successJson(jo);
+		String openid = jo.getString("openid");
+		String exist = userDao.getUserByOppenId(openid);
+		js.put("openid", jo.get("openid"));
+		if (StringTools.isNullOrEmpty(exist)) {
+			js.put("username", openid);
+			js.put("password", openid);
+			userDao.addUserfrontAuth(js);
+
+		}
+		String username = js.getString("openid");
+		String password = openid;
+		Subject currentUser = SecurityUtils.getSubject();
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		try {
+			currentUser.login(token);
+		} catch (AuthenticationException e) {
+			return CommonUtil.errorJson(e.getMessage());
+		}
+		Subject subject = SecurityUtils.getSubject();
+		Session session = subject.getSession();
+		session.setTimeout(-1l);// 小程序登录 永不超时
+		return CommonUtil.successJson(js);
 	}
 
 	@Override
 	public void updateMobile(String appid, String phone) {
 		// TODO Auto-generated method stub
 		userDao.updateMobile(appid,phone);
+	}
+
+	@Override
+	public JSONObject getPathCode(String path,String appid) {
+		// TODO Auto-generated method stub
+		String secret=sysParamDao.getValueByCode(appid,"key");
+		String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+secret;
+		String data = HttpClientUtils.doGet(url, null);
+		JSONObject jo = JSON.parseObject(data);
+		//获取access_token
+		String access_token=jo.getString("access_token");
+		return CommonUtil.successJson(access_token);
 	}
 }

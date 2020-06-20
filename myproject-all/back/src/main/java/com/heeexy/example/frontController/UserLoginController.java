@@ -1,8 +1,11 @@
 package com.heeexy.example.frontController;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,10 +19,11 @@ import com.heeexy.example.util.WxUtils;
 public class UserLoginController {
 	@Autowired
 	private UserService userService;
-    @GetMapping("/auth")
-    public Object auth(String code,String appid) {
-    	
-    	return userService.getWeiXinUserInfo(code,appid);
+    @PostMapping("/auth")
+    public Object auth(String code,String appid,HttpServletRequest request) {
+    	JSONObject weiXinUserInfo = userService.getWeiXinUserInfo(CommonUtil.request2Json(request));
+    	weiXinUserInfo.put("sessionId", request.getSession().getId());
+		return weiXinUserInfo;
     }
     @GetMapping("/auth/phone")
     public Object authPhone(String encryptedData, String session_key, String iv) {
@@ -42,5 +46,10 @@ public class UserLoginController {
         } catch (Exception e) {
         	return CommonUtil.errorJson( "获取失败！");
         }
+    }
+    @PostMapping("/getPathCode")
+    public Object getPathCode(String path,String appid) {
+    	JSONObject weiXinUserInfo = userService.getPathCode(path,appid);
+		return weiXinUserInfo;
     }
 }

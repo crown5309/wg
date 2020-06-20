@@ -211,11 +211,11 @@ public class OrderServiceImpl implements OrderService {
         		continue;
         	}
         	if("mch_id".equals(js.getString("code"))) {
-        		title=js.getString("value");
+        		mch_id=js.getString("value");
         		continue;
         	}
         	if("key".equals(js.getString("code"))) {
-        		title=js.getString("value");
+        		key=js.getString("value");
         		continue;
         	}
         }
@@ -301,6 +301,7 @@ public class OrderServiceImpl implements OrderService {
 			orderLog.put("orderId", s);
 			orderLogList.add(orderLog);
 			if(address!=null) {
+				orderAddress=new JSONObject();
 				orderAddress.put("name", address.get("name"));
 				orderAddress.put("province", address.get("province"));
 				orderAddress.put("city", address.get("city"));
@@ -426,35 +427,43 @@ public class OrderServiceImpl implements OrderService {
 		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
 		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
 		String userId =userInfo.getString("userId");
-		List<JSONObject> list=orderDao.getOrderInfoByState(state,userId);
-		for(int i=0;i<list.size();i++) {
-			Integer stateInt = list.get(i).getInteger("state");
+		List<OrderInfo> list=orderDao.getOrderInfoByState(state,userId);
+		List<JSONObject> goodsList=null;
+		for(OrderInfo sg:list){
+			Integer stateInt = sg.getInteger("state");
 			if(stateInt==1) {
-				list.get(i).put("stateName", "待支付");
-			}else if(stateInt==2) {
-				list.get(i).put("stateName", "待发货");
-			}else if(stateInt==3) {
-				list.get(i).put("stateName", "待收货");
-			}else if(stateInt==5) {
-				list.get(i).put("stateName", "交易完成");
-			}else if(stateInt==6) {
-				list.get(i).put("stateName", "下单成功");
-			}else if(stateInt==7) {
-				list.get(i).put("stateName", "下单失败");
-			}else if(stateInt==8) {
-				list.get(i).put("stateName", "支付成功");
-			}else if(stateInt==9) {
-				list.get(i).put("stateName", "支付失败");
-			}
-			else if(stateInt==10) {
-				list.get(i).put("stateName", "退款中");
-			}
-			else if(stateInt==11) {
-				list.get(i).put("stateName", "退款完成");
-			}else if(stateInt==12) {
-				list.get(i).put("stateName", "退货中");
-			}
+				sg.put("stateName", "待支付");
+				}else if(stateInt==2) {
+					sg.put("stateName", "待发货");
+				}else if(stateInt==3) {
+					sg.put("stateName", "待收货");
+				}else if(stateInt==5) {
+					sg.put("stateName", "交易完成");
+				}else if(stateInt==6) {
+					sg.put("stateName", "下单成功");
+				}else if(stateInt==7) {
+					sg.put("stateName", "下单失败");
+				}else if(stateInt==8) {
+					sg.put("stateName", "支付成功");
+				}else if(stateInt==9) {
+					sg.put("stateName", "支付失败");
+				}
+				else if(stateInt==10) {
+					sg.put("stateName", "退款中");
+				}
+				else if(stateInt==11) {
+					sg.put("stateName", "退款完成");
+				}else if(stateInt==12) {
+					sg.put("stateName", "退货中");
+				}
+			goodsList =(List<JSONObject>) sg.get("goodsList");
+			for(JSONObject goods:goodsList) {
+				goods.put("bannerUrl", goods.getString("bannerUrl").split(","));
+				
+				}
+			
 		}
+	
 		return CommonUtil.successJson(list);
 	}
 

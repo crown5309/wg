@@ -21,5 +21,5 @@ public interface OrderDao {
 
 	List<String> getOrderIdsByOutTradeNo(String out_trade_no);
 
-	List<JSONObject> getOrderInfoByState(@Param("state")String state,@Param("userId")String userId);
+	List<OrderInfo> getOrderInfoByState(@Param("state")String state,@Param("userId")String userId);
 }

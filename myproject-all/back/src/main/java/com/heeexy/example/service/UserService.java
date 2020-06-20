@@ -54,7 +54,9 @@ public interface UserService {
 	 */
 	JSONObject deleteRole(JSONObject jsonObject);
 
-	Object getWeiXinUserInfo(String code, String appid);
+	JSONObject getWeiXinUserInfo(JSONObject json);
 
 	void updateMobile(String appid, String phone);
+
+	JSONObject getPathCode(String path,String appid);
 }
