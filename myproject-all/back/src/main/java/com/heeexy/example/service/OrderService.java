@@ -12,5 +12,5 @@ public interface OrderService {
 
 	void updateByOutTradeNo(String out_trade_no, int i);
 
-	Object getOrderInfoByState(String state);
+	Object getOrderInfoByState(String state,int pageNo,int pageSize);
 }

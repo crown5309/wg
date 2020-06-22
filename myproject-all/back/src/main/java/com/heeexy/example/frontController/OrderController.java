@@ -104,7 +104,7 @@ public class OrderController {
 	 * @return
 	 */
 	@RequestMapping("/getOrderInfoByState")
-	public Object getOrderInfoByState(String state) {
-		return  orderService.getOrderInfoByState(state);
+	public Object getOrderInfoByState(String state,int pageNo,int pageSize) {
+		return  orderService.getOrderInfoByState(state,pageNo,pageSize);
 	}
 }

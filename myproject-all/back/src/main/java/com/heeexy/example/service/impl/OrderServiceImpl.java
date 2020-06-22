@@ -421,13 +421,14 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Object getOrderInfoByState(String state) {
+	public Object getOrderInfoByState(String state,int pageNo,int pageSize) {
 		// TODO Auto-generated method stub
 	//	1 待支付 2.待发货 3.待收货 4.交易失败 5.交易完成 6.下单成功 7下单失败 8支付成功 9支付失败 10退款中 11退款完成  12退货中
 		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
 		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
 		String userId =userInfo.getString("userId");
-		List<OrderInfo> list=orderDao.getOrderInfoByState(state,userId);
+		pageNo=(pageNo-1)*pageSize;
+		List<OrderInfo> list=orderDao.getOrderInfoByState(state,userId,pageNo,pageSize);
 		List<JSONObject> goodsList=null;
 		for(OrderInfo sg:list){
 			Integer stateInt = sg.getInteger("state");

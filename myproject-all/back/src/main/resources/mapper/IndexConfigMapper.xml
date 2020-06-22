@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.IndexConfigDao">
+	<select id="listIndexConfigBanner" resultType="com.alibaba.fastjson.JSONObject">
+		select id ,type ,img_url imgUrl FROM index_config WHERE type=#{type}
+	</select>
+	<select id="listIndexConfigClasses" resultType="com.alibaba.fastjson.JSONObject">
+		select c.id,g.class_name className,c.goods_class_id from index_config c INNER JOIN 
+		 goods_class g on c.goods_class_id=g.id and g.class_level=1
+	</select>
+	
+	
+	
+</mapper>
