@@ -12,9 +12,8 @@
 	
 	<resultMap id="orderMap"
 			   type="com.heeexy.example.entity.ClassesInfo">
-		<id column="id" property="id" />
+		<id column="classId" property="classId" />
 		<result column="name" property="name" />
-		<result column="classId" property="classId" />
 		<collection property="classsesList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsClassId" property="goodsClassId" />
 			<result column="className" property="className" />
@@ -48,7 +47,7 @@
 FROM
 	index_config c
 	INNER JOIN goods_class g ON c.goods_class_id = g.id
-	where c1.app_id=#{appId}
+	where c.app_id=#{appId}
 	</select>
 	
 </mapper>

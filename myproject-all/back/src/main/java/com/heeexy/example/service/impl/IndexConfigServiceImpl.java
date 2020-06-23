@@ -42,11 +42,13 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 	@Override
 	public JSONObject listIndexAll(String appId) {
 		// TODO Auto-generated method stub
-		ClassesInfo listIndexAll = indexConfigDao.listIndexAll(appId);
+		JSONObject json=new JSONObject();
+		List<ClassesInfo> listIndexAll = indexConfigDao.listIndexAll(appId);
 		//获取banner
 		List<JSONObject> listIndexConfigBanner = indexConfigDao.listIndexConfigBanner("banner");
-		listIndexAll.put("bannerList", listIndexConfigBanner);
-		return listIndexAll;
+		json.put("classList", listIndexAll);
+		json.put("bannerList", listIndexConfigBanner);
+		return json;
 	}
 
 }

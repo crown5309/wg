@@ -11,6 +11,6 @@ public interface IndexConfigDao {
 
 	List<JSONObject> listIndexConfigBanner(String type);
 
-	ClassesInfo listIndexAll(String appId);
+	List<ClassesInfo> listIndexAll(String appId);
 
 }

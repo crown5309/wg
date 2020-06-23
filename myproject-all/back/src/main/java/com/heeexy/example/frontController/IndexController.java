@@ -11,7 +11,7 @@ import com.heeexy.example.util.CommonUtil;
 
 @RestController
 @RequestMapping("/index")
-public class IndexConfigController {
+public class IndexController {
 	@Autowired
 	private IndexConfigService indexConfigService;
 

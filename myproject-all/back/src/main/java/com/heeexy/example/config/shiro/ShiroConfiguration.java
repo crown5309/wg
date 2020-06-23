@@ -58,7 +58,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/front/weixin/callback", "anon");
 
 		filterChainDefinitionMap.put("/front/getAllGoodsByState", "anon");
-
+		filterChainDefinitionMap.put("/index/**", "anon");
 		filterChainDefinitionMap.put("/error", "anon");
 		filterChainDefinitionMap.put("/**", "authc");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

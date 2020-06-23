@@ -31,7 +31,7 @@ public class IndexConfigController {
 	 */
 	@RequiresPermissions("indexConfig:list")
 	@GetMapping("/listIndexConfig")
-	public JSONObject listIndexConfig(HttpServletRequest request) {
+	public Object listIndexConfig(HttpServletRequest request) {
 		return indexConfigService.listIndexConfig(CommonUtil.request2Json(request));
 	}
 
