@@ -10,6 +10,45 @@
 		 goods_class g on c.goods_class_id=g.id and g.class_level=1
 	</select>
 	
-	
+	<resultMap id="orderMap"
+			   type="com.heeexy.example.entity.ClassesInfo">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="classId" property="classId" />
+		<collection property="classsesList" ofType="com.alibaba.fastjson.JSONObject">
+			<id column="goodsClassId" property="goodsClassId" />
+			<result column="className" property="className" />
+			<result column="classImgUrl" property="classImgUrl" />
+		</collection>
+	</resultMap>
+	<select id="listIndexAll" resultMap="orderMap">
+		SELECT
+	c.id,
+	g.class_name className,
+	c.goods_class_id goodsClassId,
+	g.class_img_url classImgUrl,
+	(
+	SELECT
+		c2.class_name 
+	FROM
+		goods_class c1
+		INNER JOIN goods_class c2 ON c1.parent_id = c2.id 
+	WHERE
+		c1.id = g.parent_id 
+	) name,
+	(
+	SELECT
+		c2.id 
+	FROM
+		goods_class c1
+		INNER JOIN goods_class c2 ON c1.parent_id = c2.id 
+	WHERE
+		c1.id = g.parent_id 
+	) classId 
+FROM
+	index_config c
+	INNER JOIN goods_class g ON c.goods_class_id = g.id
+	where c1.app_id=#{appId}
+	</select>
 	
 </mapper>
