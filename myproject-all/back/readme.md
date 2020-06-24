@@ -1,0 +1,1 @@
+生产环境将application.properties 配置 spring.profiles.active = test 改为 spring.profiles.active = pro 
