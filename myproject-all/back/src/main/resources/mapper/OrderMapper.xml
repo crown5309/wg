@@ -72,9 +72,10 @@
 		INNER JOIN goods g ON o_goods.goods_id = g.id
 		INNER JOIN store s ON g.store_id = s.id
 	where o.order_id in
-	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+	<foreach collection="orderIds" item="id" index="index" open="(" close=")" separator=",">
 		#{id}
-	</foreach>
+	</foreach> 
+	and user_id=#{userId}
 	</select>
 	<update id="updateOrderState">
 	   update shop_order set state=#{state},out_trade_no=#{out_trade_no} where order_id in

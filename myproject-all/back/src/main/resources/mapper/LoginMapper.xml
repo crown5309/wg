@@ -10,7 +10,8 @@
             u.password password,
             u.nickname nickName,
             u.app_id appId,
-            u.open_id openId
+            u.open_id openId,
+            u.store_id storeId
         FROM
             sys_user u
         WHERE u.username = #{username}

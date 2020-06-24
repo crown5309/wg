@@ -71,11 +71,11 @@ public class OrderServiceImpl implements OrderService {
 		String orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 		List<String> orderIds=new ArrayList<String>();//返回订单列表id
 		// TODO Auto-generated method stub
+		String[] split = cartIds.split(",");
 		if (StringTools.isNullOrEmpty(goodsId) && !StringTools.isNullOrEmpty(cartIds)) {// 从购物车取信息
 			orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 			orderIds.add(orderId);
-			String[] split = cartIds.split(",");
-			List<StoreGoodsList> list=cartDao.getStoreList(split);
+			List<StoreGoodsList> list=cartDao.getStoreList(split,userId);
 			List<JSONObject> goodsList=null;
 			List<JSONObject> orderList=new ArrayList<JSONObject>();//需要插入的订单集合
 			JSONObject order=null;
@@ -133,6 +133,8 @@ public class OrderServiceImpl implements OrderService {
 			orderGoodsDao.insertGoodsBatch(orderGoodList);
 			//订单日志
 			orderLogDao.insertOrderLogBatch(orderLogList);
+			//删除购物车商品
+			cartDao.deleteBatch(split);
 		
 		} else {
 			orderIds.add(orderId);
@@ -324,9 +326,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private JSONObject getOrderInfoByIds(String orderIds) {
+		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
+		userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+        String userId =userInfo.getString("userId");
 		JSONObject info = new JSONObject();
 		String[] split = orderIds.split(",");
-		List<OrderInfo> OrderInfoList=orderDao.getAllInfoOrderByOrderIds(split);
+		List<OrderInfo> OrderInfoList=orderDao.getAllInfoOrderByOrderIds(split,userId);
 		List<JSONObject> goodsList=null;
 		BigDecimal totalPay=new BigDecimal(0);//总价
 		BigDecimal discountPay=new BigDecimal(0);//优惠价
