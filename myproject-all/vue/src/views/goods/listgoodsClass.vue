@@ -10,8 +10,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row>
+    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
       <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           <span v-text="getIndex(scope.$index)"> </span>
@@ -20,30 +19,23 @@
       <el-table-column align="center" prop="className" label="名称" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="showOrder" label="显示顺序" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="classLevel" label="级别" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="图片" width="170" >
+      <el-table-column align="center" label="图片" width="170">
         <template slot-scope="scope">
-          <img :src="scope.row.classImgUrl" width="80px" height="80px"/>
+          <img :src="scope.row.classImgUrl" width="80px" height="80px" />
         </template>
       </el-table-column>
       <el-table-column align="center" label="管理" width="200" v-if="hasPerm('goodsClass:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-           <el-button type="primary" icon="edit" @click="showXia(scope.$index)" v-show="goodsClass.classLevel!=3">下级</el-button>
+          <el-button type="primary" icon="edit" @click="showXia(scope.$index)" v-show="goodsClass.classLevel!=3">下级</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="listQuery.pageNum"
-      :page-size="listQuery.pageRow"
-      :total="totalCount"
-      :page-sizes="[10, 20, 50, 100]"
-      layout="total, sizes, prev, pager, next, jumper">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum"
+      :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="goodsClass" label-position="left" label-width="80px"
-               style='width: 300px; margin-left:80px;'>
+      <el-form class="small-space" :model="goodsClass" label-position="left" label-width="80px" style='width: 300px; margin-left:80px;'>
         <el-form-item label="分类名称">
           <el-input type="text" v-model="goodsClass.className">
           </el-input>
@@ -53,17 +45,12 @@
           </el-input>
         </el-form-item>
         <el-form-item label="图片" v-show='goodsClass.classLevel!=2'>
-      
-           <el-upload
-            action="http://localhost:8080/uploadimg"
-            list-type="picture-card"
-            :on-success="handlePictureSucess"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
-            <i class="el-icon-plus"></i>
+
+          <el-upload class="avatar-uploader" action="http://81.68.73.72:9000/uploadimg" :show-file-list="false"
+            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <img v-if="goodsClass.classImgUrl" :src="goodsClass.classImgUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar">
-         
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -79,14 +66,14 @@
     data() {
       return {
         totalCount: 0, //分页组件--数据总条数
-        list: [],//表格的数据
-        listLoading: false,//数据加载等待动画
+        list: [], //表格的数据
+        listLoading: false, //数据加载等待动画
         listQuery: {
-          pageNum: 1,//页码
-          pageRow: 50,//每页条数
+          pageNum: 1, //页码
+          pageRow: 50, //每页条数
           name: '',
-          parentId:"0",
-          shangId:"",
+          parentId: "0",
+          shangId: "",
         },
         dialogStatus: 'create',
         dialogFormVisible: false,
@@ -97,14 +84,14 @@
         goodsClass: {
           id: "",
           className: "",
-          classImgUrl:"",
-          imgUrl:"",
-          showOrder:"",
-          classLevel:1,
-          parentId:0
+          classImgUrl: "",
+          imgUrl: "",
+          showOrder: "",
+          classLevel: 1,
+          parentId: 0
         },
-         dialogImageUrl: '',
-         dialogVisible: false
+        dialogImageUrl: '',
+        dialogVisible: false
       }
     },
     created() {
@@ -148,37 +135,37 @@
         this.goodsClass.classImgUrl = "";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
-        this.dialogImageUrl=""
+        this.dialogImageUrl = ""
       },
       showUpdate($index) {
         //显示修改对话框
         this.goodsClass.id = this.list[$index].id;
         this.goodsClass.className = this.list[$index].className;
-        this.goodsClass.showOrder =this.list[$index].showOrder;
+        this.goodsClass.showOrder = this.list[$index].showOrder;
         this.goodsClass.classImgUrl = this.list[$index].classImgUrl;
-        this.dialogImageUrl=this.list[$index].classImgUrl
+        this.dialogImageUrl = this.list[$index].classImgUrl
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
-      showXia($index){
+      showXia($index) {
         this.goodsClass.classLevel++
-        this.listQuery.parentId=this.list[$index].id
-        if(this.goodsClass.classLevel==2){
-         this.listQuery.shangId=this.list[$index].id
+        this.listQuery.parentId = this.list[$index].id
+        if (this.goodsClass.classLevel == 2) {
+          this.listQuery.shangId = this.list[$index].id
         }
         this.getList()
       },
-      showSang(){
-        this.goodsClass.classLevel=this.goodsClass.classLevel-1;
-        if(this.goodsClass.classLevel==2){
-          this.listQuery.parentId=this.listQuery.shangId
-        }else{
-         this.listQuery.parentId=0
+      showSang() {
+        this.goodsClass.classLevel = this.goodsClass.classLevel - 1;
+        if (this.goodsClass.classLevel == 2) {
+          this.listQuery.parentId = this.listQuery.shangId
+        } else {
+          this.listQuery.parentId = 0
         }
         this.getList()
       },
       createGoodsClass() {
-        this.goodsClass.parentId=this.listQuery.parentId
+        this.goodsClass.parentId = this.listQuery.parentId
         //保存新文章
         this.api({
           url: "/goods/addgoodsClass",
@@ -200,43 +187,52 @@
           this.dialogFormVisible = false
         })
       },
-      handleRemove(file, fileList) {
-         console.log(file, fileList);
-       },
-       handlePictureCardPreview(file) {
-          this.dialogImageUrl = file.url;
-          this.dialogVisible = true;
-       },
-       handlePictureSucess(response, file, fileList){
-         if(response.code=='100'){
-           this.goodsClass.classImgUrl =response.info
-         }
-       }
+      handleAvatarSuccess(res, file) {
+        if (res.code == '100') {
+          this.goodsClass.classImgUrl = res.info.join(",")
+        }
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+      //   if (!isJPG) {
+      //     this.$message.error('上传图片只能是 JPG 格式!');
+      //   }
+      //   if (!isLt2M) {
+      //     this.$message.error('上传图片大小不能超过 2MB!');
+      //   }
+      //   return isJPG && isLt2M;
+      // }
     }
   }
+  }
 </script>
-  <style>
-    .avatar-uploader .el-upload {
-      border: 1px dashed #d9d9d9;
-      border-radius: 6px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    .avatar-uploader .el-upload:hover {
-      border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-      font-size: 28px;
-      color: #8c939d;
-      width: 178px;
-      height: 178px;
-      line-height: 178px;
-      text-align: center;
-    }
-    .avatar {
-      width: 178px;
-      height: 178px;
-      display: block;
-    }
-  </style>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

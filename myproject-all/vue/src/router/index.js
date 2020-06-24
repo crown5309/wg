@@ -80,5 +80,24 @@ export const asyncRouterMap = [
       },
     ]
   },
+  {
+    path: '/index',
+    component: Layout,
+    redirect: '/index/',
+    name: '',
+    meta: {title: '首页管理', icon: 'table'},
+    children: [
+      {
+        path: '', name: 'banner列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
+      },
+      {
+        path: 'indexClass',
+        name: '首页配置',
+        component: _import('index/indexClass'),
+        meta: {title: '首页配置', icon: 'password'},
+        menu: 'index_class'
+      },
+    ]
+  },
   {path: '*', redirect: '/404', hidden: true}
 ]
