@@ -1,14 +1,10 @@
 package com.heeexy.example.frontController;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.heeexy.example.service.AddressService;
 import com.heeexy.example.service.CartService;
-import com.heeexy.example.util.CommonUtil;
 
 @RestController
 @RequestMapping("/front")
