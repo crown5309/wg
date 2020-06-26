@@ -18,11 +18,12 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 	public List<JSONObject> listIndexConfig(JSONObject request2Json) {
 		// TODO Auto-generated method stubrequest2Json
 		String type=request2Json.getString("type");
+		String appId=request2Json.getString("appId");
 		List<JSONObject> js=null;
 		if("classes".equals(type)) {
 			js=indexConfigDao.listIndexConfigClasses(type);
 		}else {
-			js=indexConfigDao.listIndexConfigBanner(type);
+			js=indexConfigDao.listIndexConfigBanner(type,appId);
 		}
 		return js;
 	}
@@ -45,7 +46,7 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		JSONObject json=new JSONObject();
 		List<ClassesInfo> listIndexAll = indexConfigDao.listIndexAll(appId);
 		//获取banner
-		List<JSONObject> listIndexConfigBanner = indexConfigDao.listIndexConfigBanner("banner");
+		List<JSONObject> listIndexConfigBanner = indexConfigDao.listIndexConfigBanner("banner",appId);
 		json.put("classList", listIndexAll);
 		json.put("bannerList", listIndexConfigBanner);
 		return json;

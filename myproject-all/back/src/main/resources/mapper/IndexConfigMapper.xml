@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.IndexConfigDao">
 	<select id="listIndexConfigBanner" resultType="com.alibaba.fastjson.JSONObject">
-		select id ,type ,img_url imgUrl FROM index_config WHERE type=#{type}
+		select id ,type ,img_url imgUrl FROM index_config WHERE type=#{type} and app_id=#{appId}
 	</select>
 	<select id="listIndexConfigClasses" resultType="com.alibaba.fastjson.JSONObject">
 		select c.id,g.class_name className,c.goods_class_id from index_config c INNER JOIN 

@@ -21,7 +21,7 @@ public class IndexController {
 	 * @param appId
 	 * @return
 	 */
-	@GetMapping("/listIndexAll")
+	@RequestMapping("/listIndexAll")
 	public JSONObject listIndexAll(String appId) {
 		return CommonUtil.successJson(indexConfigService.listIndexAll(appId));
 	}

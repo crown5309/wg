@@ -48,7 +48,11 @@ public class CartServiceImpl implements CartService {
 	public Object getMyCartList(Integer pageNo, Integer pageSize) {
 		// TODO Auto-generated method stub
 		pageNo=(pageNo-1)*pageSize;
-		List<JSONObject> list=cartDao.getMyCartList(pageNo,pageSize,getUserId());
+		List<JSONObject> list=cartDao.getMyCartList(pageNo,pageSize,"1");
+		
+		for(JSONObject j:list) {
+			j.put("bannerUrl",j.getString("bannerUrl").split(","));
+		}
 		return CommonUtil.successJson(list);
 	}
 

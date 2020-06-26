@@ -40,7 +40,7 @@
 	</select>
 	
 	<update id="updateCartCountById">
-		update shop_cart set count=count+#{count} where  cart_id=#{id}
+		update shop_cart set count=#{count} where  cart_id=#{id}
 	</update>
 	<insert id="insert" parameterType="com.alibaba.fastjson.JSONObject">
 		 INSERT INTO shop_cart
@@ -64,7 +64,8 @@
 		g.goods_name goodsName,
 		g.price,
 		g.sku_store skuStore,
-		g.state
+		g.state,
+		g.banner_url bannerUrl
 		FROM
 		shop_cart cart
 		INNER JOIN goods g ON cart.goods_id = g.id
