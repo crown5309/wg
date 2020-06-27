@@ -1,6 +1,7 @@
 package com.heeexy.example.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -11,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.CartDao;
 import com.heeexy.example.service.CartService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.UUIDUtil;
 import com.heeexy.example.util.constants.Constants;
 
 @Service
@@ -32,6 +34,7 @@ public class CartServiceImpl implements CartService {
 			cart.put("goodsId", goodsId);
 			cart.put("count", count);
 			cart.put("userId", userId);
+			cart.put("cartId", UUIDUtil.uuid());
 			cartDao.insert(cart);
 		}
 		return CommonUtil.successJson();
@@ -48,7 +51,7 @@ public class CartServiceImpl implements CartService {
 	public Object getMyCartList(Integer pageNo, Integer pageSize) {
 		// TODO Auto-generated method stub
 		pageNo=(pageNo-1)*pageSize;
-		List<JSONObject> list=cartDao.getMyCartList(pageNo,pageSize,"1");
+		List<JSONObject> list=cartDao.getMyCartList(pageNo,pageSize,getUserId());
 		
 		for(JSONObject j:list) {
 			j.put("bannerUrl",j.getString("bannerUrl").split(","));

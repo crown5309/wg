@@ -21,12 +21,15 @@ public class GoodsServiceImpl implements GoodsService {
 		return CommonUtil.successJson();
 	}
 	@Override
-	public Object getAllGoodsByState(String state, int pageSize,int pageNo,String appId,String classId) {
+	public Object getAllGoodsByState(String state, int pageSize,int pageNo,String appId,String classId,String goodsName, String type, String priceFlag) {
 		// TODO Auto-generated method stub
 		pageNo=pageSize*(pageNo-1);
-		List<JSONObject> list=goodsDao.getAllGoodsByState(state,pageSize,pageNo,appId,classId);
+		List<JSONObject> list=goodsDao.getAllGoodsByState(state,pageSize,pageNo,appId,classId,goodsName,type,priceFlag);
+		String[] split =null;
 		for(int i=0;i<list.size();i++) {
-			list.get(i).put("bannerUrl",list.get(i).getString("bannerUrl").split(","));
+			split = list.get(i).getString("bannerUrl").split(",");
+			list.get(i).put("bannerUrl",split);
+			list.get(i).put("imageurl",split[0]);
 		list.get(i).put("isSelect",false);
 		}
 		return list;

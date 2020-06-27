@@ -75,7 +75,7 @@
 	<foreach collection="orderIds" item="id" index="index" open="(" close=")" separator=",">
 		#{id}
 	</foreach> 
-	and user_id=#{userId}
+	and o.user_id=#{userId}
 	</select>
 	<update id="updateOrderState">
 	   update shop_order set state=#{state},out_trade_no=#{out_trade_no} where order_id in

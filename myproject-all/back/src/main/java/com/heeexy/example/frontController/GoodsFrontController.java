@@ -24,8 +24,8 @@ public class GoodsFrontController {
 	
 	
 	@RequestMapping("/getAllGoodsByState")
-	public Object getAllGoodsClass(String state,int pageSize,int pageNo,String appId,String classId) {
-		return  CommonUtil.successJson(goodservice.getAllGoodsByState(state,pageSize,pageNo,appId,classId));
+	public Object getAllGoodsClass(String state,int pageSize,int pageNo,String appId,String classId,String goodsName,String type,String priceFlag) {
+		return  CommonUtil.successJson(goodservice.getAllGoodsByState(state,pageSize,pageNo,appId,classId,goodsName,type,priceFlag));
 	}
 
 	@RequestMapping("/getGoodsById")

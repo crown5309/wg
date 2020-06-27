@@ -13,6 +13,7 @@
 			<result column="count" property="count" />
 			<result column="price" property="price" />
 			<result column="skuStore" property="skuStore" />
+			<result column="state" property="state" />
 		</collection>
 	</resultMap>
 	<select id="getStoreList" resultMap="storeGoodsList">
@@ -44,8 +45,8 @@
 	</update>
 	<insert id="insert" parameterType="com.alibaba.fastjson.JSONObject">
 		 INSERT INTO shop_cart
-        (goods_id, count, user_id) VALUES
-            (#{goodsId}, #{count}, #{userId})
+        (goods_id, count, user_id,cart_id) VALUES
+            (#{goodsId}, #{count}, #{userId},#{cartId})
 	</insert>
 	<delete id="deleteMyCartById">
 		delete from shop_cart where  cart_id=#{id}

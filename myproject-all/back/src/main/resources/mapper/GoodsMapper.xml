@@ -19,6 +19,23 @@
     	<if test="classId!='' and classId !=null">
     		and class_id3=#{classId}
     	</if>
+    	<if test="goodsName!='' and goodsName !=null">
+    		and goods_name like concat("%",#{goodsName},"%")
+    	</if>
+    	<if test="type==''">
+    		order by create_time desc
+    	</if>
+    	<if test="type=='price'">
+    		<if test="priceFlag=='true'">
+    		order by price desc
+    		</if>
+    		<if test="priceFlag=='false'">
+    		order by price asc
+    		</if>
+    	</if>
+    	<if test="type=='count'">
+    		order by count desc
+    	</if>
     	limit #{pageNo},#{pageSize}
     </select>
     <update id="updateGoodsByIds">    

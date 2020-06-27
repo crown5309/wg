@@ -71,10 +71,11 @@ public class OrderServiceImpl implements OrderService {
 		String orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 		List<String> orderIds=new ArrayList<String>();//返回订单列表id
 		// TODO Auto-generated method stub
-		String[] split = cartIds.split(",");
+		
 		if (StringTools.isNullOrEmpty(goodsId) && !StringTools.isNullOrEmpty(cartIds)) {// 从购物车取信息
 			orderId = OrderIdFactory.getOrderIdByUUIdAndDate();
 			orderIds.add(orderId);
+			String[] split = cartIds.split(",");
 			List<StoreGoodsList> list=cartDao.getStoreList(split,userId);
 			List<JSONObject> goodsList=null;
 			List<JSONObject> orderList=new ArrayList<JSONObject>();//需要插入的订单集合
@@ -104,8 +105,8 @@ public class OrderServiceImpl implements OrderService {
 					 setOrderGoods(orderId, 0, goods, orderGoods);
 					 getPrice(map,goods,goods.getIntValue("count"));
 					 totalPay= totalPay.add(map.get("totalPay"));
-					 discountPay= totalPay.add(map.get("discountPay"));
-					 practicePay= totalPay.add(map.get("practicePay"));
+					 discountPay= discountPay.add(map.get("discountPay"));
+					 practicePay= practicePay.add(map.get("practicePay"));
 					 orderGoodList.add(orderGoods);
 				 }
 				 // 订单表保存

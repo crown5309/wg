@@ -10,7 +10,7 @@ public interface GoodsDao {
 
 	void addGoods(JSONObject request2Json);
 
-	List<JSONObject> getAllGoodsByState(@Param("state")String state,@Param("pageSize") int pageSize,@Param("pageNo") int pageNo,@Param("appId")String appId,@Param("classId")String classId);
+	List<JSONObject> getAllGoodsByState(@Param("state")String state,@Param("pageSize") int pageSize,@Param("pageNo") int pageNo,@Param("appId")String appId,@Param("classId")String classId,@Param("goodsName") String goodsName, @Param("type")String type,@Param("priceFlag") String priceFlag);
 
 	void updateGoodsByIds(@Param("state")String state, @Param("ids")String[] ids);
 
