@@ -1,4 +1,5 @@
-var app = getApp();
+var netUtil = require("../../../utils/api.js"); //require引入
+const app = getApp();
 Page({
   /**
    * 页面的初始数据
@@ -13,22 +14,43 @@ Page({
   onShow: function () {
     // 获取产品展示页保存的缓存数据（购物车的缓存数组，没有数据，则赋予一个空数组）  
     var arr = wx.getStorageSync('cart') || [];
-    console.info("缓存数据：" + arr);
-    // 有数据的话，就遍历数据，计算总金额 和 总数量  
+
+    let that = this
+    var params={
+      pageNo:1,
+      pageSize:1000
+    }
+    netUtil.requestLoading(app.globalData.baseUrl + "/front/getMyCartList", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      if (res.code == '100') {
+        arr=res.info
+         // 有数据的话，就遍历数据，计算总金额 和 总数量  
     if (arr.length > 0) {
       // 更新数据  
-      this.setData({
+      that.setData({
         carts: arr,
         iscart: true,
-        hidden: false
+        hidden: false,
+        totalMoney:0
       });
-      console.info("缓存数据：" + this.data.carts);
+      console.info("缓存数据：" + that.data.carts);
     } else {
-      this.setData({
+      that.setData({
         iscart: false,
         hidden: true,
       });
     }
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '失败',
+      })
+    })
+   
   },
   //勾选事件处理函数  
   switchSelect: function (e) {
@@ -87,9 +109,37 @@ Page({
   },
   // 去结算
   toBuy() {
-    wx.setStorageSync('cart', []);
+    var ids=[]
+    for(var i=0;i<this.data.carts.length;i++){
+      if(this.data.carts[i].isSelect==true){
+        ids.push(this.data.carts[i].id);
+      }
+    }
+    var params = {
+      cartIds: ids.join(","),
+    }
+    netUtil.requestLoading(app.globalData.baseUrl + "/front/submitOrder", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      var orderIds="";
+      console.log(res)
+      if (res.code == '100') {
+        orderIds = res.info
+        //支付页面
+        wx.navigateTo({
+          url: '../pay/pay?orderIds=' + orderIds +"&addressId="
+        })
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '加载失败',
+      })
+    })
     wx.showToast({
-      title: '去结算',
+      title: '去结算111111111111',
       icon: 'success',
       duration: 3000
     });
@@ -121,6 +171,21 @@ Page({
     });
     console.log("carts:" + this.data.carts);
     this.priceCount();
+    var params=this.data.carts[index]
+    netUtil.requestLoading(app.globalData.baseUrl + "/front/updateCartCountById", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      if (res.code == '100') {
+      
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '失败',
+      })
+    })
   },
   /* 加数 */
   addCount: function (e) {
@@ -128,7 +193,7 @@ Page({
     console.log("刚刚您点击了加+");
     var count = this.data.carts[index].count;
     // 商品总数量+1  
-    if (count < 10) {
+    if (count < 5000) {
       this.data.carts[index].count++;
     }
     // 将数值与状态写回  
@@ -136,7 +201,23 @@ Page({
       carts: this.data.carts
     });
     console.log("carts:" + this.data.carts);
+    
     this.priceCount();
+    var params=this.data.carts[index]
+    netUtil.requestLoading(app.globalData.baseUrl + "/front/updateCartCountById", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      if (res.code == '100') {
+      
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '失败',
+      })
+    })
   },
   priceCount: function (e) {
     this.data.totalMoney = 0;
@@ -168,5 +249,24 @@ Page({
       })
       wx.setStorageSync('cart', []);
     }
+    var params={
+      id:e.currentTarget.dataset.id
+    }
+    netUtil.requestLoading(app.globalData.baseUrl + "/front/deleteMyCartById", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      if (res.code == '100') {
+        wx.showToast({
+          title: '删除成功',
+        })
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '失败',
+      })
+    })
   }
 })

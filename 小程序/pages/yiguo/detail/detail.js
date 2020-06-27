@@ -9,7 +9,7 @@ Page({
 
   /**
    * 页面的初始数据
-   */
+   */ 
   data: {
     isLike: false,
     showDialog: false,
@@ -30,6 +30,7 @@ Page({
     codeUrl: 'https://cos.myfaka.com/car/share/code.jpg',//二维码网络路径
     localImageUrl: '', //绘制的商品图片本地路径
     localCodeUrl: '', //绘制的二维码图片本地路径
+    wxShow:true//分享显示
   },
   //预览图片
   previewImage: function (e) {
@@ -78,6 +79,50 @@ Page({
     console.log('goodsId:' + goodsId);
     //加载商品详情
     that.goodsInfoShow();
+    // 获取小程序二维码
+    that.getCode();
+  },
+  getCode: function () {
+    var that = this;
+    var params = {
+      appid: app.globalData.appId
+    }
+    netUtil.requestLoading(app.globalData.baseUrl + "/user/getPathCode", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      console.log(res)
+      if (res.code == '100') {
+        var arr = res.info
+        // 生成页面的二维码
+        wx.request({
+          //注意：下面的access_token值可以不可以直接复制使用，需要自己请求获取
+          url: 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + arr,
+          data: {
+            scene: '000',
+            page: ""  //这里按照需求设置值和参数   
+          },
+          method: "POST",
+          responseType: 'arraybuffer',  //设置响应类型
+          success(res) {
+            console.log(res)
+            var src2 = wx.arrayBufferToBase64(res.data);  //对数据进行转换操作
+            that.setData({
+              localCodeUrl:"data:image/png;base64,"+ src2
+            })
+          },
+          fail(e) {
+            console.log(e)
+          }
+        })
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '加载失败',
+      })
+    })
   },
   goodsInfoShow: function (success) {
     var that = this;
@@ -92,7 +137,8 @@ Page({
         arr.count=1
         arr.totalMoney=arr.price
         that.setData({
-          goods: arr
+          goods: arr,
+         imageUrl:arr.bannerUrl[0]
         });
       } else {
         wx.showToast({
@@ -150,7 +196,17 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    return {
+      title: this.data.goods.goodsName,
+      path: 'pages/yiguo/detail/detail?goodsId' + this.data.goods.goodsId,
+      imageUrl: "",
+      success: (res) => {
 
+      }
+    }
+  },
+  onShareMessage:function(){
+    this.onShareAppMessage()
   },
   /**
    * sku 弹出
@@ -164,7 +220,14 @@ Page({
   shareDialog: function () {
     this.setData({
       shareDialog: !this.data.shareDialog,
-      param: "car"
+      param: "car",
+       wxShow: true 
+    });
+  },
+  closeDialog2: function () {
+    console.info("关闭");
+    this.setData({
+      shareDialog: false
     });
   },
   /**
@@ -244,66 +307,92 @@ Page({
       })
      
     }else{//加入购物车
-      var goods = this.data.goods;
-      goods.isSelect = false;
-      var count = this.data.goods.count;
-
-      var title = this.data.goods.goodsName;
-      if (title.length > 13) {
-        goods.goodsName = title.substring(0, 13) + '...';
+      //下单
+      var that = this;
+      var params = {
+        goodsId: goodsId,
+        count: that.data.goods.count
       }
-
-      // 获取购物车的缓存数组（没有数据，则赋予一个空数组）  
-      var arr = wx.getStorageSync('cart') || [];
-      console.log("arr,{}", arr);
-      if (arr.length > 0) {
-        // 遍历购物车数组  
-        for (var j in arr) {
-          // 判断购物车内的item的id，和事件传递过来的id，是否相等  
-          if (arr[j].goodsId == goodsId) {
-            // 相等的话，给count+1（即再次添加入购物车，数量+1）  
-            arr[j].count = arr[j].count + 1;
-            // 最后，把购物车数据，存放入缓存（此处不用再给购物车数组push元素进去，因为这个是购物车有的，直接更新当前数组即可）  
-            try {
-              wx.setStorageSync('cart', arr)
-            } catch (e) {
-              console.log(e)
-            }
-            //关闭窗口
-            wx.showToast({
-              title: '加入购物车成功！',
-              icon: 'success',
-              duration: 2000
-            });
-            this.closeDialog();
-            // 返回（在if内使用return，跳出循环节约运算，节约性能） 
-            return;
-          }
+      netUtil.requestLoading(app.globalData.baseUrl + "/front/addToMyCart", params, '加载中', function (res) {
+        //res就是我们请求接口返回的数据
+        var orderIds = "";
+        console.log(res)
+        if (res.code == '100') {
+          wx.showToast({
+            title: '成功'
+          })
+        } else {
+          wx.showToast({
+            title: res.msg
+          })
         }
-        // 遍历完购物车后，没有对应的item项，把goodslist的当前项放入购物车数组  
-        arr.push(goods);
-      } else {
-        arr.push(goods);
-      }
-      // 最后，把购物车数据，存放入缓存  
-      try {
-        wx.setStorageSync('cart', arr)
-        // 返回（在if内使用return，跳出循环节约运算，节约性能） 
-        //关闭窗口
+      }, function () {
         wx.showToast({
-          title: '加入购物车成功！',
-          icon: 'success',
-          duration: 2000
-        });
-        this.closeDialog();
-        return;
-      } catch (e) {
-        console.log(e)
-      }
+          title: '加载失败',
+        })
+      })
     }
+    //   var goods = this.data.goods;
+    //   goods.isSelect = false;
+    //   var count = this.data.goods.count;
+
+    //   var title = this.data.goods.goodsName;
+    //   if (title.length > 13) {
+    //     goods.goodsName = title.substring(0, 13) + '...';
+    //   }
+
+    //   // 获取购物车的缓存数组（没有数据，则赋予一个空数组）  
+    //   var arr = wx.getStorageSync('cart') || [];
+    //   console.log("arr,{}", arr);
+    //   if (arr.length > 0) {
+    //     // 遍历购物车数组  
+    //     for (var j in arr) {
+    //       // 判断购物车内的item的id，和事件传递过来的id，是否相等  
+    //       if (arr[j].goodsId == goodsId) {
+    //         // 相等的话，给count+1（即再次添加入购物车，数量+1）  
+    //         arr[j].count = arr[j].count + 1;
+    //         // 最后，把购物车数据，存放入缓存（此处不用再给购物车数组push元素进去，因为这个是购物车有的，直接更新当前数组即可）  
+    //         try {
+    //           wx.setStorageSync('cart', arr)
+    //         } catch (e) {
+    //           console.log(e)
+    //         }
+    //         //关闭窗口
+    //         wx.showToast({
+    //           title: '加入购物车成功！',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         this.closeDialog();
+    //         // 返回（在if内使用return，跳出循环节约运算，节约性能） 
+    //         return;
+    //       }
+    //     }
+    //     // 遍历完购物车后，没有对应的item项，把goodslist的当前项放入购物车数组  
+    //     arr.push(goods);
+    //   } else {
+    //     arr.push(goods);
+    //   }
+    //   // 最后，把购物车数据，存放入缓存  
+    //   try {
+    //     wx.setStorageSync('cart', arr)
+    //     // 返回（在if内使用return，跳出循环节约运算，节约性能） 
+    //     //关闭窗口
+    //     wx.showToast({
+    //       title: '加入购物车成功！',
+    //       icon: 'success',
+    //       duration: 2000
+    //     });
+    //     this.closeDialog();
+    //     return;
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }
   },
   /*按生成图片按钮时*/
   creatQrcodePictures: function () {
+    this.setData({ wxShow:false})
     wx.showLoading({
       title: '正在绘制图片',
     })
@@ -326,7 +415,6 @@ Page({
   },
   // 获取图片信息
   getImginfo: function (urlArr, _type) {
-    debugger
     let that = this;
     wx.getImageInfo({
       src: urlArr[_type],
@@ -337,9 +425,6 @@ Page({
             localImageUrl: res.path,
           })
         //  that.getImginfo(urlArr, 1)
-          that.setData({ //二维码
-            localCodeUrl: res.path,
-          })
           // 创建canvas图片
           that.createNewImg();
         } else {
@@ -368,36 +453,36 @@ Page({
     let ctx = wx.createCanvasContext('mycanvas');
     // 绘制背景
     ctx.setFillStyle("#fff");
-    ctx.fillRect(0, 0, _width - 40, imgH + 160);
+    ctx.fillRect(20, 20, _width/2 - 40, imgH/2+30);
     //绘制图片
-    ctx.drawImage(this.data.localImageUrl, 10, 10, _width - 60, imgH);
+    ctx.drawImage(this.data.localImageUrl, _width/4+20, 10, _width/2 - 60, imgH/2);
 
     // 绘制标题
-    ctx.setFontSize(18);
+    ctx.setFontSize(12);
     ctx.setFillStyle('#333');
 
     let txtWidth = _width - 60 + 30 - 100 - 50; //文字的宽度
 
     //商品名称
-    ctx.fillText('汽车服务：白金蜡', 10, imgH + 40, txtWidth);
+    ctx.fillText(this.data.goods.goodsName, _width / 4 + 20, imgH/2 + 40, txtWidth);
     // 绘制价格单位 '￥'
-    ctx.setFontSize(14);
+    ctx.setFontSize(10);
     ctx.setFillStyle('#d2aa68');
-    ctx.fillText('￥', 10, imgH + 65, txtWidth);
+    ctx.fillText('￥', _width / 4 + 16, imgH/2 + 65, txtWidth);
     // 绘制价格
-    ctx.setFontSize(18);
-    ctx.fillText('90元/次', 26, imgH + 65, txtWidth);
+    ctx.setFontSize(10);
+    ctx.fillText(this.data.goods.price, _width / 4 + 24, imgH/2 + 65, txtWidth);
     // 绘制小程序名称
-    ctx.setFontSize(20);
+    ctx.setFontSize(10);
     ctx.setFillStyle('red');
-    ctx.fillText('武鸣爱车', 10, imgH + 105, txtWidth);
+    ctx.fillText('微信电商', _width / 4 + 20, imgH/2 + 105, txtWidth);
     // 绘制提示信息
-    ctx.setFontSize(14);
+    ctx.setFontSize(10);
     ctx.setFillStyle('#999');
-    ctx.fillText('微信小程序 • 长按识别', 10, imgH + 125, txtWidth);
+    ctx.fillText('微信小程序 • 长按识别', _width / 4 + 20, imgH/2 + 125, txtWidth);
 
     // 绘制二维码
-    ctx.drawImage(this.data.localCodeUrl, _width - 80 + 80 - 150, imgH + 20, 100, 100);
+    ctx.drawImage(this.data.localCodeUrl, _width- 150, imgH/2 + 20, 60, 60);
     // 显示绘制
     ctx.draw();
 

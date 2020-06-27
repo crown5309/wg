@@ -19,13 +19,13 @@ Page({
       this.setData({
         resultType: "success",
         resultContent: "支付成功",
-        url: '../order/order?status=tosend'
+        url: '../order/order?typeId=0'
       });
     } else {
       this.setData({
         resultType: "warn",
         resultContent: "支付失败",
-        url: '../list/list'
+        url: '../order/order?typeId=0'
       });
     }
   }

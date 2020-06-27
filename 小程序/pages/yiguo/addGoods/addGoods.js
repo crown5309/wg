@@ -666,9 +666,9 @@ Page({
   /** 选择图片detail */
   chooseDetail: function () {
     var that = this;
-    if (that.data.detail.length < 3) {
+    if (that.data.detail.length < 10) {
       wx.chooseImage({
-        count: 3,
+        count: 10,
         sizeType: ['compressed'],
         sourceType: ['album', 'camera'],
         success: function (photo) {
@@ -684,30 +684,33 @@ Page({
           })
           that.chooseViewShowDetail();
           var tempFilePaths = photo.tempFilePaths;
-          wx.uploadFile({
-            url: app.globalData.baseUrl + "/uploadimg",      //此处换上你的接口地址
-            filePath: tempFilePaths[0],
-            name: 'file',
-            header: {
-              "Content-Type": "multipart/form-data",
-              'accept': 'application/json',
+          for (var i = 0; i < tempFilePaths.length;i++){
+            wx.uploadFile({
+              url: app.globalData.baseUrl + "/uploadimg",      //此处换上你的接口地址
+              filePath: tempFilePaths[0],
+              name: 'file',
+              header: {
+                "Content-Type": "multipart/form-data",
+                'accept': 'application/json',
 
-            },
-            formData: {
-              'user': 'test'  //其他额外的formdata，可不写
-            },
-            success: function (res) {
-              let detailUrl = that.data.detailUrl
-              detailUrl.push(JSON.parse(res.data).info)
-              that.setData({
-                detailUrl: detailUrl
-              })
-            },
-            fail: function (res) {
-              console.log('fail');
+              },
+              formData: {
+                'user': 'test'  //其他额外的formdata，可不写
+              },
+              success: function (res) {
+                let detailUrl = that.data.detailUrl
+                detailUrl.push(JSON.parse(res.data).info)
+                that.setData({
+                  detailUrl: detailUrl
+                })
+              },
+              fail: function (res) {
+                console.log('fail');
 
-            },
-          })
+              },
+            })
+          }
+       
         }
       })
     } else {
@@ -791,9 +794,9 @@ Page({
   /** 选择图片Banner */
   chooseBanner: function () {
     var that = this;
-    if (that.data.banner.length < 2) {
+    if (that.data.banner.length < 10) {
       wx.chooseImage({
-        count: 2, //最多选择4张图片- that.data.imgArr.length,
+        count: 10, //最多选择4张图片- that.data.imgArr.length,
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (photo) {
@@ -808,30 +811,33 @@ Page({
           })
           that.chooseViewShowBanner();
           var tempFilePaths = photo.tempFilePaths;
-          wx.uploadFile({
-            url: app.globalData.baseUrl+"/uploadimg",      //此处换上你的接口地址
-            filePath: tempFilePaths[0],
-            name: 'file',
-            header: {
-              "Content-Type": "multipart/form-data",
-              'accept': 'application/json',
-    
-            },
-            formData: {
-              'user': 'test'  //其他额外的formdata，可不写
-            },
-            success: function (res) {
-              let bannerUrl =that.data.bannerUrl
-              bannerUrl.push(JSON.parse(res.data).info)
-              that.setData({
-                bannerUrl: bannerUrl 
-              })
-            },
-            fail: function (res) {
-              console.log('fail');
+          for (var i = 0; i < tempFilePaths.length;i++){
+            wx.uploadFile({
+              url: app.globalData.baseUrl + "/uploadimg",      //此处换上你的接口地址
+              filePath: tempFilePaths[i],
+              name: 'file',
+              header: {
+                "Content-Type": "multipart/form-data",
+                'accept': 'application/json;charset=utf-8',
 
-            },
-          })
+              },
+              formData: {
+                'user': 'test'  //其他额外的formdata，可不写
+              },
+              success: function (res) {
+                let bannerUrl = that.data.bannerUrl
+                bannerUrl.push(JSON.parse(res.data).info)
+                that.setData({
+                  bannerUrl: bannerUrl
+                })
+              },
+              fail: function (res) {
+                console.log('fail');
+
+              },
+            })
+          }
+          
         }
       })
 

@@ -8,7 +8,7 @@
 
 <view class="separate"></view>
 
-<view class="order" catchtap="toOrder">
+<view class="order" catchtap="toOrder" data-typeid="0">
   <text class="myorder-text">我的订单</text>
   <text class="myorderlook-text">查看全部订单</text>
 </view>

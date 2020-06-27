@@ -1,13 +1,18 @@
+var netUtil = require("../../../utils/api.js"); //require引入
+const app = getApp();
 Page({
   data: {
     painting: {},
     shareImage: '',
-    navbar: ['今日推荐', '时尚', '国际', '美妆', '母婴', '居家'],
+    navbar: ['首页'],
+    navbarArray:[],
     currentTab: 0,
     indicatorDots: true, //设置是否显示面板指示点
     autoplay: true, //设置是否自动切换
     interval: 3000, //设置自动切换时间间隔,3s
-    duration: 1000, //  设置滑动动画时长1s
+    duration: 1000, //  设置滑动动画时长1s,
+    menus:[],
+    showBanner:true,
     imgUrls: [
       'https://a4.vimage1.com/upload/flow/2017/10/20/117/15084947982974.jpg',
       'https://a2.vimage1.com/upload/flow/2017/11/07/73/15100619325212.jpg',
@@ -141,10 +146,22 @@ Page({
 
   // 导航切换监听
   navbarTap: function (e) {
-    console.debug(e);
-    this.setData({
-      currentTab: e.currentTarget.dataset.idx
-    })
+    
+    console.log(e.currentTarget.dataset.idx);
+    if(e.currentTarget.dataset.idx>=1){
+      this.setData({
+        currentTab: e.currentTarget.dataset.idx,
+        menus:this.data.navbarArray[e.currentTarget.dataset.idx-1].classsesList,
+        showBanner:false
+      })
+    }else{
+      this.setData({
+        currentTab: e.currentTarget.dataset.idx,
+        menus:[],
+        showBanner:true
+      })
+    }
+    
   },
   //加载更多
   onReachBottom: function () {
@@ -371,6 +388,44 @@ Page({
         shareImage: tempFilePath
       })
     }
-  }
+  },
+  onShow:function(){
+    let that=this
+    that.setData({navbar:['首页']})
+    var params={
+      appId:app.globalData.appId,
+    }
+    netUtil.requestLoading(app.globalData.baseUrl + "/index/listIndexAll", params, '加载中', function (res) {
+      //res就是我们请求接口返回的数据
+      if (res.code == '100') {
+        that.setData({
+          imgUrls:res.info.bannerList,
+          navbarArray:res.info.classList,
+        })
+        var array=that.data.navbar
+       for(var i=0;i<that.data.navbarArray.length;i++){
+        array.push(that.data.navbarArray[i].name);
+       }
+       that.setData({
+        navbar:array,
+      })
+      } else {
+        wx.showToast({
+          title: res.msg
+        })
+      }
+    }, function () {
+      wx.showToast({
+        title: '失败',
+      })
+    })
+  },
+  ToSearchResult:function(e){
+    var id=e.currentTarget.dataset.id
+    console.log(id)
+     wx.navigateTo({
+       url: '../list/list?id='+id
+     })
+  },
  
 })

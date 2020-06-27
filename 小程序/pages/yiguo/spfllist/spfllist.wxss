@@ -155,7 +155,7 @@ page, .page {
 }
 .banner_list{
   display: inline-flex;
-  width: 33.33333%;
+  width: 20%;
   justify-content: center;
   color: #606060;
 }

@@ -20,16 +20,27 @@
   <text wx:for="{{navbar}}" data-idx="{{index}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>  
 </view>
 <!-- banner start-->
-   <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+   <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" wx:if="{{showBanner}}">
     <block wx:for="{{imgUrls}}">
       <swiper-item>
-        <image src="{{item}}" />
+        <image src="{{item.imgUrl}}" />
       </swiper-item>
     </block>
   </swiper> 
 <!-- banner end-->
+<!-- 分类导航 -->
+ <view>
+  <view class="navy">
+    <block wx:for-items="{{menus}}" wx:key="name">
+      <view class="nav-item"  data-type="{{item.className}}" data-id="{{item.goodsClassId}}" bindtap="ToSearchResult">
+        <image src="{{item.classImgUrl}}" class="nav-image" />
+        <text>{{item.className}}</text>
+      </view>
+    </block>
+  </view>
+ </view>
 <!--实时热销榜 start-->
-<view class="hots-container"> 
+<!-- <view class="hots-container"> 
   <view class="category-title">
     <text class="title">实时热销榜</text>
     <view class="line_name">
@@ -48,14 +59,14 @@
         </block> 
       </view>
     </scroll-view>   
-</view> 
+</view>  -->
 <!--实时热销榜 end-->
 <!--福利专场 start-->
 <view class="welfare-container"> 
   <view class="category-title">
-    <text class="title">福利专场</text>
+    <text class="title">热卖商品</text>
     <view class="line_name">
-      <text>每天早10晚8准时上新</text>
+      <!-- <text>每天早10晚8准时上新</text> -->
     </view>
   </view>  
   <scroll-view scroll-y="true">

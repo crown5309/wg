@@ -40,12 +40,12 @@
   <view>
   <!-- 顶部分类和搜索框 -->
     <view class='header'>
-      <!-- <view class='header_fl' bindtap="tap_ch">
+      <view class='header_fl' bindtap="tap_ch">
         <image class="fl_img" src="../../../image/fl.png"></image>
         <text class='fl_label'>分类</text>
-      </view> -->
+      </view>
       <view class='header_ss'>
-        <image class="ss_img" src="../../../images/sousuo.png"></image>
+        <image class="ss_img" src="../../../image/sousuo.png"></image>
         <input class='ss_input' placeholder='请输入搜索的商品' bindinput='spxx_input'></input>
       </view>
       <button class='ss_btn' bindtap='tap_search'>搜索</button>
@@ -61,36 +61,36 @@
           <image class='arrow_down' hidden='{{item.icon2}}' src='{{item.b_src2}}'></image>
         </view>
       </view>
-      <!-- <view class='banner_list' bindtap='tap_sx'>筛选</view>  -->
+      <view class='banner_list' bindtap='tap_sx'>筛选</view>
     </view>
     <!-- 商品列表 -->
     <view class='content'>
       <view class="goods" style="width:100%">
         <view class="img_item col1">
           <view class='goods_item' wx:for="{{col1}}" wx:key="id">
-            <view class="item_info" bindtap='toGo' data-id="{{item.goodsId}}">
-              <image src="{{item.imageurl}}" style="width:100%;height:{{item.height}}px" mode='aspectFill'></image> 
+            <view class="item_info">
+              <image src="{{item.imageurl}}" style="width:100%;height:{{item.height}}px" mode='aspectFill'></image>
             </view>
             <view class="product-name">
-              {{item.goodsName}}
+              {{item.name}}
             </view>
             <view class="product-price-wrap">
-              <p class="product-price-new">￥{{item.price}}</p>  
-              <image class='jrgwc' src='../../images/cart1.png"' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.goodsName}}' data-price='{{item.price}}'></image>
+              <p class="product-price-new">￥{{item.newprice}}</p>  
+              <image class='jrgwc' src='../../../image/jrgwc.png' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.name}}' data-price='{{item.newprice}}'></image>
             </view>
           </view>
         </view>
         <view class="img_item">
           <view class='goods_item' wx:for="{{col2}}" wx:key="id">
-            <view class="item_info" bindtap='toGo' data-id="{{item.goodsId}}">
+            <view class="item_info">
               <image src="{{item.imageurl}}" style="width:100%;height:{{item.height}}px" mode='aspectFill'></image>
             </view>
             <view class="product-name">
-              {{item.goodsName}}
+              {{item.name}}
             </view>
             <view class="product-price-wrap">
-              <p class="product-price-new">￥{{item.price}}</p>  
-              <image class='jrgwc' src='../../../image/jrgwc.png' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.goodsName}}' data-price='{{item.price}}'></image>
+              <p class="product-price-new">￥{{item.newprice}}</p>  
+              <image class='jrgwc' src='../../../image/jrgwc.png' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.name}}' data-price='{{item.newprice}}'></image>
             </view>
           </view>
         </view>

@@ -19,28 +19,48 @@ Page({
     orderinfo:{},
     oneGoodsShow:true,
     addressShow:true,
-    address:{},
+    address:null,
     orderIds:"",
     addressId:""
   },
   // 跳到购物车
   bindSubmitOrder(e) {
     let that = this
+    if (that.data.address==null){
+      wx.showToast({
+        title: '请选择地址',
+      })
+    }
     var param = {
       orderIds: that.data.orderIds,
       addressId: that.data.address.id
     }
     netUtil.requestLoading(app.globalData.baseUrl + "/front/pay", param, '数据加载中', function (res) {
       if (res.code == '100') {
+        var res=res.info
+        wx.requestPayment({
+          timeStamp: res.timeStamp,
+          nonceStr: res.nonceStr,
+          package: res.package,
+          signType: res.signType,
+          paySign: res.paySign,
+          success:function(){
+            wx.navigateTo({ url: '../payCompelete/payCompelete?resultType=success' });
+          },
+          fail:function(){
+            wx.navigateTo({ url: '../payCompelete/payCompelete?resultType=error' });
+          },
+
+        })
       } else {
-        app.Tips({ title: res.msg, icon: 'error' });
+        wx.navigateTo({ url: '../payCompelete/payCompelete?resultType=error' });
       }
     }, function () {
       wx.showToast({
         title: '失败',
       })
     })
-    wx.navigateTo({ url: '../payCompelete/payCompelete?resultType=success' });
+    
   },
   bindaddress(e) {
     wx.navigateTo({ url: '../addressList/addressList?source=pay&orderIds=' + this.data.orderIds });
@@ -57,7 +77,7 @@ Page({
       addressId: this.data.addressId
     }
     if (this.data.addressId!="")
-    netUtil.requestLoading(app.globalData.baseUrl + "/front/addressId", param, '数据加载中', function (res) {
+      netUtil.requestLoading(app.globalData.baseUrl + "/front/getAddressById", param, '数据加载中', function (res) {
       if (res.code == '100') {
         that.setData({
           address: res.info,
@@ -91,7 +111,6 @@ Page({
           if (result[0].goodsList.length==1){
             that.setData({
               goods: result[0].goodsList[0],
-              orderinfo: res.info,
               address: address,
               addressShow: show,
               orderIds: options.orderIds,
@@ -99,6 +118,9 @@ Page({
             })
           }
         }
+        that.setData({
+          orderinfo: res.info,
+        })
        for(var i=0;i<result.length;i++){
           
        }

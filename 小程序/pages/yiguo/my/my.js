@@ -39,25 +39,25 @@ Page({
     ],
     orderItems: [
       {
-        typeId: 0,
+        typeId: 1,
         name: '待付款',
         url: 'bill',
         imageurl: '../../../images/person/personal_pay.png',
       },
       {
-        typeId: 1,
+        typeId: 2,
         name: '待收货',
         url: 'bill',
         imageurl: '../../../images/person/personal_receipt.png',
       },
       {
-        typeId: 2,
-        name: '待评价',
+        typeId: 3,
+        name: '已完成',
         url: 'bill',
         imageurl: '../../../images/person/personal_comment.png'
       },
       {
-        typeId: 3,
+        typeId: 4,
         name: '退换/售后',
         url: 'bill',
         imageurl: '../../../images/person/personal_service.png'
@@ -65,9 +65,9 @@ Page({
     ],
   },
   //事件处理函数
-  toOrder: function () {
+  toOrder: function (e) {
     wx.navigateTo({
-      url: '../order/order'
+      url: '../order/order?typeId=' + e.currentTarget.dataset.typeid
     })
   },
   onLoad: function () {
@@ -125,49 +125,57 @@ Page({
     let that = this;
     //获取openid不需要授权
     wx.login({
-      success: function (res) {
+      success: function (res1) {
         //请求自己后台获取用户openid
-        wx.request({
-          url: 'https://api.weixin.qq.com/sns/jscode2session',
-          data: {
-            appid: app.globalData.appId,
-            secret: app.globalData.appsecret,
-            js_code: res.code,
-            grant_type: 'authorization_code'
-          },
-          success: function (response) {
-            app.globalData.userInfo.openId = response.data.openid;
-            app.globalData.userInfo.appId = app.globalData.appId;
-            console.log('请求获取openid:' + app.globalData.userInfo.openId);
             //可以把openid存到本地，方便以后调用
             wx.setStorageSync('openid', app.globalData.userInfo.openId);
-            //网络请求
-            that.data.params = app.globalData.userInfo;
-            netUtil.requestLoading(app.globalData.baseUrl + "/login/frontAuth", that.data.params, '登录中', function (res) {
-              //res就是我们请求接口返回的数据
-              console.log(res)
-              if (res.code == '100') {
-                app.globalData.userInfo = res.info.userPermission
-                app.globalData.sessionId = res.sessionId
-                that.setData({
-                  userInfo: res.info.userPermission,
-                  hasUserInfo: false
-                })
-              } else {
-                wx.showToast({
-                  title: res.msg
-                })
-              }
-            }, function () {
-              wx.showToast({
-                title: '登录失败',
+        wx.getSetting({
+          success: res => {
+            if (res.authSetting['scope.userInfo']) {
+              // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+              wx.getUserInfo({
+                success: res => {
+                  // 可以将 res 发送给后台解码出 unionId
+                  console.log(res.userInfo)
+                  //网络请求
+                  that.data.params = res.userInfo
+                  that.data.params.appid= app.globalData.appId
+                  that.data.params.code=res1.code
+                  
+                  netUtil.requestLoading(app.globalData.baseUrl + "/user/auth", that.data.params, '登录中', function (res) {
+                    //res就是我们请求接口返回的数据
+                    console.log(res)
+                    if (res.code == '100') {
+                      app.globalData.sessionId = res.sessionId
+                      that.setData({
+                        userInfo: res.info,
+                        hasUserInfo: false
+                      })
+                    } else {
+                      wx.showToast({
+                        title: res.msg
+                      })
+                    }
+                  }, function () {
+                    wx.showToast({
+                      title: '登录失败',
+                    })
+                  })
+                  // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+                  // 所以此处加入 callback 以防止这种情况
+                  if (that.userInfoReadyCallback) {
+                    that.userInfoReadyCallback(res)
+                  }
+                }
               })
-            })
+            }
           }
         })
+               }
+        })
       }
-    })
-  },
+
+  ,
   myAddress:function(e){
     wx.navigateTo({ url: '../addressList/addressList' });
   }
