@@ -3,22 +3,23 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-button type="primary" icon="plus" v-if="hasPerm('user:add')" @click="showCreate">添加
+          <el-button type="primary" icon="plus" v-if="hasPerm('banner:add')" @click="showCreate">添加
           </el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
               highlight-current-row>
+     <el-table-column align="center" label="显示顺序" prop="showOrder" ></el-table-column>
      <el-table-column align="center" label="图片" >
        <template slot-scope="scope">
          <img :src="scope.row.imgUrl" width="80px" height="80px" />
        </template>
      </el-table-column>
-      <el-table-column align="center" label="管理"  v-if="hasPerm('user:update')">
+      <el-table-column align="center" label="管理"  v-if="hasPerm('banner:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete" v-if="scope.row.userId!=userId "
+          <el-button type="danger" icon="delete"  v-if="hasPerm('banner:delete')"
                      @click="removeUser(scope.$index)">删除
           </el-button>
         </template>
@@ -40,17 +41,16 @@
         </el-input>
       </el-form-item>
       <el-form-item label="图片">
-  
         <el-upload class="avatar-uploader" action="http://81.68.73.72:9000/uploadimg" :show-file-list="false"
           :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-          <img v-if="goodsClass.classImgUrl" :src="goodsClass.classImgUrl" class="avatar">
+          <img v-if="goodsClass.imgUrl" :src="goodsClass.imgUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button v-if="dialogStatus=='create'" type="success" @click="createGoodsClass()">创 建</el-button>
+      <el-button v-if="dialogStatus=='create'" type="success" @click="createBanner()">创 建</el-button>
       <el-button type="primary" v-else @click="updateArticle">修 改</el-button>
     </div>
   </el-dialog>
@@ -77,12 +77,11 @@
           create: '新建用户'
         },
         goodsClass: {
-          classImgUrl: '',
-          password: '',
-          nickname: '',
-          roleId: '',
-          userId: ''
-        }
+          imgUrl: '',
+          showOrder: '',
+          id: '',
+        },
+        deId:{id:""}
       }
     },
     created() {
@@ -129,49 +128,40 @@
       },
       showCreate() {
         //显示新增对话框
-        this.tempUser.username = "";
-        this.tempUser.password = "";
-        this.tempUser.nickname = "";
-        this.tempUser.roleId = "";
-        this.tempUser.userId = "";
+        this.goodsClass.id = "";
+         this.goodsClass.imgUrl = "";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
         let user = this.list[$index];
-        this.tempUser.username = user.username;
-        this.tempUser.nickname = user.nickname;
-        this.tempUser.roleId = user.roleId;
-        this.tempUser.userId = user.userId;
-        this.tempUser.deleteStatus = '1';
-        this.tempUser.password = '';
+        this.goodsClass.imgUrl =user.imgUrl;
+        this.goodsClass.id=user.id
+        this.goodsClass.showOrder =user.showOrder;
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
-      createUser() {
+      createBanner() {
         //添加新用户
         this.api({
-          url: "/user/addUser",
+          url: "/index/addBanner",
           method: "post",
-          data: this.tempUser
+          params: this.goodsClass
         }).then(() => {
           this.getList();
           this.dialogFormVisible = false
         })
       },
-      updateUser() {
+      updateArticle() {
         //修改用户信息
         let _vue = this;
         this.api({
-          url: "/user/updateUser",
+          url: "/index/updateBanner",
           method: "post",
-          data: this.tempUser
+          params: this.goodsClass
         }).then(() => {
           let msg = "修改成功";
           this.dialogFormVisible = false
-          if (this.userId === this.tempUser.userId) {
-            msg = '修改成功,部分信息重新登录后生效'
-          }
           this.$message({
             message: msg,
             type: 'success',
@@ -184,17 +174,17 @@
       },
       removeUser($index) {
         let _vue = this;
-        this.$confirm('确定删除此用户?', '提示', {
+        this.$confirm('确定删除?', '提示', {
           confirmButtonText: '确定',
           showCancelButton: false,
           type: 'warning'
         }).then(() => {
           let user = _vue.list[$index];
-          user.deleteStatus = '2';
+          this.deId.id=user.id
           _vue.api({
-            url: "/user/updateUser",
+            url: "/index/deleteBanner",
             method: "post",
-            data: user
+            params: this.deId
           }).then(() => {
             _vue.getList()
           }).catch(() => {
@@ -202,6 +192,43 @@
           })
         })
       },
+      handleAvatarSuccess(res, file) {
+          if (res.code == '100') {
+            this.goodsClass.imgUrl = res.info.join(",")
+          }
+        },
+        beforeAvatarUpload(file) {
+          const isJPG = file.type === 'image/jpeg';
+          const isLt2M = file.size / 1024 / 1024 < 2;
+      }
     }
   }
 </script>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

@@ -3,6 +3,8 @@ package com.heeexy.example.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.heeexy.example.dao.IndexConfigDao;
 import com.heeexy.example.entity.ClassesInfo;
 import com.heeexy.example.service.IndexConfigService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.StringTools;
 import com.heeexy.example.util.constants.Constants;
 
 @Service
@@ -162,6 +165,52 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		int count = indexConfigDao.countBanner(request2Json);
 		List<JSONObject> list = indexConfigDao.listBanner(request2Json);
 		return CommonUtil.successPage(request2Json, list, count);
+	}
+
+	@Override
+	public JSONObject addBanner(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		String showOrder = request.getParameter("showOrder");
+		String imgUrl = request.getParameter("imgUrl");
+		if(StringTools.isNullOrEmpty(showOrder)) {
+			return CommonUtil.errorJson("显示顺序不能为空");
+		}
+		if(StringTools.isNullOrEmpty(imgUrl)) {
+			return CommonUtil.errorJson("图片不能为空");
+		}
+		Session session = SecurityUtils.getSubject().getSession();
+		JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		userInfo.put("showOrder", showOrder);
+		userInfo.put("imgUrl", imgUrl);
+		indexConfigDao.addBanner(userInfo);
+		return CommonUtil.successJson();
+	}
+
+	@Override
+	public JSONObject updateBanner(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		String showOrder = request.getParameter("showOrder");
+		String imgUrl = request.getParameter("imgUrl");
+		if(StringTools.isNullOrEmpty(showOrder)) {
+			return CommonUtil.errorJson("显示顺序不能为空");
+		}
+		if(StringTools.isNullOrEmpty(imgUrl)) {
+			return CommonUtil.errorJson("图片不能为空");
+		}
+		Session session = SecurityUtils.getSubject().getSession();
+		JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		userInfo.put("showOrder", showOrder);
+		userInfo.put("imgUrl", imgUrl);
+		userInfo.put("id", request.getParameter("id"));
+		indexConfigDao.updateBanner(userInfo);
+		return CommonUtil.successJson();
+	}
+
+	@Override
+	public JSONObject deleteBanner(String id) {
+		// TODO Auto-generated method stub
+		indexConfigDao.deleteBanner(id);
+		return CommonUtil.successJson();
 	}
 
 }

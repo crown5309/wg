@@ -81,10 +81,31 @@ FROM
      <select id="listBanner" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             w.id                                      id,
-            w.img_url                                 imgUrl
+            w.img_url                                 imgUrl,
+            w.show_order                              showOrder
         FROM index_config w
         WHERE w.app_id=#{appId} and w.type='banner'
         ORDER BY w.id DESC
         LIMIT #{offSet}, #{pageRow}
     </select>
+    <insert id="addBanner"  parameterType="com.alibaba.fastjson.JSONObject">
+    			insert into index_config
+    			(img_url,app_id,type,show_order)
+    			values
+    			
+    				(
+    					#{imgUrl},
+    					#{appId},
+    					'banner',
+    					#{showOrder}
+   
+    				)
+    		
+    </insert>
+    <update id="updateBanner"  parameterType="com.alibaba.fastjson.JSONObject">
+    	update index_config set img_url=#{imgUrl},show_order=#{showOrder} WHERE id=#{id}
+    </update>
+    <delete id="deleteBanner">
+    	delete from index_config  WHERE id=#{id}
+    </delete>
 </mapper>

@@ -25,4 +25,10 @@ public interface IndexConfigDao {
 
 	List<JSONObject> listBanner(JSONObject request2Json);
 
+	void addBanner(JSONObject userInfo);
+
+	void updateBanner(JSONObject userInfo);
+
+	void deleteBanner(String id);
+
 }

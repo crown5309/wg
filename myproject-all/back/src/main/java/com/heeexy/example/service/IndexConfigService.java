@@ -2,6 +2,8 @@ package com.heeexy.example.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.alibaba.fastjson.JSONObject;
 
 public interface IndexConfigService {
@@ -21,5 +23,11 @@ public interface IndexConfigService {
 	Object addIndexClass(String json);
 
 	JSONObject listBanner(JSONObject request2Json);
+
+	JSONObject addBanner(HttpServletRequest request);
+
+	JSONObject updateBanner(HttpServletRequest request);
+
+	JSONObject deleteBanner(String id);
 
 }

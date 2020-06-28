@@ -52,12 +52,27 @@ public class IndexClassController {
 	public JSONObject addIndexClass(String json) {
 		return CommonUtil.successJson(indexConfigService.addIndexClass(json));
 	}
-	/**
-	 * 查询文章列表
-	 */
+	
 	@RequiresPermissions("banner:list")
 	@GetMapping("/listBanner")
 	public JSONObject listBanner(HttpServletRequest request) {
 		return indexConfigService.listBanner(CommonUtil.request2Json(request));
+	}
+	
+	@RequiresPermissions("banner:add")
+	@RequestMapping("/addBanner")
+	public JSONObject addBanner(HttpServletRequest request) {
+		return indexConfigService.addBanner(request);
+	}
+	
+	@RequiresPermissions("banner:update")
+	@RequestMapping("/updateBanner")
+	public JSONObject updateBanner(HttpServletRequest request) {
+		return indexConfigService.updateBanner(request);
+	}
+	@RequiresPermissions("banner:delete")
+	@RequestMapping("/deleteBanner")
+	public JSONObject deleteBanner(String  id) {
+		return indexConfigService.deleteBanner(id);
 	}
 }
