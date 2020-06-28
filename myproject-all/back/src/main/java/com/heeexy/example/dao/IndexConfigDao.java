@@ -15,4 +15,14 @@ public interface IndexConfigDao {
 
 	List<ClassesInfo> listIndexAll(String appId);
 
+	List<String> listIndexCheck(String appId);
+
+	void addIndexClass(@Param("appId")String appId, @Param("list")String[] parseArray);
+
+	void deleteByAppId(String appId);
+
+	int countBanner(JSONObject request2Json);
+
+	List<JSONObject> listBanner(JSONObject request2Json);
+
 }

@@ -88,7 +88,7 @@ export const asyncRouterMap = [
     meta: {title: '首页管理', icon: 'table'},
     children: [
       {
-        path: '', name: 'banner列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
+        path: '', name: 'banner列表', component: _import('index/banner'), meta: {title: 'banner列表', icon: 'user'}, menu: 'banner_list'
       },
       {
         path: 'indexClass',

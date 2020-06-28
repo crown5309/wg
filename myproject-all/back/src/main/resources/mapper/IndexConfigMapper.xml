@@ -49,5 +49,42 @@ FROM
 	INNER JOIN goods_class g ON c.goods_class_id = g.id
 	where c.app_id=#{appId}
 	</select>
-	
+	<select id="listIndexCheck" resultType="string">
+		SELECT
+	c.goods_class_id goodsClassId
+FROM
+	index_config c
+	INNER JOIN goods_class g ON c.goods_class_id = g.id
+	where c.app_id=#{appId}
+	</select>
+	 	<insert id="addIndexClass" >
+    			insert into index_config
+    			(goods_class_id,app_id,type)
+    			values
+    			<foreach collection="list" item="item" index="index" separator=",">
+    				(
+    					#{item},
+    					#{appId},
+    					'classes'
+   
+    				)
+    		     </foreach>		
+    </insert> 
+    <delete id="deleteByAppId">
+    	delete from index_config where app_id=#{appId} and type='classes'
+    </delete> 
+    <select id="countBanner" resultType="Integer" parameterType="com.alibaba.fastjson.JSONObject">
+        SELECT count(0)
+        FROM index_config 
+        WHERE app_id=#{appId} and type='banner'
+    </select>
+     <select id="listBanner" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id                                      id,
+            w.img_url                                 imgUrl
+        FROM index_config w
+        WHERE w.app_id=#{appId} and w.type='banner'
+        ORDER BY w.id DESC
+        LIMIT #{offSet}, #{pageRow}
+    </select>
 </mapper>

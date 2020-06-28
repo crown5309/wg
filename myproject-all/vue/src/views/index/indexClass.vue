@@ -3,27 +3,33 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-button type="primary" icon="plus" @click="" v-if="hasPerm('goodsClass:add')">添加
+          <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+            配置
           </el-button>
         </el-form-item>
       </el-form>
     </div>
 
     <div class="block">
-      <p>使用 scoped slot</p>
-      <el-tree :data="data"  node-key="id" default-expand-all :expand-on-click-node="false">
+      <p>商城首页配置</p>
+      <el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="false">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
-          <span>
-            <el-image
-                  style="width: 20; height: 20px"
-                  src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
-                  :fit="fit"></el-image>
-          </span>
         </span>
       </el-tree>
     </div>
-
+    <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
+      <div class="block">
+        <p>首页配置</p>
+        <el-tree :data="dataList" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps"
+          :default-checked-keys="checkList">
+        </el-tree>
+      </div>
+      <div class="buttons">
+        <el-button @click="getCheckedNodes">确定</el-button>
+        <el-button @click="resetChecked">清空</el-button>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
@@ -31,76 +37,76 @@
 
   export default {
     data() {
-      const data = [{
-        id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        label: '一级 1',
-        imgUrl: '1',
-        children: [{
-          id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          label: '二级 1-1',
-          imgUrl: '1',
-          children: [{
-            id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            label: '三级 1-1-1',
-            imgUrl: '1'
-          }, {
-            id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-            label: '三级 1-1-2',
-            imgUrl: '1'
-          }]
-        }]
-      }, {
-        id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        label: '一级 2',
-        imgUrl: '1',
-        children: [{
-          id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          label: '二级 2-1',
-          imgUrl: '1'
-        }, {
-          id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          label: '二级 2-2',
-          imgUrl: '1'
-        }]
-      }, {
-        id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        label: '一级 3',
-        imgUrl: '1',
-        children: [{
-          id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          label: '二级 3-1',
-          imgUrl: '1'
-        }, {
-          id: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          label: '二级 3-2',
-          imgUrl: '1'
-        }]
-      }];
       return {
-        data: JSON.parse(JSON.stringify(data)),
-        data: JSON.parse(JSON.stringify(data))
+        data: [], //表格的数据
+        listLoading: false, //数据加载等待动画
+        drawer: false,
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        },
+        dataList: [],
+        checkList: []
       }
     },
-
+    created() {
+      this.getList();
+      this.getClassList();
+    },
     methods: {
-      append(data) {
-        const newChild = {
-          id: id++,
-          label: 'testtest',
-          children: []
-        };
-        if (!data.children) {
-          this.$set(data, 'children', []);
-        }
-        data.children.push(newChild);
+      getList() {
+        //查询列表
+        this.listLoading = true;
+        this.api({
+          url: "/index/listIndexClassAll",
+          method: "get",
+        }).then(data => {
+          this.listLoading = false;
+          this.data = data;
+        })
       },
-
-      remove(node, data) {
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+      getClassList() {
+        //查询列表
+        this.listLoading = true;
+        this.api({
+          url: "/index/listClassAll",
+          method: "get",
+        }).then(data => {
+          this.listLoading = false;
+          this.dataList = data.list;
+          this.checkList = data.checkList;
+        })
       },
+      getCheckedNodes() {
+        let nodeList = this.$refs.tree.getCheckedNodes();
+        let param = []
+        nodeList.forEach((item) => {
+          if (item.children == undefined) {
+            param.push(item.id)
+          }
+        })
+        this.listLoading = true;
+        this.api({
+          url: "/index/addIndexClass",
+          method: "get",
+          params: {
+            json: param.join(",")
+          }
+        }).then(data => {
+          this.$message({
+            message: '配置成功',
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              this.drawer=false
+              _vue.getList();
+            }
+          })
+        })
+      },
+      resetChecked() {
+        this.$refs.tree.setCheckedKeys([]);
+      }
     }
   }
 </script>
