@@ -117,8 +117,9 @@
 	where  o.user_id=#{userId}
 	   <if test="state!=null and state !=''">
 	   and o.state=#{state} 
-	   limit #{pageNo},#{pageSize}
+	  
 	   </if>
+	    limit #{pageNo},#{pageSize}
 	</select>
 	<select id="getOrderInfoByNoPay" resultMap="orderMap1">
 		SELECT

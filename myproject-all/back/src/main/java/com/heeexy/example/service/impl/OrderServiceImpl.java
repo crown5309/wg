@@ -353,25 +353,32 @@ public class OrderServiceImpl implements OrderService {
 		BigDecimal totalPay=new BigDecimal(0);//总价
 		BigDecimal discountPay=new BigDecimal(0);//优惠价
 		BigDecimal practicePay=new BigDecimal(0);//实际价
+		BigDecimal count=new BigDecimal(0);//商品数
+		List<String> imgList=new ArrayList<String>();
 		for(OrderInfo sg:OrderInfoList){
 			goodsList =(List<JSONObject>) sg.get("goodsList");
 			totalPay= totalPay.add(sg.getBigDecimal("totalPay"));
 			discountPay= discountPay.add(sg.getBigDecimal("discountPay"));
 			practicePay= practicePay.add(sg.getBigDecimal("practicePay"));
 			for(JSONObject goods:goodsList) {
-				goods.put("bannerUrl", goods.getString("bannerUrl").split(","));
+				String[] split2 = goods.getString("bannerUrl").split(",");
+				goods.put("bannerUrl", split2);
 				if(goods.getIntValue("state")!=2){
 					return CommonUtil.errorJson(goods.getString("goodsName")+"商品未上架");
 				}
 				if(goods.getBigDecimal("price").compareTo(goods.getBigDecimal("orderPrice"))!=0){
 					return CommonUtil.errorJson(goods.getString("goodsName")+"价格有变");
 				}
+				count=count.add(goods.getBigDecimal("count"));
+				imgList.add(split2[0]);
 			}
 		}
 		info.put("totalPay",totalPay);
 		info.put("discountPay",discountPay);
 		info.put("practicePay",practicePay);
 		info.put("OrderInfoList", OrderInfoList);
+		info.put("count", count);
+		info.put("imgList", imgList);
 		return CommonUtil.successJson(info);
 	}
 
