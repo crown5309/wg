@@ -122,12 +122,12 @@ public class OrderServiceImpl implements OrderService {
 				 
 			}
 			// 批量扣减库存
-			for(JSONObject o:orderGoodList){
-				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( o.getString("goodsId"), o.getInteger("count"));
-				if(!(updateGoodStoreCount>0)) {
-					return CommonUtil.errorJson("库存不足");
-				}
-			}
+//			for(JSONObject o:orderGoodList){
+//				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( o.getString("goodsId"), o.getInteger("count"));
+//				if(!(updateGoodStoreCount>0)) {
+//					return CommonUtil.errorJson("库存不足");
+//				}
+//			}
 			//订单表批量保存
 			orderDao.insertOrderBatch(orderList);
 			// 商品订单表批量保存
@@ -156,11 +156,11 @@ public class OrderServiceImpl implements OrderService {
 			if(goods.getIntValue("skuStore")<count) {
 				return CommonUtil.errorJson("库存不足");
 			}
-			int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), count);
-			//扣减库存
-			if(!(updateGoodStoreCount>0)) {
-				return CommonUtil.errorJson("库存不足");
-			}
+//			int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), count);
+//			//扣减库存
+//			if(!(updateGoodStoreCount>0)) {
+//				return CommonUtil.errorJson("库存不足");
+//			}
 			//获取订单总价，优惠价，实付金额
 			Map<String,BigDecimal> map=new HashMap<String, BigDecimal>();
 			getPrice(map,goods,count);
@@ -281,6 +281,22 @@ public class OrderServiceImpl implements OrderService {
             String paySign = PayCommonUtil.createSign("UTF-8", packageP, key);
             packageP.put("paySign", paySign);
             inserOrderLog(orderIds, userId,6,"下单成功",address);
+            //
+            List<OrderInfo> OrderInfoList =(List<OrderInfo>) info.get("OrderInfoList");
+            List<JSONObject> goodsList=null;
+            for(OrderInfo sg:OrderInfoList){
+    			goodsList =(List<JSONObject>) sg.get("goodsList");
+    			for(JSONObject goods:goodsList) {
+    				//下单成功减库存
+    				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), goods.getInteger("count"));
+    				if(!(updateGoodStoreCount>0)) {//减库存
+    					return CommonUtil.errorJson("库存不足");
+    				}
+    				//下单成功加销量
+    				goodsDao.updateCountById(goods.getString("goodsId"),goods.getString("count"));
+    				
+    			}
+    		}
             return CommonUtil.successJson(packageP);
         }
         

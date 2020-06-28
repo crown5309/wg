@@ -61,6 +61,7 @@
 		g.goods_name goodsName,
 		g.price price,
 		o_goods.price orderPrice,
+		o_goods.goods_id goodsId,
 		g.banner_url  bannerUrl,
 		o_goods.count count,
 		g.state state,
@@ -100,12 +101,14 @@
 		s.id storeId,
 		g.goods_name goodsName,
 		o_goods.price price,
+		o_goods.goods_id goodsId,
 		o_goods.price orderPrice,
 		g.banner_url  bannerUrl,
 		o_goods.count count,
 		o.state state,
 		g.banner_url bannerUrl,
-		s.img_url imgUrl
+		s.img_url imgUrl,
+		o.create_time createTime
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -117,6 +120,31 @@
 	   limit #{pageNo},#{pageSize}
 	   </if>
 	</select>
+	<select id="getOrderInfoByNoPay" resultMap="orderMap1">
+		SELECT
+		o.order_id  orderId,
+		o.total_pay totalPay,
+		o.discount_pay discountPay,
+		o.practice_pay practicePay,
+		s.store_name storeName,
+		s.id storeId,
+		g.goods_name goodsName,
+		o_goods.price price,
+		o_goods.goods_id goodsId,
+		o_goods.price orderPrice,
+		g.banner_url  bannerUrl,
+		o_goods.count count,
+		o.state state,
+		g.banner_url bannerUrl,
+		s.img_url imgUrl,
+		o.create_time createTime
+		FROM
+		shop_order o
+		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
+		INNER JOIN goods g ON o_goods.goods_id = g.id
+		INNER JOIN store s ON g.store_id = s.id
+	where  o.state=#{state} 
+	</select>
 	<resultMap id="orderMap1"
 			   type="com.heeexy.example.entity.OrderInfo">
 		<id column="orderId" property="orderId" />
@@ -127,14 +155,17 @@
 		<result column="practicePay" property="practicePay" />
 		<result column="imgUrl" property="imgUrl" />
 		<result column="state" property="state" />
+		<result column="createTime" property="createTime" />
 		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsId" property="goodsId" />
 			<result column="goodsName" property="goodsName" />
 			<result column="count" property="count" />
 			<result column="price" property="price" />
 			<result column="orderPrice" property="orderPrice" />
-			
 			<result column="bannerUrl" property="bannerUrl" />
 		</collection>
 	</resultMap>
+	<update id="cancelOrderState">
+	update shop_order set state=#{state} where order_id=#{orderId}
+	</update>
 </mapper>

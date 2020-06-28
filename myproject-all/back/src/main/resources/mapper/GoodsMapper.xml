@@ -63,4 +63,10 @@
     <update id="updateGoodStoreCount" >
     		update goods set sku_store=sku_store-#{count} where id=#{goodsId} and sku_store=sku_store-#{count} &gt;=0
     </update>
+    <update id="updateCountById" >
+    		update goods set count=count+#{count} where id=#{goodsId} 
+    </update>
+    <update id="addSkuCount" >
+    		update goods set sku_store=sku_store+#{count} where id=#{goodsId} 
+    </update>
 </mapper>

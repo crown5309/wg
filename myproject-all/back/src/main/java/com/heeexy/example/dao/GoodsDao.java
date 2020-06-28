@@ -20,4 +20,8 @@ public interface GoodsDao {
 
 	int updateGoodStoreCount(@Param("goodsId")String goodsId,@Param("count") int count);
 
+	void updateCountById(@Param("goodsId")String goodsId,@Param("count") String count);
+
+	void addSkuCount(@Param("goodsId")String goodsId,@Param("count") String count);
+
 }

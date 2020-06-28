@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author: hxy
@@ -13,6 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @date: 2017/10/24 11:55
  */
 @SpringBootApplication
+@EnableScheduling   // 2.开启定时任务
 @MapperScan("com.heeexy.example.dao")
 public class MyApplication extends SpringBootServletInitializer {
 
