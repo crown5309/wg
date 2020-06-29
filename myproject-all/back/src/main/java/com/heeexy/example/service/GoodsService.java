@@ -1,5 +1,7 @@
 package com.heeexy.example.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.alibaba.fastjson.JSONObject;
 
 public interface GoodsService {
@@ -11,5 +13,11 @@ public interface GoodsService {
 	Object updateGoodsByIds(String state, String ids);
 
 	Object getGoodsById(String goodsId);
+
+	JSONObject addGoods(HttpServletRequest request);
+
+	JSONObject listGoods(JSONObject request2Json);
+
+	JSONObject updateGoods(HttpServletRequest request);
 
 }

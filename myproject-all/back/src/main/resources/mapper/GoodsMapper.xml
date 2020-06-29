@@ -69,4 +69,38 @@
     <update id="addSkuCount" >
     		update goods set sku_store=sku_store+#{count} where id=#{goodsId} 
     </update>
+    <select id="countGoods" resultType="Integer">
+        SELECT count(0)
+        FROM goods 
+        <where>
+        <if test="appId!=null and appId !=''">
+        	app_id=#{appId}
+        </if>
+        </where>
+    </select>
+    <select id="listGoods" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id            id,
+            w.goods_name    goodsName,
+            w.price         price,
+            w.sku_store     skuStore,
+            w.banner_url    bannerUrl,
+            w.detail_url    detailUrl,
+            w.multi_index   multiIndex,
+            w.class_id1     classId1,
+            w.class_id2     classId2,
+            w.class_id3     classId3,
+            w.state         state,
+            w.create_time   createTime,
+            s.store_name    storeName
+        FROM goods w INNER JOIN store s on w.store_id =s.id
+        <where>
+        	 <if test="appId !=null and appId !=''">
+        	 	w.app_id=#{appId}	
+        	 </if>
+    
+        </where>
+        ORDER BY w.create_time desc
+        LIMIT #{offSet}, #{pageRow}
+    </select>
 </mapper>

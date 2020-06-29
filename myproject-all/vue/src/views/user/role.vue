@@ -61,7 +61,7 @@
           <div v-for=" (menu,_index) in allPermission" :key="menu.menuName">
             <span style="width: 100px;display: inline-block;">
               <el-button :type="isMenuNone(_index)?'':(isMenuAll(_index)?'success':'primary')" size="mini"
-                         style="width:80px;"
+                         style="width:90px;"
                          @click="checkAll(_index)">{{menu.menuName}}</el-button>
             </span>
             <div style="display: inline-block;margin-left:20px;">

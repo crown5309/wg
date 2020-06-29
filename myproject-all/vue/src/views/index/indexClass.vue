@@ -99,7 +99,7 @@
             duration: 1 * 1000,
             onClose: () => {
               this.drawer=false
-              _vue.getList();
+              this.getList();
             }
           })
         })

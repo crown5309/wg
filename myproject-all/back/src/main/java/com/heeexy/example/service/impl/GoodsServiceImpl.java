@@ -2,6 +2,10 @@ package com.heeexy.example.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +14,8 @@ import com.heeexy.example.dao.GoodsDao;
 import com.heeexy.example.dao.UserDao;
 import com.heeexy.example.service.GoodsService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.DateUtil;
+import com.heeexy.example.util.constants.Constants;
 @Service
 public class GoodsServiceImpl implements GoodsService {
 	@Autowired
@@ -49,5 +55,54 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsById.put("detailUrl",goodsById.getString("detailUrl").split(","));
 		return goodsById;
 	}
-
+	@Override
+	public JSONObject addGoods(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public JSONObject listGoods(JSONObject request2Json) {
+		// TODO Auto-generated method stub
+		CommonUtil.fillPageParam(request2Json);
+		getAppId(request2Json);
+		int count = goodsDao.countGoods(request2Json);
+		List<JSONObject> list = goodsDao.listGoods(request2Json);
+		for(JSONObject j:list) {
+			getStateName(j);
+			j.put("createTime", DateUtil.format(j.getDate("createTime"), DateUtil.DATE_TIME));
+		}
+		return CommonUtil.successPage(request2Json, list, count);
+	}
+	@Override
+	public JSONObject updateGoods(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private void getAppId(JSONObject request2Json) {
+		Session session = SecurityUtils.getSubject().getSession(); JSONObject
+		userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		if(!"admin".equals(userInfo.getString("username"))) {
+			String appId =userInfo.getString("appId");
+			request2Json.put("appId", appId);
+		}else {
+			request2Json.put("appId", "");
+		}
+		
+	}
+	private void getStateName(JSONObject json) {
+		//0 待审核 1审核通过  2 上架 3下架 4拒绝
+		Integer state = json.getInteger("state");
+		if(state==0) {
+			json.put("stateName", "待审核");
+		}else if(state==1) {
+			json.put("stateName", "审核通过");
+		}else if(state==2) {
+			json.put("stateName", "已上架");
+		}else if(state==3) {
+			json.put("stateName", "已下架");
+		}else if(state==4) {
+			json.put("stateName", "拒绝通过");
+		}
+		
+	}
 }

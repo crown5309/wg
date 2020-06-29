@@ -21,7 +21,7 @@ export const constantRouterMap = [
   }
 ]
 export default new Router({
-  // mode: 'history', //后端支持可开
+   mode: 'history', //后端支持可开
   scrollBehavior: () => ({y: 0}),
   routes: constantRouterMap
 })
@@ -69,7 +69,7 @@ export const asyncRouterMap = [
     meta: {title: '商品管理', icon: 'table'},
     children: [
       {
-        path: '', name: '商品列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
+        path: '', name: '商品列表', component: _import('goods/listgoods'), meta: {title: '商品列表', icon: '1'}, menu: 'goods_goods'
       },
       {
         path: 'goods',
@@ -88,7 +88,7 @@ export const asyncRouterMap = [
     meta: {title: '首页管理', icon: 'table'},
     children: [
       {
-        path: '', name: 'banner列表', component: _import('index/banner'), meta: {title: 'banner列表', icon: 'user'}, menu: 'banner_list'
+        path: '', name: 'banner管理', component: _import('index/banner'), meta: {title: 'banner列表', icon: 'user'}, menu: 'banner_list'
       },
       {
         path: 'indexClass',

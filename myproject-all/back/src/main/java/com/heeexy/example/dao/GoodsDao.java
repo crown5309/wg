@@ -24,4 +24,8 @@ public interface GoodsDao {
 
 	void addSkuCount(@Param("goodsId")String goodsId,@Param("count") String count);
 
+	int countGoods(JSONObject request2Json);
+
+	List<JSONObject> listGoods(JSONObject request2Json);
+
 }
