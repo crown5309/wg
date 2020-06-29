@@ -74,4 +74,7 @@
         cart.user_id=#{userId}
         limit #{pageNo},#{pageSize}
 	</select>
+	<delete id="deleteMyCartByGoodsId">
+		delete from shop_cart where goods_id=#{goodsId} AND user_id=#{userId}
+	</delete>
 </mapper>

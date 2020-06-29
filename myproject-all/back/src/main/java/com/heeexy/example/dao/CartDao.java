@@ -23,4 +23,6 @@ public interface CartDao {
 
 	void deleteBatch(@Param("ids")String[] split);
 
+	void deleteMyCartByGoodsId(@Param("goodsId")String goodsId, @Param("userId")String userId);
+
 }

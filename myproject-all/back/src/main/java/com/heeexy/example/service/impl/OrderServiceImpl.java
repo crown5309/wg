@@ -3,6 +3,7 @@ package com.heeexy.example.service.impl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,8 +135,8 @@ public class OrderServiceImpl implements OrderService {
 			orderGoodsDao.insertGoodsBatch(orderGoodList);
 			//订单日志
 			orderLogDao.insertOrderLogBatch(orderLogList);
-			//删除购物车商品
-			cartDao.deleteBatch(split);
+			//删除购物车商品()
+		//	cartDao.deleteBatch(split);
 		
 		} else {
 			orderIds.add(orderId);
@@ -294,6 +295,10 @@ public class OrderServiceImpl implements OrderService {
     				}
     				//下单成功加销量
     				goodsDao.updateCountById(goods.getString("goodsId"),goods.getString("count"));
+    				//删除购物车
+    				if("cart".equals(request.getParameter("type"))) {
+    					cartDao.deleteMyCartByGoodsId(goods.getString("goodsId"),userId);
+    				}
     				
     			}
     		}
@@ -410,6 +415,7 @@ public class OrderServiceImpl implements OrderService {
 		order.put("practicePay", practicePay);
 		//1 待支付 2.待发货 3.待收货 4.交易失败 5.交易完成 6.已取消
 		order.put("state","1");
+		order.put("createTime",new Date());
 	}
 
 	private void setOrderGoods(String orderId, int count, JSONObject goods, JSONObject orderGoods) {

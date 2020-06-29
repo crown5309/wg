@@ -4,7 +4,7 @@
 <mapper namespace="com.heeexy.example.dao.OrderDao">
 	<insert id="insertOrderBatch" parameterType="java.util.List" useGeneratedKeys="false">
     			insert into shop_order
-    			(order_id,user_id,total_pay,discount_pay,practice_pay,state)
+    			(order_id,user_id,total_pay,discount_pay,practice_pay,state,create_time)
     			values
     			<foreach collection="list" item="item" index="index" separator=",">
     				(
@@ -13,13 +13,14 @@
     					#{item.totalPay},
     					#{item.discountPay},
     					#{item.practicePay},
-    					#{item.state}
+    					#{item.state},
+    					#{item.createTime}
     				)
     		     </foreach>		
     </insert>    
     <insert id="insertOrder" parameterType="com.alibaba.fastjson.JSONObject" >
     			insert into shop_order
-    			(order_id,user_id,total_pay,discount_pay,practice_pay,state)
+    			(order_id,user_id,total_pay,discount_pay,practice_pay,state,create_time)
     			values
     				(
     					#{orderId},
@@ -27,7 +28,8 @@
     					#{totalPay},
     					#{discountPay},
     					#{practicePay},
-    					#{state}
+    					#{state},
+    					#{createTime}
     				)	
     </insert>
 
