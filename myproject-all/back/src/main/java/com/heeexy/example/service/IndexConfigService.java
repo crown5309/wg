@@ -30,4 +30,6 @@ public interface IndexConfigService {
 
 	JSONObject deleteBanner(String id);
 
+	Object listIndexGoods(String appId, String classId, int pageNo, int pageSize);
+
 }

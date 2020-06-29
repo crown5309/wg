@@ -205,8 +205,8 @@ public class UserServiceImpl implements UserService {
 			userDao.addUserfrontAuth(js);
 
 		}
-		String username = js.getString("openid");
-		String password = openid;
+		String username = js.getString("username");
+		String password = js.getString("password");
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		try {

@@ -25,4 +25,16 @@ public class IndexController {
 	public JSONObject listIndexAll(String appId) {
 		return CommonUtil.successJson(indexConfigService.listIndexAll(appId));
 	}
+
+	/**
+	 * 热门商品
+	 * 
+	 * @param appId
+	 * @param CLASSID
+	 * @return
+	 */
+	@RequestMapping("/listIndexGoods")
+	public JSONObject listIndexGoods(String appId,String classId,int pageNo,int pageSize) {
+		return CommonUtil.successJson(indexConfigService.listIndexGoods(appId,classId,pageNo,pageSize));
+	}
 }

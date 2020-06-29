@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.GoodsClassDao;
+import com.heeexy.example.dao.GoodsDao;
 import com.heeexy.example.dao.IndexConfigDao;
 import com.heeexy.example.entity.ClassesInfo;
 import com.heeexy.example.service.IndexConfigService;
@@ -28,7 +29,8 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 	private IndexConfigDao indexConfigDao;
 	@Autowired
 	private GoodsClassDao goodsClassDao;
-
+	@Autowired
+	private GoodsDao goodsDao;
 	@Override
 	public List<JSONObject> listIndexConfig(JSONObject request2Json) {
 		// TODO Auto-generated method stubrequest2Json
@@ -211,6 +213,14 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		// TODO Auto-generated method stub
 		indexConfigDao.deleteBanner(id);
 		return CommonUtil.successJson();
+	}
+
+	@Override
+	public Object listIndexGoods(String appId, String classId,int pageNo, int pageSize) {
+		pageNo=(pageNo-1)*pageSize;
+		// TODO Auto-generated method stub
+		List<JSONObject> lsit=goodsDao.listIndexGoods(appId,classId,pageNo,pageSize);
+		return null;
 	}
 
 }

@@ -28,4 +28,6 @@ public interface GoodsDao {
 
 	List<JSONObject> listGoods(JSONObject request2Json);
 
+	List<JSONObject> listIndexGoods(@Param("appId")String appId,@Param("classId") String classId, @Param("pageNo")int pageNo, @Param("pageSize")int pageSize);
+
 }
