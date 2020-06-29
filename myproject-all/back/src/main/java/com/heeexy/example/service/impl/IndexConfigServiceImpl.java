@@ -220,7 +220,11 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		pageNo=(pageNo-1)*pageSize;
 		// TODO Auto-generated method stub
 		List<JSONObject> lsit=goodsDao.listIndexGoods(appId,classId,pageNo,pageSize);
-		return null;
+		for(int i=0;i<lsit.size();i++) {
+			lsit.get(i).put("bannerUrl", lsit.get(i).getString("bannerUrl").split(","));
+
+		}
+		return lsit;
 	}
 
 }

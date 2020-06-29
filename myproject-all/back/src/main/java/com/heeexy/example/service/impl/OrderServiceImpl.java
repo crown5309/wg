@@ -269,7 +269,7 @@ public class OrderServiceImpl implements OrderService {
         String result_code = (String) map.get("result_code()");
         if ("SUCCESS".equals(return_code) && return_code.equals(result_code)) {
         	//更新订单信息1 待支付 2.待发货 3.待收货 4.交易失败 5.交易完成 6.下单成功 7下单失败 8支付成功 9支付失败 10退款中 11退款完成  12退货中 
-        	orderDao.updateOrderState(orderIds.split(","),did,6);
+        	orderDao.updateOrderState(orderIds.split(","),did,6,addressId);
         	//得到prepay_id
             String prepay_id = (String) map.get("prepay_id");
             SortedMap<Object, Object> packageP = new TreeMap<Object, Object>();
@@ -307,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
         
         //将packageP数据返回给小程序
         //更新订单信息
-        orderDao.updateOrderState(orderIds.split(","),did,7);
+        orderDao.updateOrderState(orderIds.split(","),did,7,addressId);
         inserOrderLog(orderIds, userId,7,"下单失败",address);
 		return CommonUtil.errorJson(map.get("return_msg").toString());
 	}
@@ -361,6 +361,7 @@ public class OrderServiceImpl implements OrderService {
 		BigDecimal count=new BigDecimal(0);//商品数
 		List<String> imgList=new ArrayList<String>();
 		for(OrderInfo sg:OrderInfoList){
+			getStateName(sg);
 			goodsList =(List<JSONObject>) sg.get("goodsList");
 			totalPay= totalPay.add(sg.getBigDecimal("totalPay"));
 			discountPay= discountPay.add(sg.getBigDecimal("discountPay"));
@@ -368,7 +369,7 @@ public class OrderServiceImpl implements OrderService {
 			for(JSONObject goods:goodsList) {
 				String[] split2 = goods.getString("bannerUrl").split(",");
 				goods.put("bannerUrl", split2);
-				if(goods.getIntValue("state")!=2){
+				if(goods.getIntValue("goodsState")!=2){
 					return CommonUtil.errorJson(goods.getString("goodsName")+"商品未上架");
 				}
 				if(goods.getBigDecimal("price").compareTo(goods.getBigDecimal("orderPrice"))!=0){
@@ -466,32 +467,7 @@ public class OrderServiceImpl implements OrderService {
 		List<OrderInfo> list=orderDao.getOrderInfoByState(state,userId,pageNo,pageSize);
 		List<JSONObject> goodsList=null;
 		for(OrderInfo sg:list){
-			Integer stateInt = sg.getInteger("state");
-			if(stateInt==1) {
-				sg.put("stateName", "待支付");
-				}else if(stateInt==2) {
-					sg.put("stateName", "待发货");
-				}else if(stateInt==3) {
-					sg.put("stateName", "待收货");
-				}else if(stateInt==5) {
-					sg.put("stateName", "交易完成");
-				}else if(stateInt==6) {
-					sg.put("stateName", "下单成功");
-				}else if(stateInt==7) {
-					sg.put("stateName", "下单失败");
-				}else if(stateInt==8) {
-					sg.put("stateName", "支付成功");
-				}else if(stateInt==9) {
-					sg.put("stateName", "支付失败");
-				}
-				else if(stateInt==10) {
-					sg.put("stateName", "退款中");
-				}
-				else if(stateInt==11) {
-					sg.put("stateName", "退款完成");
-				}else if(stateInt==12) {
-					sg.put("stateName", "退货中");
-				}
+			getStateName(sg);
 			goodsList =(List<JSONObject>) sg.get("goodsList");
 			for(JSONObject goods:goodsList) {
 				goods.put("bannerUrl", goods.getString("bannerUrl").split(","));
@@ -501,6 +477,35 @@ public class OrderServiceImpl implements OrderService {
 		}
 	
 		return CommonUtil.successJson(list);
+	}
+
+	private void getStateName(OrderInfo sg) {
+		Integer stateInt = sg.getInteger("state");
+		if(stateInt==1) {
+			sg.put("stateName", "待支付");
+			}else if(stateInt==2) {
+				sg.put("stateName", "待发货");
+			}else if(stateInt==3) {
+				sg.put("stateName", "待收货");
+			}else if(stateInt==5) {
+				sg.put("stateName", "交易完成");
+			}else if(stateInt==6) {
+				sg.put("stateName", "下单成功");
+			}else if(stateInt==7) {
+				sg.put("stateName", "下单失败");
+			}else if(stateInt==8) {
+				sg.put("stateName", "支付成功");
+			}else if(stateInt==9) {
+				sg.put("stateName", "支付失败");
+			}
+			else if(stateInt==10) {
+				sg.put("stateName", "退款中");
+			}
+			else if(stateInt==11) {
+				sg.put("stateName", "退款完成");
+			}else if(stateInt==12) {
+				sg.put("stateName", "退货中");
+			}
 	}
 
 }

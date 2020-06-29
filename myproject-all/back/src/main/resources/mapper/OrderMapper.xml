@@ -42,13 +42,15 @@
 		<result column="discountPay" property="discountPay" />
 		<result column="practicePay" property="practicePay" />
 		<result column="imgUrl" property="imgUrl" />
+		<result column="addressId" property="addressId" />
+		<result column="state" property="state" />
 		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsId" property="goodsId" />
 			<result column="goodsName" property="goodsName" />
 			<result column="count" property="count" />
 			<result column="price" property="price" />
 			<result column="orderPrice" property="orderPrice" />
-			<result column="state" property="state" />
+			<result column="goodsState" property="goodsState" />
 			<result column="bannerUrl" property="bannerUrl" />
 		</collection>
 	</resultMap>
@@ -56,6 +58,7 @@
 		SELECT
 		o.order_id  orderId,
 		o.total_pay totalPay,
+		o.state,
 		o.discount_pay discountPay,
 		o.practice_pay practicePay,
 		s.store_name storeName,
@@ -66,9 +69,10 @@
 		o_goods.goods_id goodsId,
 		g.banner_url  bannerUrl,
 		o_goods.count count,
-		g.state state,
+		g.state goodsState,
 		g.banner_url bannerUrl,
-		s.img_url imgUrl
+		s.img_url imgUrl,
+		o.address_id addressId
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -81,7 +85,7 @@
 	and o.user_id=#{userId}
 	</select>
 	<update id="updateOrderState">
-	   update shop_order set state=#{state},out_trade_no=#{out_trade_no} where order_id in
+	   update shop_order set state=#{state},out_trade_no=#{out_trade_no},address_id=#{addressId} where order_id in
 	   <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
 		#{id}
 	</foreach>
@@ -110,7 +114,8 @@
 		o.state state,
 		g.banner_url bannerUrl,
 		s.img_url imgUrl,
-		o.create_time createTime
+		o.create_time createTime,
+		o.address_id addressId
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -121,7 +126,9 @@
 	   and o.state=#{state} 
 	  
 	   </if>
-	    limit #{pageNo},#{pageSize}
+	   
+	    order by o.create_time desc
+	     limit #{pageNo},#{pageSize}
 	</select>
 	<select id="getOrderInfoByNoPay" resultMap="orderMap1">
 		SELECT
@@ -159,6 +166,7 @@
 		<result column="imgUrl" property="imgUrl" />
 		<result column="state" property="state" />
 		<result column="createTime" property="createTime" />
+		<result column="addressId" property="addressId" />
 		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsId" property="goodsId" />
 			<result column="goodsName" property="goodsName" />

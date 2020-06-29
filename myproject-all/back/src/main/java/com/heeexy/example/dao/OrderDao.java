@@ -15,7 +15,7 @@ public interface OrderDao {
 
     List<OrderInfo> getAllInfoOrderByOrderIds(@Param("orderIds")String[] orderIds,@Param("userId") String userId);
 
-	void updateOrderState(@Param("ids")String[] split,@Param("out_trade_no") String did,@Param("state") int state);
+	void updateOrderState(@Param("ids")String[] split,@Param("out_trade_no") String did,@Param("state") int state,@Param("addressId")  String addressId);
 
 	void updateByOutTradeNo(@Param("out_trade_no")String out_trade_no,@Param("state") int state);
 

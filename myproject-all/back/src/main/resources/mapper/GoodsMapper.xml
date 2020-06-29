@@ -119,16 +119,16 @@
             w.create_time   createTime,
             s.store_name    storeName
         FROM goods w INNER JOIN store s on w.store_id =s.id
-        <where>
+        where 1=1
         	 <if test="appId !=null and appId !=''">
-        	 	w.app_id=#{appId}	
+        	 	and w.app_id=#{appId}	
         	 </if>
         	 <if test="classId !=null and classId !=''">
-        	 	w.class_id1=#{classId}	
+        	 	and w.class_id1=#{classId}	
         	 </if>
     
-        </where>
+     
         ORDER BY w.count desc
-        LIMIT #{offSet}, #{pageRow}
+        LIMIT #{pageNo}, #{pageSize}
     </select>
 </mapper>

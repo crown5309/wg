@@ -199,11 +199,10 @@ public class UserServiceImpl implements UserService {
 		String openid = jo.getString("openid");
 		String exist = userDao.getUserByOppenId(openid);
 		js.put("openid", jo.get("openid"));
+		js.put("username", openid);
+		js.put("password", openid);
 		if (StringTools.isNullOrEmpty(exist)) {
-			js.put("username", openid);
-			js.put("password", openid);
 			userDao.addUserfrontAuth(js);
-
 		}
 		String username = js.getString("username");
 		String password = js.getString("password");
