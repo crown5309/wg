@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -222,7 +223,59 @@ public class HttpClientUtils {
 	}
 
 
-
+	/**
+	 * @param reqURL
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public static String sendHttpPostRequest(String reqURL, Map<String, String> params, String data, String reqType, int timeOut) throws Exception {
+		String responseContent = null;
+		CloseableHttpResponse response = null;
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(reqURL);
+		try {
+			RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(timeOut).setConnectTimeout(timeOut).setConnectionRequestTimeout(timeOut).build();
+			httpPost.setConfig(requestConfig);
+			// 绑定到请求 Entry
+			if (reqType.equalsIgnoreCase("map")) {
+				List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+				for (Map.Entry<String, String> entry : params.entrySet()) {
+					formParams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+				}
+				httpPost.setEntity(new UrlEncodedFormEntity(formParams, Consts.UTF_8));
+			} else if (reqType.equalsIgnoreCase("xml")) {
+				StringEntity entity = new StringEntity(data, Consts.UTF_8);
+				httpPost.setEntity(entity);
+			} else if (reqType.equalsIgnoreCase("json")) {
+				StringEntity entity = new StringEntity(data, Consts.UTF_8);
+				entity.setContentType("application/json");
+				httpPost.setEntity(entity);
+			}
+			response = httpclient.execute(httpPost);
+			if (response.getStatusLine().getStatusCode() != 200) {
+				httpPost.abort();
+				throw new Exception("渠道方接口通讯状态异常");
+			}
+			// 执行POST请求
+			HttpEntity entity = response.getEntity(); // 获取响应实体
+			if (null != entity) {
+				responseContent = EntityUtils.toString(entity, Consts.UTF_8);
+			}
+			if (entity != null) {
+				EntityUtils.consume(entity);
+			}
+		} catch (Exception e) {
+			httpPost.abort();
+			throw new Exception("渠道方接口通讯异常");
+		} finally {
+			if (response != null) {
+				response.close();
+			}
+			httpPost.releaseConnection();
+		}
+		return responseContent;
+	}
 
 
 
