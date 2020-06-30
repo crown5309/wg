@@ -46,8 +46,8 @@
         </el-form-item>
         <el-form-item label="图片" v-show='goodsClass.classLevel!=2'>
 
-          <el-upload class="avatar-uploader" action="http://81.68.73.72:9000/uploadimg" :show-file-list="false"
-            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+          <el-upload class="avatar-uploader" action="" :show-file-list="false"
+            :auto-upload="false" :before-upload="beforeAvatarUpload" :on-change="upload">
             <img v-if="goodsClass.classImgUrl" :src="goodsClass.classImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -187,25 +187,33 @@
           this.dialogFormVisible = false
         })
       },
-      handleAvatarSuccess(res, file) {
-        if (res.code == '100') {
-          this.goodsClass.classImgUrl = res.info.join(",")
-        }
+      upload(e) {
+        console.log(e)
+        let formData1 = new FormData();
+        formData1.append("file",  e.raw)
+        this.api({
+          url: "/uploadimg",
+          method: "post",
+          data: formData1,
+          headers:{'Content-Type':'multipart/form-data'}
+        }).then((data) => {
+           this.goodsClass.classImgUrl = data.join(",")
+        })
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
-      //   if (!isJPG) {
-      //     this.$message.error('上传图片只能是 JPG 格式!');
-      //   }
-      //   if (!isLt2M) {
-      //     this.$message.error('上传图片大小不能超过 2MB!');
-      //   }
-      //   return isJPG && isLt2M;
-      // }
+        //   if (!isJPG) {
+        //     this.$message.error('上传图片只能是 JPG 格式!');
+        //   }
+        //   if (!isLt2M) {
+        //     this.$message.error('上传图片大小不能超过 2MB!');
+        //   }
+        //   return isJPG && isLt2M;
+        // }
+      }
     }
-  }
   }
 </script>
 <style>

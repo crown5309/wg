@@ -8,68 +8,61 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row>
-     <el-table-column align="center" label="显示顺序" prop="showOrder" ></el-table-column>
-     <el-table-column align="center" label="图片" >
-       <template slot-scope="scope">
-         <img :src="scope.row.imgUrl" width="80px" height="80px" />
-       </template>
-     </el-table-column>
-      <el-table-column align="center" label="管理"  v-if="hasPerm('banner:update')">
+    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+      <el-table-column align="center" label="显示顺序" prop="showOrder"></el-table-column>
+      <el-table-column align="center" label="图片">
+        <template slot-scope="scope">
+          <img :src="scope.row.imgUrl" width="80px" height="80px" />
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="管理" v-if="hasPerm('banner:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete"  v-if="hasPerm('banner:delete')"
-                     @click="removeUser(scope.$index)">删除
+          <el-button type="danger" icon="delete" v-if="hasPerm('banner:delete')" @click="removeUser(scope.$index)">删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="listQuery.pageNum"
-      :page-size="listQuery.pageRow"
-      :total="totalCount"
-      :page-sizes="[10, 20, 50, 100]"
-      layout="total, sizes, prev, pager, next, jumper">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum"
+      :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-  <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-    <el-form class="small-space" :model="goodsClass" label-position="left" label-width="80px" style='width: 300px; margin-left:80px;'>
-      <el-form-item label="显示顺序">
-        <el-input type="number" v-model="goodsClass.showOrder">
-        </el-input>
-      </el-form-item>
-      <el-form-item label="图片">
-        <el-upload class="avatar-uploader" action="http://81.68.73.72:9000/uploadimg" :show-file-list="false"
-          :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-          <img v-if="goodsClass.imgUrl" :src="goodsClass.imgUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button v-if="dialogStatus=='create'" type="success" @click="createBanner()">创 建</el-button>
-      <el-button type="primary" v-else @click="updateArticle">修 改</el-button>
-    </div>
-  </el-dialog>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form class="small-space" :model="goodsClass" label-position="left" label-width="80px" style='width: 300px; margin-left:80px;'>
+        <el-form-item label="显示顺序">
+          <el-input type="number" v-model="goodsClass.showOrder">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="图片">
+          <el-upload class="avatar-uploader" action="" :show-file-list="false" :before-upload="beforeAvatarUpload" :on-change="upload">
+            <img v-if="goodsClass.imgUrl" :src="goodsClass.imgUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="success" @click="createBanner()">创 建</el-button>
+        <el-button type="primary" v-else @click="updateArticle">修 改</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-  import {mapGetters} from 'vuex'
+  import {
+    mapGetters
+  } from 'vuex'
 
   export default {
     data() {
       return {
         totalCount: 0, //分页组件--数据总条数
-        list: [],//表格的数据
-        listLoading: false,//数据加载等待动画
+        list: [], //表格的数据
+        listLoading: false, //数据加载等待动画
         listQuery: {
-          pageNum: 1,//页码
-          pageRow: 50,//每页条数
+          pageNum: 1, //页码
+          pageRow: 50, //每页条数
         },
-        roles: [],//角色列表
+        roles: [], //角色列表
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
@@ -81,7 +74,9 @@
           showOrder: '',
           id: '',
         },
-        deId:{id:""}
+        deId: {
+          id: ""
+        }
       }
     },
     created() {
@@ -129,15 +124,15 @@
       showCreate() {
         //显示新增对话框
         this.goodsClass.id = "";
-         this.goodsClass.imgUrl = "";
+        this.goodsClass.imgUrl = "";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
         let user = this.list[$index];
-        this.goodsClass.imgUrl =user.imgUrl;
-        this.goodsClass.id=user.id
-        this.goodsClass.showOrder =user.showOrder;
+        this.goodsClass.imgUrl = user.imgUrl;
+        this.goodsClass.id = user.id
+        this.goodsClass.showOrder = user.showOrder;
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
@@ -180,7 +175,7 @@
           type: 'warning'
         }).then(() => {
           let user = _vue.list[$index];
-          this.deId.id=user.id
+          this.deId.id = user.id
           _vue.api({
             url: "/index/deleteBanner",
             method: "post",
@@ -192,14 +187,24 @@
           })
         })
       },
-      handleAvatarSuccess(res, file) {
-          if (res.code == '100') {
-            this.goodsClass.imgUrl = res.info.join(",")
+      upload(e) {
+        console.log(e)
+        let formData1 = new FormData();
+        formData1.append("file", e.raw)
+        this.api({
+          url: "/uploadimg",
+          method: "post",
+          data: formData1,
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
-        },
-        beforeAvatarUpload(file) {
-          const isJPG = file.type === 'image/jpeg';
-          const isLt2M = file.size / 1024 / 1024 < 2;
+        }).then((data) => {
+          this.goodsClass.imgUrl = data.join(",")
+        })
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
       }
     }
   }

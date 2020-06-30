@@ -24,6 +24,8 @@ import com.heeexy.example.util.OrderIdFactory;
 public class FileController {
 	@Value("${imgPath}")
 	private String imgPath;
+	@Value("${imgServerUrl}")
+	private String imgServerUrl;
 	@RequestMapping(value="/uploadimg", method = RequestMethod.POST)
     public @ResponseBody JSONObject uploadImg(@RequestParam("file") MultipartFile[] file,
             HttpServletRequest request) {
@@ -43,7 +45,7 @@ public class FileController {
 				String substring = OrderIdFactory.getOrderIdByUUId()+fileName.substring(fileName.lastIndexOf("."));
 		        try {
 					uploadFile(f.getBytes(), filePath,substring);
-					fiList.add(url+"/img"+"/"+format+substring);
+					fiList.add(imgServerUrl+"/img"+"/"+format+substring);
 		        } catch (Exception e) {
 		            // TODO: handle exception
 		        }
