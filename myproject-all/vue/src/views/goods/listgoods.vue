@@ -269,7 +269,7 @@
         this.imgsback1=this.list[$index].detailUrl.split(",")
         this.dialogStatus = "update"
         this.dialogFormVisible = true
-      
+
       },
       verification(){
         const skuStore= /^[0-9]+$/
@@ -399,7 +399,7 @@
       delimgback1(i) {
         this.imgsback1.splice(i, 1)
       },
-      getClassIndex(){
+      getClassIndex(){//获取所选商品分类的下标，回显小程序
         let classArray=this.goods.classId
         let classIndex=[]
         for(let i=0;i<this.optionsClass.length;i++){
