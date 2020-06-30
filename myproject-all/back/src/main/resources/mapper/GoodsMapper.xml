@@ -18,7 +18,8 @@
 		resultType="com.alibaba.fastjson.JSONObject">
 		select goods_name goodsName,id goodsId,banner_url
 		bannerUrl,price,sku_store skuStore
-		from goods where state=#{state} and app_id=#{appId}
+		from goods where state=#{state} and
+		app_id=#{appId}
 		<if test="classId!='' and classId !=null">
 			and class_id3=#{classId}
 		</if>
@@ -52,9 +53,11 @@
 	</update>
 	<select id="getGoodsById"
 		resultType="com.alibaba.fastjson.JSONObject">
-		select goods_name goodsName,id goodsId,banner_url bannerUrl,price,sku_store
+		select goods_name goodsName,id goodsId,banner_url
+		bannerUrl,price,sku_store
 		skuStore,
-		detail_url detailUrl,multi_index multiIndex ,store_id storeId,state
+		detail_url detailUrl,multi_index
+		multiIndex ,store_id storeId,state
 		from goods where id=#{appId}
 	</select>
 	<update id="updateGoodsStoreSku" parameterType="java.util.List">
@@ -67,14 +70,17 @@
 		</foreach>
 	</update>
 	<update id="updateGoodStoreCount">
-		update goods set sku_store=sku_store-#{count} where id=#{goodsId} and
+		update goods set sku_store=sku_store-#{count} where
+		id=#{goodsId} and
 		sku_store=sku_store-#{count} &gt;=0
 	</update>
 	<update id="updateCountById">
-		update goods set count=count+#{count} where id=#{goodsId}
+		update goods set count=count+#{count} where
+		id=#{goodsId}
 	</update>
 	<update id="addSkuCount">
-		update goods set sku_store=sku_store+#{count} where id=#{goodsId}
+		update goods set sku_store=sku_store+#{count} where
+		id=#{goodsId}
 	</update>
 	<select id="countGoods" resultType="Integer">
 		SELECT count(0)
@@ -91,23 +97,38 @@
 		w.id id,
 		w.goods_name goodsName,
 		w.price price,
-		w.sku_store skuStore,
+		w.sku_store
+		skuStore,
 		w.banner_url bannerUrl,
 		w.detail_url detailUrl,
-		w.multi_index multiIndex,
+		w.multi_index
+		multiIndex,
 		w.class_id1 classId1,
 		w.class_id2 classId2,
-		w.class_id3 classId3,
+		w.class_id3
+		classId3,
 		w.state state,
 		w.count count,
 		w.create_time createTime,
 		s.store_name storeName
-		FROM goods w INNER JOIN store s on w.store_id =s.id
+		FROM goods w INNER JOIN store s on w.store_id
+		=s.id
 		<where>
 			<if test="appId !=null and appId !=''">
-				w.app_id=#{appId}
+				w.app_id=#{appId} 
 			</if>
-
+			<if test="goodsName !=null and goodsName !=''">
+				 and  goods_name like concat("%",#{goodsName},"%") 
+			</if>
+			<if test="state !=null and state !=''">
+				and  w.state=#{state}  
+			</if>
+			<if test="createTime !=null and createTime  !=''">
+				and w.create_time between #{startTime} and  #{endTime}
+			</if>
+			<if test="classId !=null and classId  !=''">
+				and w.class_id3 = #{classId}
+			</if>
 		</where>
 		ORDER BY w.create_time desc
 		LIMIT #{offSet}, #{pageRow}
@@ -118,13 +139,16 @@
 		w.id id,
 		w.goods_name goodsName,
 		w.price price,
-		w.sku_store skuStore,
+		w.sku_store
+		skuStore,
 		w.banner_url bannerUrl,
 		w.detail_url detailUrl,
-		w.multi_index multiIndex,
+		w.multi_index
+		multiIndex,
 		w.class_id1 classId1,
 		w.class_id2 classId2,
-		w.class_id3 classId3,
+		w.class_id3
+		classId3,
 		w.state state,
 		w.create_time createTime,
 		s.store_name storeName

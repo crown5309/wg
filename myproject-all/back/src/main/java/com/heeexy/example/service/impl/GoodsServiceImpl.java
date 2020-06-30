@@ -1,5 +1,6 @@
 package com.heeexy.example.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.GoodsClassDao;
 import com.heeexy.example.dao.GoodsDao;
 import com.heeexy.example.dao.UserDao;
 import com.heeexy.example.service.GoodsService;
@@ -20,6 +22,8 @@ import com.heeexy.example.util.constants.Constants;
 public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private GoodsDao goodsDao;
+	@Autowired
+	private GoodsClassDao goodsClassDao;
 	@Override
 	public Object addGoods(JSONObject request2Json) {
 		// TODO Auto-generated method stub
@@ -71,7 +75,10 @@ public class GoodsServiceImpl implements GoodsService {
 			getStateName(j);
 			j.put("createTime", DateUtil.format(j.getDate("createTime"), DateUtil.DATE_TIME));
 		}
-		return CommonUtil.successPage(request2Json, list, count);
+		//商品分类
+		JSONObject successPage = CommonUtil.successPage(request2Json, list, count);
+		successPage.getJSONObject("info").put("goodsClassList", getGoodsClass(request2Json.getString("appId")));
+		return successPage;
 	}
 	@Override
 	public JSONObject updateGoods(JSONObject jsonObject) {
@@ -82,12 +89,12 @@ public class GoodsServiceImpl implements GoodsService {
 	private void getAppId(JSONObject request2Json) {
 		Session session = SecurityUtils.getSubject().getSession(); JSONObject
 		userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
-		if(!"admin".equals(userInfo.getString("username"))) {
+//		if(!"admin".equals(userInfo.getString("username"))) {
 			String appId =userInfo.getString("appId");
 			request2Json.put("appId", appId);
-		}else {
-			request2Json.put("appId", "");
-		}
+//		}else {
+//			request2Json.put("appId", "");
+//		}
 		
 	}
 	private void getStateName(JSONObject json) {
@@ -105,5 +112,45 @@ public class GoodsServiceImpl implements GoodsService {
 			json.put("stateName", "拒绝通过");
 		}
 		
+	}
+	private List<JSONObject> getGoodsClass(String appId){
+		List<JSONObject> list=goodsClassDao.getAllGoodsClass(appId);
+		List<JSONObject> list1=new ArrayList<JSONObject>();
+		JSONObject one=null;
+		List<JSONObject> list2=null;
+		JSONObject two=null;
+		List<JSONObject> list3=null;
+		JSONObject three=null;
+		for(int i=0;i<list.size();i++) {
+			if(list.get(i).getInteger("classLevel")==1) {//一级
+				one=new JSONObject();
+				one.put("value", list.get(i).get("id"));
+				one.put("label", list.get(i).get("className"));
+				list2=new ArrayList<JSONObject>();
+				for(int j=0;j<list.size();j++) {
+					if(list.get(j).getInteger("classLevel")==2&&list.get(j).get("parentId").equals(list.get(i).get("id"))) {//二级
+						two=new JSONObject();
+						two.put("value", list.get(j).get("id"));
+						two.put("label", list.get(j).get("className"));
+						list3=new ArrayList<JSONObject>();
+						for(int k=0;k<list.size();k++) {
+							if(list.get(k).getInteger("classLevel")==3&&list.get(k).get("parentId").equals(list.get(j).get("id"))) {//三级
+								three=new JSONObject();
+								three.put("value", list.get(k).get("id"));
+								three.put("label", list.get(k).get("className"));
+								list3.add(three);
+							}
+						}
+						two.put("children", list3);
+						list2.add(two);
+					}
+					
+				}
+				one.put("children", list2);
+				list1.add(one);
+			}
+			
+		}
+		return list1;
 	}
 }

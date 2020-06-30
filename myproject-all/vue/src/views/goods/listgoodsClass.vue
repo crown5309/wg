@@ -188,7 +188,6 @@
         })
       },
       upload(e) {
-        console.log(e)
         let formData1 = new FormData();
         formData1.append("file",  e.raw)
         this.api({
