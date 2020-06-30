@@ -18,6 +18,6 @@ public interface GoodsService {
 
 	JSONObject listGoods(JSONObject request2Json);
 
-	JSONObject updateGoods(HttpServletRequest request);
+	JSONObject updateGoods(JSONObject jsonObject);
 
 }

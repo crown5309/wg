@@ -40,6 +40,6 @@ public  	class GoodsBackController {
 	@RequiresPermissions("goods:update")
 	@PostMapping("/updateGoods")
 	public JSONObject updategoods(HttpServletRequest request) {
-		return goodsService.updateGoods(request);
+		return goodsService.updateGoods(CommonUtil.request2Json(request));
 	}
 }

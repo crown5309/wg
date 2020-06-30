@@ -38,8 +38,6 @@ public class FileController {
 		for(MultipartFile f:file) {
 			 String contentType = f.getContentType();
 		        String fileName = f.getOriginalFilename();
-		        /*System.out.println("fileName-->" + fileName);
-		        System.out.println("getContentType-->" + contentType);*/
 		        String format = DateUtil.format(new Date(), "yyyMMdd")+"/";
 				String filePath = imgPath+format;
 				String substring = OrderIdFactory.getOrderIdByUUId()+fileName.substring(fileName.lastIndexOf("."));

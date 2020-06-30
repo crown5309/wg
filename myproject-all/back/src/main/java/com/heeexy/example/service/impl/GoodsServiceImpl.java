@@ -74,9 +74,10 @@ public class GoodsServiceImpl implements GoodsService {
 		return CommonUtil.successPage(request2Json, list, count);
 	}
 	@Override
-	public JSONObject updateGoods(HttpServletRequest request) {
+	public JSONObject updateGoods(JSONObject jsonObject) {
 		// TODO Auto-generated method stub
-		return null;
+		goodsDao.updateGoods(jsonObject);
+		return CommonUtil.successJson();
 	}
 	private void getAppId(JSONObject request2Json) {
 		Session session = SecurityUtils.getSubject().getSession(); JSONObject
