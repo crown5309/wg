@@ -30,6 +30,7 @@
       <el-table-column align="center" prop="storeName" label="商家" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="stateName" label="状态" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="count" label="购买数量" style="width: 60px;"></el-table-column>
+       <el-table-column align="center" prop="totalPay" label="总价格(元)" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="discountPay" label="优惠价格(元)" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="practicePay" label="实付(元)" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="createTime" label="添加时间" style="width: 60px;"></el-table-column>
@@ -43,7 +44,42 @@
       :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      111
+      <div>
+        <span>订单信息</span>
+        <el-divider></el-divider>
+        <div class="orderInfo">
+          <span>订单号:</span>  <span>{{good.orderId}}</span>
+          <span>状态:</span>  <span>{{good.stateName}}</span>
+          <span>总价(元):</span>  <span>{{good.totalPay}}</span>
+          <span>优惠(元):</span>  <span>{{good.practicePay}}</span>
+          <span>实付(元):</span>  <span>{{good.orderId}}</span>
+        </div>
+      </div>
+        <el-divider></el-divider>
+      <div>
+        <span>商品信息</span>
+        <el-divider></el-divider>
+        <el-table :data="goodList" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row class="tableClass">
+        <el-table-column align="center" label="序号">
+          <template slot-scope="scope">
+            <span v-text="getIndex(scope.$index)"> </span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="goodsName" label="商品名" ></el-table-column>
+        <el-table-column align="center" prop="count" label="购买数量" ></el-table-column>
+        <el-table-column align="center" prop="price" label="价格(元)" ></el-table-column>
+        </el-table>
+      </div>
+        <el-divider></el-divider>
+      <div>
+        <span>物流信息</span>
+        <el-divider></el-divider>
+        <el-timeline :reverse="reverse">
+          <el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp">
+            {{activity.content}}
+          </el-timeline-item>
+        </el-timeline>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -107,9 +143,19 @@
             label: '退货中'
           },
         ],
-        optionsClass: [],
-        imgsback: [],
-        imgsback1: []
+        reverse: true,
+        activities: [{
+          content: '活动按期开始',
+          timestamp: '2018-04-15'
+        }, {
+          content: '通过审核',
+          timestamp: '2018-04-13'
+        }, {
+          content: '创建成功',
+          timestamp: '2018-04-11'
+        }],
+        goodList:[],
+        good:{}
       }
     },
     created() {
@@ -172,55 +218,22 @@
       showUpdate($index) {
         //显示修改对话框
         this.dialogFormVisible = true
+        this.goodList=this.list[$index].goodsList
+        this.good=this.list[$index]
 
       },
     }
   }
 </script>
 <style>
-  .imgCss .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+  .orderInfo{
+    margin-top: 15px;
+    margin-left: 15px;
   }
-
-  .avatar-uploader,
-  .avatar-uploader div {
-    display: inline-block;
-
+  .orderInfo span{
+    padding-right: 25px;
   }
-
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
-
-  }
-
-  .img {
-    font-size: 28px;
-    color: #8c939d;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
-  }
-
-  .avatar {
-    width: 80px;
-    height: 80px;
-  }
-
-  .inputSerach {
-    width: 10%;
+  .tableClass{
+    font-size: 13px;
   }
 </style>

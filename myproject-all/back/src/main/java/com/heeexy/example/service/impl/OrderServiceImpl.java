@@ -480,8 +480,9 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 		int count = orderDao.countOrder(request2Json);
 		List<OrderInfo> list=orderDao.getOrderInfoList(request2Json);
 		List<JSONObject> goodsList=null;
-		int goodsCount=0;
+
 		for(OrderInfo j:list) {
+			int goodsCount=0;
 			getStateName(j);
 			j.put("createTime", DateUtil.format(j.getDate("createTime"), DateUtil.DATE_TIME));
 			goodsList =(List<JSONObject>) j.get("goodsList");
