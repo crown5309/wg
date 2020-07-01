@@ -45,7 +45,7 @@
       <el-table-column align="center" prop="skuStore" label="库存" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="count" label="销量" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="createTime" label="添加时间" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="下架/上架" width="200" v-if="hasPerm('goods:update')">
+      <el-table-column align="center" label="下架/上架" width="200" v-if="hasPerm('goods:upAndDown')">
         <template slot-scope="scope">
           <el-switch style="display: block" active-value="2" inactive-value="3" v-model="scope.row.state" active-color="#13ce66"
             inactive-color="#ff4949" active-text="上架" inactive-text="下架" @change="changeValue(scope.row.state,scope.$index)"
@@ -54,10 +54,10 @@
 
         </template>
       </el-table-column>
-      <el-table-column align="center" label="审核" width="200" v-if="hasPerm('goods:update')">
+      <el-table-column align="center" label="审核" width="200" v-if="hasPerm('goods:audit')">
         <template slot-scope="scope">
-          <el-switch style="display: block" active-value="2" inactive-value="4" v-model="scope.row.state" active-color="#13ce66"
-            inactive-color="#ff4949" active-text="通过" inactive-text="拒绝" @change="changeValue(scope.row.state,scope.$index)"
+          <el-switch style="display: block" active-value="2" inactive-value="4" v-model="scope.row.state1" active-color="#13ce66"
+            inactive-color="#ff4949" active-text="通过" inactive-text="拒绝" @change="changeValue(scope.row.state1,scope.$index)"
             :disabled="scope.row.auditFlag">
           </el-switch>
 
@@ -66,7 +66,6 @@
       <el-table-column align="center" label="管理" width="200" v-if="hasPerm('goods:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -88,7 +87,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="所属分类">
-          <el-cascader  @change="getClassIndex" clearable v-model="goods.classId" :options="optionsClass" :props="{ expandTrigger: 'hover' }"></el-cascader>
+          <el-cascader @change="getClassIndex" clearable v-model="goods.classId" :options="optionsClass" :props="{ expandTrigger: 'hover' }"></el-cascader>
           </el-input>
         </el-form-item>
         <el-form-item label="banner图" class="imgCss">
@@ -117,7 +116,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button v-if="dialogStatus=='create'" type="success" @click="createGoods()">创 建</el-button>
-        <el-button type="primary" v-else @click="updateArticle">修 改</el-button>
+        <el-button type="primary" v-else @click="updateGoods">修 改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -157,7 +156,7 @@
           classId2: "",
           classId3: '',
           multiIndex: [],
-          classId:[]
+          classId: []
         },
         dialogImageUrl: '',
         dialogVisible: false,
@@ -214,15 +213,16 @@
           this.list = data.list;
           this.optionsClass = data.goodsClassList
           this.list.forEach((item) => {
+            item.state1 = item.state
             if (item.state == 0 || item.state == 4) {
               item.flag = true
             } else {
               item.flag = false
             }
-            if(item.state==0){
-              item.auditFlag=false
-            }else{
-              item.auditFlag=true
+            if (item.state == 0) {
+              item.auditFlag = false
+            } else {
+              item.auditFlag = true
             }
           })
           this.totalCount = data.totalCount;
@@ -248,16 +248,16 @@
         this.goods.goodsName = "";
         this.goods.price = "";
         this.goods.skuStore = "";
-        this.imgsback =[];
-        this.imgsback1 =[];
-        this.goods.classId =[];
+        this.imgsback = [];
+        this.imgsback1 = [];
+        this.goods.classId = [];
         this.dialogStatus = "create"
         this.dialogFormVisible = true
         this.dialogImageUrl = ""
       },
       showUpdate($index) {
         //显示修改对话框
-        this.goods.classId=[]
+        this.goods.classId = []
         this.goods.id = this.list[$index].id;
         this.goods.goodsName = this.list[$index].goodsName;
         this.goods.price = this.list[$index].price;
@@ -265,68 +265,90 @@
         this.goods.classId.push(this.list[$index].classId1)
         this.goods.classId.push(this.list[$index].classId2)
         this.goods.classId.push(this.list[$index].classId3)
-        this.imgsback=this.list[$index].bannerUrl.split(",")
-        this.imgsback1=this.list[$index].detailUrl.split(",")
+        this.imgsback = this.list[$index].bannerUrl.split(",")
+        this.imgsback1 = this.list[$index].detailUrl.split(",")
         this.dialogStatus = "update"
         this.dialogFormVisible = true
 
       },
-      verification(){
-        const skuStore= /^[0-9]+$/
-       const price= /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/
-        if(this.goods.goodsName==''){
+      verification() {
+        const skuStore = /^[0-9]+$/
+        const price = /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/
+        if (this.goods.goodsName == '') {
           this.$message.error("请输入商品名称");
           return false
         }
-        if(!price.test(this.goods.price)){
+        if (!price.test(this.goods.price)) {
           this.$message.error("请输入合法的金额数字，最多两位小数");
           return false
         }
-        if(!skuStore.test(this.goods.skuStore)){
+        if (!skuStore.test(this.goods.skuStore)) {
           this.$message.error("库存应为整数");
           return false
         }
-        if(this.goods.classId.length==0){
+        if (this.goods.classId.length == 0) {
           this.$message.error("请选择分类");
           return false
         }
-        if(this.imgsback==0){
+        if (this.imgsback.length == 0) {
           this.$message.error("请上传banner图");
           return false
         }
-        if(this.imgsback1==0){
+        if (this.imgsback1.length == 0) {
           this.$message.error("请上传详情图");
           return
         }
-        this.goods.classId1=this.goods.classId[0]
-        this.goods.classId2=this.goods.classId[1]
-        this.goods.classId3=this.goods.classId[2]
-        this.goods.bannerUrl=this.imgsback.join(",")
-        this.goods.detailUrl=this.imgsback1.join(",")
+        this.goods.classId1 = this.goods.classId[0]
+        this.goods.classId2 = this.goods.classId[1]
+        this.goods.classId3 = this.goods.classId[2]
+        this.goods.bannerUrl = this.imgsback.join(",")
+        this.goods.detailUrl = this.imgsback1.join(",")
         return true
       },
       createGoods() {
-        if(this.verification()){//校验
+        if (this.verification()) { //校验
+          this.listLoading = true;
+          this.goods.classId = ""
           this.api({
-            url: "/goods/addgoodsClass",
+            url: "/goods/addGoods",
             method: "post",
-            data: this.goods
+            params: this.goods
           }).then(() => {
-            this.getList();
-            this.dialogFormVisible = false
+            this.$message({
+              message: "添加成功",
+              type: 'success',
+              duration: 1 * 1000,
+              onClose: () => {
+                this.getList();
+                this.dialogFormVisible = false
+                this.listLoading = false;
+              }
+            })
           })
         }
       },
-      updateArticle() {
-        //修改文章
-        this.api({
-          url: "/goods/updategoodsClass",
-          method: "post",
-          data: this.goodsClass
-        }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
-        })
+      updateGoods() {
+        if (this.verification()) { //校验
+          this.listLoading = true;
+          this.goods.classId = ""
+          this.api({
+            url: "/goods/updateGoods",
+            method: "post",
+            params: this.goods
+          }).then(() => {
+            this.$message({
+              message: "更新成功",
+              type: 'success',
+              duration: 1 * 1000,
+              onClose: () => {
+                this.getList();
+                this.dialogFormVisible = false
+                this.listLoading = false;
+              }
+            })
+
+          })
+        }
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
@@ -338,6 +360,10 @@
           name = "上架"
         } else if (value == 3) {
           name = "下架"
+        } else if (value == 1) {
+          name = "审核通过"
+        } else if (value == 4) {
+          name = "拒绝通过"
         }
         this.$confirm('确定' + name + '?', '提示', {
           confirmButtonText: '确定',
@@ -346,11 +372,21 @@
         }).then(() => {
           this.list[index].stateName = name
           this.list[index].state = value
+          let url = "";
+          if (value == 2 || value == 3) {
+            url = "/goods/upAndDownGoods";
+          } else if (value == 1 || value == 4) {
+            url = "/goods/auditGoods";
+          } else {
+            this.$message.error("传递状态有误");
+          }
+          this.listLoading = true;
           this.api({
             url: "/goods/updateGoods",
             method: "post",
             params: this.list[index]
           }).then(() => {
+            this.listLoading = false;
             this.$message({
               message: this.list[index].stateName + "成功",
               type: 'success',
@@ -362,6 +398,7 @@
       upload(e) {
         let formData1 = new FormData();
         formData1.append("file", e.raw)
+        this.listLoading = true;
         this.api({
           url: "/uploadimg",
           method: "post",
@@ -370,6 +407,7 @@
             'Content-Type': 'multipart/form-data'
           }
         }).then((data) => {
+          this.listLoading = false;
           data.forEach((item) => {
             this.imgsback.push(item)
           })
@@ -378,6 +416,7 @@
       upload1(e) {
         let formData1 = new FormData();
         formData1.append("file", e.raw)
+        this.listLoading = true;
         this.api({
           url: "/uploadimg",
           method: "post",
@@ -386,6 +425,7 @@
             'Content-Type': 'multipart/form-data'
           }
         }).then((data) => {
+          this.listLoading = false;
           data.forEach((item) => {
             this.imgsback1.push(item)
           })
@@ -399,25 +439,25 @@
       delimgback1(i) {
         this.imgsback1.splice(i, 1)
       },
-      getClassIndex(){//获取所选商品分类的下标，回显小程序
-        let classArray=this.goods.classId
-        let classIndex=[]
-        for(let i=0;i<this.optionsClass.length;i++){
-          if(this.optionsClass[i].value==classArray[0]){
+      getClassIndex() { //获取所选商品分类的下标，回显小程序
+        let classArray = this.goods.classId
+        let classIndex = []
+        for (let i = 0; i < this.optionsClass.length; i++) {
+          if (this.optionsClass[i].value == classArray[0]) {
             classIndex.push(i);
-            for(let j=0;j<this.optionsClass[i].children.length;j++){
-              if(this.optionsClass[i].children[j].value==classArray[1]){
+            for (let j = 0; j < this.optionsClass[i].children.length; j++) {
+              if (this.optionsClass[i].children[j].value == classArray[1]) {
                 classIndex.push(j);
-                for(let k=0;k<this.optionsClass[i].children[j].children.length;k++){
-                   if(this.optionsClass[i].children[j].children[k].value==classArray[2]){
-                     classIndex.push(k);
-                   }
+                for (let k = 0; k < this.optionsClass[i].children[j].children.length; k++) {
+                  if (this.optionsClass[i].children[j].children[k].value == classArray[2]) {
+                    classIndex.push(k);
+                  }
                 }
               }
             }
           }
         }
-        this.goods.multiIndex=classIndex.join(",")
+        this.goods.multiIndex = classIndex.join(",")
       }
     }
   }
@@ -431,17 +471,17 @@
     overflow: hidden;
   }
 
-  .avatar-uploader,
+  .imgCss .avatar-uploader,
   .avatar-uploader div {
     display: inline-block;
 
   }
 
-  .avatar-uploader .el-upload:hover {
+  .imgCss .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
 
-  .avatar-uploader-icon {
+  .imgCss .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     width: 80px;
@@ -460,7 +500,7 @@
     text-align: center;
   }
 
-  .avatar {
+  .imgCss .avatar {
     width: 80px;
     height: 80px;
   }

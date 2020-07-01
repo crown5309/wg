@@ -15,7 +15,7 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="角色" prop="roleName" width="150"></el-table-column>
+      <el-table-column align="center" label="角色" prop="roleName"></el-table-column>
       <el-table-column align="center" label="用户">
         <template slot-scope="scope">
           <div v-for="user in scope.row.users">
@@ -23,7 +23,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="菜单&权限" width="420">
+   <!--   <el-table-column align="center" label="菜单&权限" width="420">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.roleName==adminName" type="success">全部</el-tag>
           <div v-else>
@@ -35,7 +35,7 @@
             </div>
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="管理" width="220" v-if="hasPerm('role:update') ||hasPerm('role:delete') ">
         <template slot-scope="scope">
           <div v-if="scope.row.roleName!='管理员'">
@@ -64,7 +64,7 @@
                          style="width:90px;"
                          @click="checkAll(_index)">{{menu.menuName}}</el-button>
             </span>
-            <div style="display: inline-block;margin-left:20px;">
+            <div style="margin-left:20px;">
               <el-checkbox-group v-model="tempRole.permissions">
                 <el-checkbox v-for="perm in menu.permissions" :label="perm.id" @change="checkRequired(perm,_index)"
                              :key="perm.id">

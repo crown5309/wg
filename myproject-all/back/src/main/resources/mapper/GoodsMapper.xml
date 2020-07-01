@@ -89,6 +89,9 @@
 			<if test="appId!=null and appId !=''">
 				app_id=#{appId}
 			</if>
+			<if test="storeId!=null and storeId !=''">
+				and store_id=#{storeId}
+			</if>
 		</where>
 	</select>
 	<select id="listGoods"
@@ -128,6 +131,9 @@
 			</if>
 			<if test="classId !=null and classId  !=''">
 				and w.class_id3 = #{classId}
+			</if>
+			<if test="storeId!=null and storeId !=''">
+				and store_id=#{storeId}
 			</if>
 		</where>
 		ORDER BY w.create_time desc

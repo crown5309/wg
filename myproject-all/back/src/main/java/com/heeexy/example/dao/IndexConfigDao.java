@@ -9,7 +9,7 @@ import com.heeexy.example.entity.ClassesInfo;
 
 public interface IndexConfigDao {
 
-	List<JSONObject> listIndexConfigClasses(String type);
+	List<JSONObject> listIndexConfigClasses(@Param("type")String type,@Param("appId") String appId);
 
 	List<JSONObject> listIndexConfigBanner(@Param("type")String type,@Param("appId") String appId);
 

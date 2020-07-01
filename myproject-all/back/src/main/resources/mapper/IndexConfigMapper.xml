@@ -8,6 +8,7 @@
 	<select id="listIndexConfigClasses" resultType="com.alibaba.fastjson.JSONObject">
 		select c.id,g.class_name className,c.goods_class_id from index_config c INNER JOIN 
 		 goods_class g on c.goods_class_id=g.id and g.class_level=1
+		 where g.app_id=#{appId}
 	</select>
 	
 	<resultMap id="orderMap"

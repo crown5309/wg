@@ -5,21 +5,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.GoodsClassDao;
 import com.heeexy.example.dao.GoodsDao;
-import com.heeexy.example.dao.UserDao;
+import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.GoodsService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.DateUtil;
-import com.heeexy.example.util.constants.Constants;
 @Service
-public class GoodsServiceImpl implements GoodsService {
+public class GoodsServiceImpl  extends BaseService implements GoodsService{
 	@Autowired
 	private GoodsDao goodsDao;
 	@Autowired
@@ -27,6 +24,7 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public Object addGoods(JSONObject request2Json) {
 		// TODO Auto-generated method stub
+		getAppId(request2Json);
 		goodsDao.addGoods(request2Json);
 		return CommonUtil.successJson();
 	}
@@ -86,17 +84,46 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDao.updateGoods(jsonObject);
 		return CommonUtil.successJson();
 	}
-	private void getAppId(JSONObject request2Json) {
-		Session session = SecurityUtils.getSubject().getSession(); JSONObject
-		userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
-//		if(!"admin".equals(userInfo.getString("username"))) {
-			String appId =userInfo.getString("appId");
-			request2Json.put("appId", appId);
-//		}else {
-//			request2Json.put("appId", "");
-//		}
-		
+
+	@Override
+	public JSONObject auditGoods(JSONObject request2Json) {
+		JSONObject goods = goodsDao.getGoodsById(request2Json.getString("id"));
+		int state = goods.getIntValue("state");
+		int state1 = request2Json.getIntValue("state");
+		String name="上架";
+		if(!(state1 ==1||state1 ==4)){
+			return CommonUtil.errorJson("状态传递错误");
+		}
+		if(state!=0){
+			return CommonUtil.errorJson("该状态下商品不能审核");
+		}
+
+		goodsDao.updateGoods(request2Json);
+		return CommonUtil.successJson();
 	}
+
+	@Override
+	public JSONObject upAndDownGoods(JSONObject request2Json) {
+		JSONObject goods = goodsDao.getGoodsById(request2Json.getString("id"));
+		int state = goods.getIntValue("state");
+		int state1 = request2Json.getIntValue("state");
+		String name="上架";
+		if(state1 ==2){
+			name="上架";
+		}else if(state1==3){
+			name="下架";
+		}else {
+			return CommonUtil.errorJson("状态传递错误");
+		}
+		if(state==0||state==4){
+			return CommonUtil.errorJson("该状态下商品不能"+name);
+		}
+
+		goodsDao.updateGoods(request2Json);
+		return CommonUtil.successJson();
+	}
+
+
 	private void getStateName(JSONObject json) {
 		//0 待审核 1审核通过  2 上架 3下架 4拒绝
 		Integer state = json.getInteger("state");

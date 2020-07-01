@@ -38,7 +38,7 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		String appId = request2Json.getString("appId");
 		List<JSONObject> js = null;
 		if ("classes".equals(type)) {
-			js = indexConfigDao.listIndexConfigClasses(type);
+			js = indexConfigDao.listIndexConfigClasses(type,appId);
 		} else {
 			js = indexConfigDao.listIndexConfigBanner(type, appId);
 		}

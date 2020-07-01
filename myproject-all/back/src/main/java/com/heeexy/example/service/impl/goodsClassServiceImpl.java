@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.GoodsClassDao;
+import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.goodsClassService;
 import com.heeexy.example.util.CommonUtil;
 
 @Service
-public class goodsClassServiceImpl implements goodsClassService {
+public class goodsClassServiceImpl extends BaseService implements goodsClassService {
 	@Autowired
 	private GoodsClassDao goodsClassDao;
 
@@ -20,6 +21,7 @@ public class goodsClassServiceImpl implements goodsClassService {
 	public JSONObject listGoodsClass(JSONObject request2Json) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
+		getAppId(request2Json);
 		CommonUtil.fillPageParam(request2Json);
 		int count = goodsClassDao.countGoodsClass(request2Json);
 		List<JSONObject> list = goodsClassDao.listGoodsClass(request2Json);
@@ -29,6 +31,7 @@ public class goodsClassServiceImpl implements goodsClassService {
 
 	@Override
 	public JSONObject addGoodsClass(JSONObject requestJson) {
+		getAppId(requestJson);
 		goodsClassDao.addGoodsClass(requestJson);
 		return CommonUtil.successJson();
 	}

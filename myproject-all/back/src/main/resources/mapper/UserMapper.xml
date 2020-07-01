@@ -3,10 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.UserDao">
 
-    <select id="countUser" resultType="Integer">
+    <select id="countUser" resultType="Integer" parameterType="com.alibaba.fastjson.JSONObject">
         SELECT count(0)
         FROM sys_user u
-        WHERE u.delete_status = '1'
+        WHERE u.delete_status = '1' and app_id=#{appId}
     </select>
 
     <resultMap id="userMap" type="com.heeexy.example.util.model.One2Many">
@@ -38,7 +38,7 @@
                      DATE_FORMAT(create_time, '%Y.%m.%d %T') createTime,
                      DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime
                  FROM sys_user
-                 WHERE delete_status = '1'
+                 WHERE delete_status = '1' and app_id=#{appId}
                  ORDER BY id
                  LIMIT #{offSet}, #{pageRow}
              ) u

@@ -8,13 +8,13 @@
     			values
     			<foreach collection="list" item="item" index="index" separator=",">
     				(
-    					#{item.orderId},
-    					#{item.userId},
-    					#{item.totalPay},
-    					#{item.discountPay},
-    					#{item.practicePay},
-    					#{item.state},
-    					#{item.createTime}
+    				#{item.orderId},
+					#{item.userId},
+					#{item.totalPay},
+					#{item.discountPay},
+					#{item.practicePay},
+					#{item.state},
+					#{item.createTime}
     				)
     		     </foreach>		
     </insert>    
@@ -179,4 +179,62 @@
 	<update id="cancelOrderState">
 	update shop_order set state=#{state} where order_id=#{orderId}
 	</update>
+	<select id="countOrder" resultType="Integer">
+		SELECT count(o.order_id)
+		FROM shop_order o inner join sys_user s on o.user_id =s.id
+		<where>
+			<if test="appId!=null and appId !=''">
+				s.app_id=#{appId}
+			</if>
+			<if test="storeId!=null and storeId !=''">
+				and s.store_id=#{storeId}
+			</if>
+		</where>
+	</select>
+	<select id="getOrderInfoList" resultMap="orderMap1" parameterType="com.alibaba.fastjson.JSONObject">
+		SELECT
+		o.order_id  orderId,
+		o.total_pay totalPay,
+		o.discount_pay discountPay,
+		o.practice_pay practicePay,
+		s.store_name storeName,
+		s.id storeId,
+		g.goods_name goodsName,
+		o_goods.price price,
+		o_goods.goods_id goodsId,
+		o_goods.price orderPrice,
+		g.banner_url  bannerUrl,
+		o_goods.count count,
+		o.state state,
+		g.banner_url bannerUrl,
+		s.img_url imgUrl,
+		o.create_time createTime,
+		o.address_id addressId
+		FROM
+		shop_order o
+		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
+		INNER JOIN goods g ON o_goods.goods_id = g.id
+		INNER JOIN store s ON g.store_id = s.id
+		inner join sys_user u on o.user_id =u.id
+		<where>
+			<if test="state!=null and state !=''">
+				and o.state=#{state}
+			</if>
+			<if test="createTime !=null and createTime  !=''">
+				and o.create_time between #{startTime} and  #{endTime}
+			</if>
+			<if test="orderId !=null and orderId  !=''">
+				and o.order_id =#{orderId}
+			</if>
+			<if test="appId!=null and appId !=''">
+				and u.app_id=#{appId}
+			</if>
+			<if test="storeId!=null and storeId !=''">
+				and u.store_id=#{storeId}
+			</if>
+		</where>
+
+		order by o.create_time desc
+		LIMIT #{offSet}, #{pageRow}
+	</select>
 </mapper>

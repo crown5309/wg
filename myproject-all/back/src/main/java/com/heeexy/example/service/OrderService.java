@@ -1,5 +1,7 @@
 package com.heeexy.example.service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import javax.servlet.http.HttpServletRequest;
 
 public interface OrderService {
@@ -13,4 +15,6 @@ public interface OrderService {
 	void updateByOutTradeNo(String out_trade_no, int i);
 
 	Object getOrderInfoByState(String state,int pageNo,int pageSize);
+
+	Object getOrderInfoList(JSONObject request2Json);
 }

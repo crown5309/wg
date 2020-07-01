@@ -26,4 +26,8 @@ public interface OrderDao {
 	List<OrderInfo>  getOrderInfoByNoPay(int i);
 
 	void cancelOrderState(@Param("orderId")String orderId,@Param("state") int state);
+
+    int countOrder(JSONObject request2Json);
+
+	List<OrderInfo> getOrderInfoList(JSONObject request2Json);
 }

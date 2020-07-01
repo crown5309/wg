@@ -12,6 +12,8 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.heeexy.example.service.BaseService;
+import com.heeexy.example.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -32,18 +34,10 @@ import com.heeexy.example.dao.SysParamDao;
 import com.heeexy.example.entity.OrderInfo;
 import com.heeexy.example.entity.StoreGoodsList;
 import com.heeexy.example.service.OrderService;
-import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.HttpClientUtils;
-import com.heeexy.example.util.IPUtil;
-import com.heeexy.example.util.OrderIdFactory;
-import com.heeexy.example.util.PayCommonUtil;
-import com.heeexy.example.util.StringTools;
-import com.heeexy.example.util.UUIDUtil;
-import com.heeexy.example.util.XMLUtil;
 import com.heeexy.example.util.constants.Constants;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl extends BaseService implements OrderService {
 	@Autowired
 	private GoodsDao goodsDao;
 	@Autowired
@@ -479,9 +473,33 @@ public class OrderServiceImpl implements OrderService {
 		return CommonUtil.successJson(list);
 	}
 
+	@Override
+	public Object getOrderInfoList(JSONObject request2Json) {
+		CommonUtil.fillPageParam(request2Json);
+		getAppId(request2Json);
+		int count = orderDao.countOrder(request2Json);
+		List<OrderInfo> list=orderDao.getOrderInfoList(request2Json);
+		List<JSONObject> goodsList=null;
+		int goodsCount=0;
+		for(OrderInfo j:list) {
+			getStateName(j);
+			j.put("createTime", DateUtil.format(j.getDate("createTime"), DateUtil.DATE_TIME));
+			goodsList =(List<JSONObject>) j.get("goodsList");
+			for(JSONObject goods:goodsList) {
+				goodsCount+=goods.getIntValue("count");
+			}
+			j.put("count",goodsCount);
+		}
+		//商品分类
+		JSONObject successPage = CommonUtil.successPage(request2Json, list, count);
+		return successPage;
+	}
+
 	private void getStateName(OrderInfo sg) {
 		Integer stateInt = sg.getInteger("state");
-		if(stateInt==1) {
+			if(stateInt==0){
+				sg.put("stateName", "已取消");
+			}else if(stateInt==1) {
 			sg.put("stateName", "待支付");
 			}else if(stateInt==2) {
 				sg.put("stateName", "待发货");

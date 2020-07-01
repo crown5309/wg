@@ -61,7 +61,7 @@ public class CommonUtil {
 	 * @param list        查询分页对象list
 	 * @param totalCount  查询出记录的总条数
 	 */
-	public static JSONObject successPage(final JSONObject requestJson, List<JSONObject> list, int totalCount) {
+	public static JSONObject successPage(final JSONObject requestJson, Object list, int totalCount) {
 		int pageRow = requestJson.getIntValue("pageRow");
 		int totalPage = getPageCounts(pageRow, totalCount);
 		JSONObject result = successJson();

@@ -20,4 +20,7 @@ public interface GoodsService {
 
 	JSONObject updateGoods(JSONObject jsonObject);
 
+	JSONObject auditGoods(JSONObject request2Json);
+
+	JSONObject upAndDownGoods(JSONObject request2Json);
 }

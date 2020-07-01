@@ -27,18 +27,21 @@ export default new Router({
 })
 export const asyncRouterMap = [
   {
-    path: '/system',
+    path: '/index',
     component: Layout,
-    redirect: '/system/article',
-    name: '功能模块',
-    meta: {title: '功能模块', icon: 'tree'},
+    redirect: '/index/',
+    name: '',
+    meta: {title: '首页管理', icon: 'indexManager'},
     children: [
       {
-        path: 'article',
-        name: '文章',
-        component: _import('article/article'),
-        meta: {title: '文章', icon: 'example'},
-        menu: 'article'
+        path: '', name: 'banner管理', component: _import('index/banner'), meta: {title: 'banner列表', icon: 'banner'}, menu: 'banner_list'
+      },
+      {
+        path: 'indexClass',
+        name: '首页配置',
+        component: _import('index/indexClass'),
+        meta: {title: '首页配置', icon: 'setting'},
+        menu: 'index_class'
       },
     ]
   },
@@ -47,7 +50,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/user/',
     name: '',
-    meta: {title: '用户权限', icon: 'table'},
+    meta: {title: '用户权限', icon: 'userManager'},
     children: [
       {
         path: '', name: '用户列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
@@ -66,37 +69,46 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/goods/',
     name: '',
-    meta: {title: '商品管理', icon: 'table'},
+    meta: {title: '商品管理', icon: 'goodsManager'},
     children: [
       {
-        path: '', name: '商品列表', component: _import('goods/listgoods'), meta: {title: '商品列表', icon: '1'}, menu: 'goods_goods'
+        path: '', name: '商品列表', component: _import('goods/listgoods'), meta: {title: '商品列表', icon: 'goods'}, menu: 'goods_goods'
       },
       {
         path: 'goods',
         name: '分类管理',
         component: _import('goods/listgoodsClass'),
-        meta: {title: '分类管理', icon: 'password'},
+        meta: {title: '分类管理', icon: 'goodsClass'},
         menu: 'goods_class'
       },
     ]
   },
   {
-    path: '/index',
+    path: '/order',
     component: Layout,
-    redirect: '/index/',
+    redirect: '/order/',
     name: '',
-    meta: {title: '首页管理', icon: 'table'},
+    meta: {title: '订单管理', icon: 'orderManager'},
     children: [
       {
-        path: '', name: 'banner管理', component: _import('index/banner'), meta: {title: 'banner列表', icon: 'user'}, menu: 'banner_list'
+        path: '', name: '订单列表', component: _import('order/listOrder'), meta: {title: '订单列表', icon: 'order'}, menu: 'order_order'
       },
-      {
-        path: 'indexClass',
-        name: '首页配置',
-        component: _import('index/indexClass'),
-        meta: {title: '首页配置', icon: 'password'},
-        menu: 'index_class'
-      },
+    ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: '/system/article',
+    name: '商铺',
+    meta: {title: '商铺管理', icon: 'shopManager'},
+    children: [
+       {
+         path: 'article',
+         name: '文章',
+         component: _import('article/article'),
+         meta: {title: '商铺列表', icon: 'shop'},
+         menu: 'article'
+       }
     ]
   },
   {path: '*', redirect: '/404', hidden: true}

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.SysParamDao;
 import com.heeexy.example.dao.UserDao;
+import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.UserService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.HttpClientUtils;
@@ -32,7 +33,7 @@ import java.util.Set;
  * @date: 2017/11/2 10:18
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService implements UserService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public JSONObject listUser(JSONObject jsonObject) {
+		getAppId(jsonObject);
 		CommonUtil.fillPageParam(jsonObject);
 		int count = userDao.countUser(jsonObject);
 		List<JSONObject> list = userDao.listUser(jsonObject);
