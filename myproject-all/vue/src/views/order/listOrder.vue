@@ -13,7 +13,7 @@
             <el-date-picker v-model="listQuery.createTime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
               end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
-            <el-button type="primary" icon="el-icon-search" @click="getList" v-if="hasPerm('goods:list')">搜索</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="getList" v-if="hasPerm('order:list')">搜索</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -34,7 +34,7 @@
       <el-table-column align="center" prop="discountPay" label="优惠价格(元)" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="practicePay" label="实付(元)" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="createTime" label="添加时间" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="管理" width="200" v-if="hasPerm('goods:update')">
+      <el-table-column align="center" label="管理" width="200" v-if="hasPerm('order:list')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">查看</el-button>
         </template>
