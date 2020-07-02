@@ -25,7 +25,7 @@ public interface UserDao {
 	 * 查询所有的角色
 	 * 在添加/修改用户的时候要使用此方法
 	 */
-	List<JSONObject> getAllRoles();
+	List<JSONObject> getAllRoles(JSONObject js);
 
 	/**
 	 * 校验用户名是否已存在
@@ -45,7 +45,7 @@ public interface UserDao {
 	/**
 	 * 角色列表
 	 */
-	List<JSONObject> listRole();
+	List<JSONObject> listRole(JSONObject jsonObject);
 
 	/**
 	 * 查询所有权限, 给角色分配权限时调用

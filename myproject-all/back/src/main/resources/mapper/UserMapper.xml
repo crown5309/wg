@@ -49,18 +49,18 @@
         ORDER BY u.userId
     </select>
 
-    <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject">
+    <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
         SELECT
             id        roleId,
             role_name roleName
         FROM sys_role
-        WHERE delete_status='1'
+        WHERE delete_status='1' and app_id=#{appId}
     </select>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
-        (username, password, nickname, role_id) VALUES
-            (#{username}, #{password}, #{nickname}, #{roleId})
+        (username, password, nickname, role_id,app_id) VALUES
+            (#{username}, #{password}, #{nickname}, #{roleId},#{appId})
     </insert>
   <insert id="addUserfrontAuth" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
@@ -109,7 +109,7 @@
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
             LEFT JOIN sys_permission p ON rp.permission_id = p.id
-        WHERE r.delete_status = '1'
+        WHERE r.delete_status = '1' and r.app_id=#{appId}
         ORDER BY r.id, p.id
     </select>
     <resultMap id="permissionMap" type="com.heeexy.example.util.model.One2Many">
@@ -131,8 +131,8 @@
 
     <insert id="insertRole" useGeneratedKeys="true" keyProperty="roleId">
         INSERT INTO sys_role
-        (role_name)
-        VALUES (#{roleName})
+        (role_name,app_id)
+        VALUES (#{roleName},#{appId})
     </insert>
 
     <insert id="insertRolePermission">

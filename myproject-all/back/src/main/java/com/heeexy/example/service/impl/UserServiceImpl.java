@@ -60,6 +60,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 		if (exist > 0) {
 			return CommonUtil.errorJson(ErrorEnum.E_10009);
 		}
+		getAppId(jsonObject);
 		userDao.addUser(jsonObject);
 		return CommonUtil.successJson();
 	}
@@ -69,7 +70,9 @@ public class UserServiceImpl extends BaseService implements UserService {
 	 */
 	@Override
 	public JSONObject getAllRoles() {
-		List<JSONObject> roles = userDao.getAllRoles();
+		JSONObject js=new JSONObject();
+		getAppId(js);
+		List<JSONObject> roles = userDao.getAllRoles(js);
 		return CommonUtil.successPage(roles);
 	}
 
@@ -87,7 +90,9 @@ public class UserServiceImpl extends BaseService implements UserService {
 	 */
 	@Override
 	public JSONObject listRole() {
-		List<JSONObject> roles = userDao.listRole();
+		JSONObject js=new JSONObject();
+		getAppId(js);
+		List<JSONObject> roles = userDao.listRole(js);
 		return CommonUtil.successPage(roles);
 	}
 
@@ -107,6 +112,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject addRole(JSONObject jsonObject) {
+		getAppId(jsonObject);
 		userDao.insertRole(jsonObject);
 		userDao.insertRolePermission(jsonObject.getString("roleId"), (List<Integer>) jsonObject.get("permissions"));
 		return CommonUtil.successJson();

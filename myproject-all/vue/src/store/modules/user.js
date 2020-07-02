@@ -20,6 +20,7 @@ const user = {
       state.role = userInfo.roleName;
       state.menus = userInfo.menuList;
       state.permissions = userInfo.permissionList;
+	  state.avatar=userInfo.avatarUrl;
     },
     RESET_USER: (state) => {
       state.nickname = "";
