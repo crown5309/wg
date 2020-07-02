@@ -20,7 +20,7 @@ public class UserLoginController {
 	@Autowired
 	private UserService userService;
     @PostMapping("/auth")
-    public Object auth(String code,String appid,HttpServletRequest request) {
+    public Object auth(HttpServletRequest request) {
     	JSONObject weiXinUserInfo = userService.getWeiXinUserInfo(CommonUtil.request2Json(request));
     	weiXinUserInfo.put("sessionId", request.getSession().getId());
 		return weiXinUserInfo;
