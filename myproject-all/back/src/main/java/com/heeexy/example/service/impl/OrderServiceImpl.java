@@ -484,6 +484,11 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 		for(OrderInfo j:list) {
 			int goodsCount=0;
 			getStateName(j);
+			if(j.getString("storeId").equals(request2Json.getString("storeId"))){
+				j.put("showFaHuo",true);
+			}else{
+				j.put("showFaHuo",false);
+			}
 			j.put("createTime", DateUtil.format(j.getDate("createTime"), DateUtil.DATE_TIME));
 			goodsList =(List<JSONObject>) j.get("goodsList");
 			for(JSONObject goods:goodsList) {

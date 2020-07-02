@@ -11,6 +11,7 @@ public abstract class BaseService {
                 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
         String appId =userInfo.getString("appId");
         request2Json.put("appId", appId);
+        request2Json.put("storeId", userInfo.getString("storeId"));
 
     }
 }

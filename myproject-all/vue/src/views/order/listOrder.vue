@@ -41,9 +41,8 @@
       <el-table-column align="center" label="管理" width="300" v-if="hasPerm('order:list')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">查看</el-button>
-          <el-button type="primary" icon="edit" @click="showUpdate1(scope.$index)" v-if="scope.row.state==2">
-            <span v-if="scope.row.state==2">发货</span>
-             <!-- <span v-if="scope.row.state==3">重新发货</span> -->
+          <el-button type="primary" icon="edit" @click="showUpdate1(scope.$index)" v-if="scope.row.state==2&&scope.row.showFaHuo">
+            发货
           </el-button>
         </template>
       </el-table-column>
