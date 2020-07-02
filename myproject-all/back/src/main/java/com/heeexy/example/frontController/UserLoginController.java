@@ -25,7 +25,7 @@ public class UserLoginController {
     	weiXinUserInfo.put("sessionId", request.getSession().getId());
 		return weiXinUserInfo;
     }
-    @GetMapping("/auth/phone")
+    @PostMapping("/auth/phone")
     public Object authPhone(String encryptedData, String session_key, String iv) {
         try {
             String result = WxUtils.wxDecrypt(encryptedData, session_key, iv);
