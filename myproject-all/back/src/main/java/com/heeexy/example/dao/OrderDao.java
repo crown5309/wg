@@ -21,7 +21,7 @@ public interface OrderDao {
 
 	List<String> getOrderIdsByOutTradeNo(String out_trade_no);
 
-	List<OrderInfo> getOrderInfoByState(@Param("state")String state,@Param("userId")String userId,@Param("pageNo") int pageNO,@Param("pageSize") int pageSize);
+	List<OrderInfo> getOrderInfoByState(@Param("state")String state,@Param("userId")String userId,@Param("pageNo") int pageNO,@Param("pageSize") int pageSize,@Param("storeId") String storeId,@Param("type") String type);
 
 	List<OrderInfo>  getOrderInfoByNoPay(int i);
 

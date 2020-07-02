@@ -121,7 +121,15 @@
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
 		INNER JOIN goods g ON o_goods.goods_id = g.id
 		INNER JOIN store s ON g.store_id = s.id
-	where  o.user_id=#{userId}
+	where 1=1
+		<choose>
+			<when test="type=='store'">
+			AND g.store_id=#{storeId}
+			</when>
+			<otherwise>
+			 o.user_id=#{userId}
+			</otherwise>
+		</choose>
 	   <if test="state!=null and state !=''">
 	   and o.state=#{state} 
 	  

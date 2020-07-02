@@ -451,14 +451,16 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 	}
 
 	@Override
-	public Object getOrderInfoByState(String state,int pageNo,int pageSize) {
+	public Object getOrderInfoByState(String state,int pageNo,int pageSize, String type) {
 		// TODO Auto-generated method stub
 	//	1 待支付 2.待发货 3.待收货 4.交易失败 5.交易完成 6.下单成功 7下单失败 8支付成功 9支付失败 10退款中 11退款完成  12退货中
 		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
 		 userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
 		String userId =userInfo.getString("userId");
+		String storeId =userInfo.getString("storeId");
+		
 		pageNo=(pageNo-1)*pageSize;
-		List<OrderInfo> list=orderDao.getOrderInfoByState(state,userId,pageNo,pageSize);
+		List<OrderInfo> list=orderDao.getOrderInfoByState(state,userId,pageNo,pageSize,storeId,type);
 		List<JSONObject> goodsList=null;
 		for(OrderInfo sg:list){
 			getStateName(sg);
