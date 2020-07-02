@@ -3,7 +3,10 @@ package com.heeexy.example.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +31,7 @@ public class KuaiDi100ServiceImpl implements KuaiDi100Service {
 		
 	
 	@Override
-	public KuaiDi100QueryResp queryLogicInfo(String comNo,String kuaiDiDangNum,String sendPhone) {
+	public JSONObject queryLogicInfo(String comNo, String kuaiDiDangNum, String sendPhone) {
 		logger.info("《《《《《《《开始调用KuaiDi100ServiceImpl.queryLogicInfo,comNo={},kuaiDiDangNum={},sendPhone={}",comNo,kuaiDiDangNum,sendPhone);
 		KuaiDi100 kd100=new KuaiDi100();
 		Map<String,String> params=new HashMap<String,String>();
@@ -38,8 +41,12 @@ public class KuaiDi100ServiceImpl implements KuaiDi100Service {
 		  params.put("phone", sendPhone);
 		}
 		KuaiDi100QueryResp resp=kd100.getKuiDicContent(customer, key, params);
+
 		logger.info("《《《《《《《kuaidi100返回信息为={}",resp);
-		return resp;
+		if(CollectionUtils.isEmpty(resp.getData())){
+			return CommonUtil.successJson(resp.getMessage());
+		}
+		return CommonUtil.successJson(resp);
 	}
 
 }

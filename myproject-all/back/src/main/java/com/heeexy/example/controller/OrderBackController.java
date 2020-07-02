@@ -1,5 +1,7 @@
 package com.heeexy.example.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.service.KuaiDi100Service;
 import com.heeexy.example.service.OrderService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.XMLUtil;
@@ -21,9 +23,15 @@ import java.util.Map;
 public class OrderBackController {
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private KuaiDi100Service kuaiDi100Service;
 	@RequiresPermissions("order:list")
 	@RequestMapping("/getOrderInfoList")
 	public Object getOrderInfoList(HttpServletRequest request) {
 		return  orderService.getOrderInfoList(CommonUtil.request2Json(request));
+	}
+	@RequestMapping("/getOrderLogistics")
+	public JSONObject getOrderLogistics(String logisticsNo , String logisticsType) {
+		return  kuaiDi100Service.queryLogicInfo(logisticsType,logisticsNo,null);
 	}
 }

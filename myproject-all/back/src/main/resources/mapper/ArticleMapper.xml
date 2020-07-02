@@ -3,12 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.ArticleDao">
 
-    <insert id="addArticle" parameterType="com.alibaba.fastjson.JSONObject">
-        INSERT INTO article
-            (content)
-        VALUES
-            (#{content})
-    </insert>
+    <update id="addArticle" parameterType="com.alibaba.fastjson.JSONObject">
+        update shop_order
+          set logistics_no=#{logisticsNo},logistics_type=#{logisticsType},state=3
+          where order_id=#{orderId}
+    </update>
 
     <select id="countArticle" resultType="Integer">
         SELECT count(0)
@@ -19,19 +18,24 @@
     <select id="listArticle" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             w.id                                      id,
-            w.content                                 content,
-            date_format(w.create_time, '%Y.%m.%d %T') createTime
-        FROM article w
-        WHERE w.delete_status = '1'
-        ORDER BY w.id DESC
-        LIMIT #{offSet}, #{pageRow}
+            w.name                                    name,
+            w.levelType                               levelType,
+            w.parentId                                parentId
+        FROM area w
     </select>
 
     <update id="updateArticle" parameterType="com.alibaba.fastjson.JSONObject">
-        UPDATE article
+        UPDATE shop_order_address
         SET
-            content = #{content}
-        WHERE id = #{id}
+            name = #{name},province = #{province},city = #{city},country = #{country},detail = #{detail},
+            telephone = #{telephone}
+        WHERE id = #{addressId}
     </update>
-
+    <select id="listWuLiu" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id                                      id,
+            w.name                                    label,
+            w.type                                    value
+        FROM logistics w
+    </select>
 </mapper>

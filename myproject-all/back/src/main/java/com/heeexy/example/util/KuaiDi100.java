@@ -107,9 +107,10 @@ public class KuaiDi100 {
 			paramsMap.put("param",param);
 			paramsMap.put("sign",sign);
 			paramsMap.put("customer",customer);
+			paramsMap.put("order","desc");
 			String result=HttpClientUtils.sendHttpPostRequest("http://poll.kuaidi100.com/poll/query.do", paramsMap, data,"map",50000).toString();
 			KuaiDi100QueryResp resp= JsonUtils.fromJson(result,KuaiDi100QueryResp.class);
-		    System.out.println(resp);
+
 			return resp;
 		} catch (Exception e) {
 			logger.error("KuaiDi100 getKuiDicContent",e);

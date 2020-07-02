@@ -379,6 +379,7 @@
             url = "/goods/auditGoods";
           } else {
             this.$message.error("传递状态有误");
+            return
           }
           this.listLoading = true;
           this.api({

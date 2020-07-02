@@ -1,6 +1,6 @@
 package com.heeexy.example.service;
 
-import com.heeexy.example.entity.KuaiDi100QueryResp;
+import com.alibaba.fastjson.JSONObject;
 /**
  * 物流
  * @author Administrator
@@ -8,5 +8,5 @@ import com.heeexy.example.entity.KuaiDi100QueryResp;
  */
 public interface KuaiDi100Service {
 
-	KuaiDi100QueryResp queryLogicInfo(String comNo, String kuaiDiDangNum, String sendPhone);
+	JSONObject queryLogicInfo(String comNo, String kuaiDiDangNum, String sendPhone);
 }

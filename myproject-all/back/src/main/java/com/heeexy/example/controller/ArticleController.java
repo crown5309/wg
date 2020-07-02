@@ -1,7 +1,7 @@
 package com.heeexy.example.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.service.ArticleService;
+import com.heeexy.example.service.AreaService;
 import com.heeexy.example.util.CommonUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,38 +15,40 @@ import javax.servlet.http.HttpServletRequest;
  * @date: 2017/10/24 16:04
  */
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/area")
 public class ArticleController {
 
 	@Autowired
-	private ArticleService articleService;
+	private AreaService areaService;
 
 	/**
 	 * 查询文章列表
 	 */
-	@RequiresPermissions("article:list")
-	@GetMapping("/listArticle")
+	@GetMapping("/listArea")
 	public JSONObject listArticle(HttpServletRequest request) {
-		return articleService.listArticle(CommonUtil.request2Json(request));
+		return areaService.listArticle(CommonUtil.request2Json(request));
+	}
+	/**
+	 * 查询文章列表
+	 */
+	@GetMapping("/listWuLiu")
+	public JSONObject listWuLiu(HttpServletRequest request) {
+		return areaService.listWuLiu(CommonUtil.request2Json(request));
 	}
 
 	/**
 	 * 新增文章
 	 */
-	@RequiresPermissions("article:add")
-	@PostMapping("/addArticle")
+	@PostMapping("/updateOrder")
 	public JSONObject addArticle(@RequestBody JSONObject requestJson) {
-		CommonUtil.hasAllRequired(requestJson, "content");
-		return articleService.addArticle(requestJson);
+		return areaService.addArticle(requestJson);
 	}
 
 	/**
 	 * 修改文章
 	 */
-	@RequiresPermissions("article:update")
-	@PostMapping("/updateArticle")
-	public JSONObject updateArticle(@RequestBody JSONObject requestJson) {
-		CommonUtil.hasAllRequired(requestJson, "id,content");
-		return articleService.updateArticle(requestJson);
+	@PostMapping("/updateArea")
+	public JSONObject updateArea(@RequestBody JSONObject requestJson) {
+		return areaService.updateArticle(requestJson);
 	}
 }

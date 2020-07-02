@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author: hxy
  * @date: 2017/10/24 16:06
  */
-public interface ArticleService {
+public interface AreaService {
 	/**
 	 * 新增文章
 	 */
@@ -21,4 +21,6 @@ public interface ArticleService {
 	 * 更新文章
 	 */
 	JSONObject updateArticle(JSONObject jsonObject);
+
+	JSONObject listWuLiu(JSONObject request2Json);
 }

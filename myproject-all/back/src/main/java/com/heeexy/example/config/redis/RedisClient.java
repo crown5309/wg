@@ -1,4 +1,5 @@
 package com.heeexy.example.config.redis;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,34 @@ public class RedisClient {
         }
         return value;
     }
- 
+    public  void setJsonString(String key,Object object){
+        Jedis jedis = null;
+        try {
+            jedis = this.getResource();
+            jedis.set(key, JSON.toJSONString(object));
+
+        } catch (Exception e) {
+        } finally {
+            this.release(jedis);
+        }
+    }
+    public  Object getJsonObject(String key,Class clazz){
+        String value = null;
+        Jedis jedis = null;
+        try {
+            jedis = this.getResource();
+            if (jedis.exists(key)) {
+                value = jedis.get(key);
+                value = StringUtils.isNotBlank(value) && !"nil".equalsIgnoreCase(value) ? value : null;
+                this.logger.debug("get {} = {}", key, value);
+            }
+        } catch (Exception e) {
+            this.logger.error("get {} = {}", new Object[]{key, value, e});
+        } finally {
+            this.release(jedis);
+        }
+        return JSON.parseObject(value,clazz);
+    }
     public String get(String key) {
         String value = null;
         Jedis jedis = null;
@@ -440,7 +468,7 @@ public class RedisClient {
             this.release(jedis);
         }
     }
- 
+
     private Jedis getResource() throws Exception {
         try {
             return jedisPool.getResource();

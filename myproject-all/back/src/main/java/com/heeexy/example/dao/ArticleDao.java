@@ -29,4 +29,6 @@ public interface ArticleDao {
 	 * 更新文章
 	 */
 	int updateArticle(JSONObject jsonObject);
+
+	List<JSONObject> listWuLiu();
 }

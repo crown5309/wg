@@ -97,6 +97,18 @@ public class KuaiDi100QueryResp {
 	public void setData(List<KuaiDi100LgicInfo> data) {
 		this.data = data;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "KuaiDi100QueryResp{" +
+				"message='" + message + '\'' +
+				", state='" + state + '\'' +
+				", status='" + status + '\'' +
+				", condition='" + condition + '\'' +
+				", ischeck='" + ischeck + '\'' +
+				", com='" + com + '\'' +
+				", nu='" + nu + '\'' +
+				", data=" + data +
+				'}';
+	}
 }
