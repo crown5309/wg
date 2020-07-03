@@ -8,22 +8,21 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row>
+    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
       <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="角色" prop="roleName"></el-table-column>
-      <el-table-column align="center" label="用户">
+      <!-- <el-table-column align="center" label="用户">
         <template slot-scope="scope">
           <div v-for="user in scope.row.users">
             <div v-text="user.nickname" style="display: inline-block;vertical-align: middle;"></div>
           </div>
         </template>
-      </el-table-column>
-   <!--   <el-table-column align="center" label="菜单&权限" width="420">
+      </el-table-column> -->
+      <!--   <el-table-column align="center" label="菜单&权限" width="420">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.roleName==adminName" type="success">全部</el-tag>
           <div v-else>
@@ -42,8 +41,7 @@
             <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)" v-if="hasPerm('role:update')">修改
             </el-button>
             <el-button v-if=" scope.row.users && scope.row.users.length===0 && hasPerm('role:delete')" type="danger"
-                       icon="delete"
-                       @click="removeRole(scope.$index)">
+              icon="delete" @click="removeRole(scope.$index)">
               删除
             </el-button>
           </div>
@@ -51,8 +49,7 @@
       </el-table-column>
     </el-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempRole" label-position="left" label-width="100px"
-               style='width: 600px; margin-left:50px;'>
+      <el-form class="small-space" :model="tempRole" label-position="left" label-width="100px" style='width: 600px; margin-left:50px;'>
         <el-form-item label="角色名称" required>
           <el-input type="text" v-model="tempRole.roleName" style="width: 250px;">
           </el-input>
@@ -60,14 +57,13 @@
         <el-form-item label="菜单&权限" required>
           <div v-for=" (menu,_index) in allPermission" :key="menu.menuName">
             <span style="width: 100px;display: inline-block;">
-              <el-button :type="isMenuNone(_index)?'':(isMenuAll(_index)?'success':'primary')" size="mini"
-                         style="width:90px;"
-                         @click="checkAll(_index)">{{menu.menuName}}</el-button>
+              <el-button :type="isMenuNone(_index)?'':(isMenuAll(_index)?'success':'primary')" size="mini" style="width:90px;"
+                @click="checkAll(_index)">{{menu.menuName}}</el-button>
             </span>
             <div style="margin-left:20px;">
               <el-checkbox-group v-model="tempRole.permissions">
                 <el-checkbox v-for="perm in menu.permissions" :label="perm.id" @change="checkRequired(perm,_index)"
-                             :key="perm.id">
+                  :key="perm.id">
                   <span :class="{requiredPerm:perm.requiredPerm===1}">{{perm.permissionName}}</span>
                 </el-checkbox>
               </el-checkbox-group>
@@ -88,9 +84,9 @@
   export default {
     data() {
       return {
-        list: [],//表格的数据
+        list: [], //表格的数据
         allPermission: [],
-        listLoading: false,//数据加载等待动画
+        listLoading: false, //数据加载等待动画
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
@@ -114,7 +110,10 @@
         //查询所有权限
         this.api({
           url: "/user/listAllPermission",
-          method: "get"
+          method: "get",
+          params: {
+            type: 'weixin'
+          }
         }).then(data => {
           this.allPermission = data.list;
         })
@@ -124,7 +123,10 @@
         this.listLoading = true;
         this.api({
           url: "/user/listRole",
-          method: "get"
+          method: "get",
+          params: {
+            type: 'weixin'
+          }
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;
@@ -163,6 +165,7 @@
         if (!this.checkPermissionNum()) {
           return;
         }
+        this.tempRole.type = 'weixin'
         //添加新角色
         this.api({
           url: "/user/addRole",
@@ -208,7 +211,7 @@
         let roles = this.list;
         let result = true;
         for (let j = 0; j < roles.length; j++) {
-          if (roles[j].roleName === roleName && (!roleId || roles[j].roleId !== roleId  )) {
+          if (roles[j].roleName === roleName && (!roleId || roles[j].roleId !== roleId)) {
             this.$message.error("角色名称已存在");
             result = false;
             break;
@@ -232,8 +235,7 @@
             }
           }).then(() => {
             _vue.getList()
-          }).catch(e => {
-          })
+          }).catch(e => {})
         })
       },
       isMenuNone(_index) {

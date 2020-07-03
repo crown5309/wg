@@ -50,7 +50,7 @@ public interface UserDao {
 	/**
 	 * 查询所有权限, 给角色分配权限时调用
 	 */
-	List<JSONObject> listAllPermission();
+	List<JSONObject> listAllPermission(String type);
 
 	/**
 	 * 新增角色

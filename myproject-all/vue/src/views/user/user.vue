@@ -17,10 +17,16 @@
       </el-table-column>
       <el-table-column align="center" label="昵称" prop="nickname" style="width: 60px;"></el-table-column>
       <el-table-column align="center" label="用户名" prop="username" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="角色" width="100">
+      <el-table-column align="center" label="后台角色" width="100">
         <template slot-scope="scope">
           <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.roleId===1"></el-tag>
           <el-tag type="primary" v-text="scope.row.roleName" v-else></el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="小程序角色" width="100">
+        <template slot-scope="scope">
+          <el-tag type="success" v-text="scope.row.weixinRoleName" v-if="scope.row.roleId===1"></el-tag>
+          <el-tag type="primary" v-text="scope.row.weixinRoleName" v-else></el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
@@ -44,7 +50,7 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
+      <el-form class="small-space" :model="tempUser" label-position="left" label-width="100px"
                style='width: 300px; margin-left:50px;'>
         <el-form-item label="用户名" required v-if="dialogStatus=='create'">
           <el-input type="text" v-model="tempUser.username">
@@ -58,10 +64,20 @@
           <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
-        <el-form-item label="角色" required>
+        <el-form-item label="后台角色" required>
           <el-select v-model="tempUser.roleId" placeholder="请选择">
             <el-option
               v-for="item in roles"
+              :key="item.roleId"
+              :label="item.roleName"
+              :value="item.roleId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="小程序角色" required>
+          <el-select v-model="tempUser.weiixnRoleId" placeholder="请选择">
+            <el-option
+              v-for="item in weixnRoles"
               :key="item.roleId"
               :label="item.roleName"
               :value="item.roleId">
@@ -94,7 +110,8 @@
           pageNum: 1,//页码
           pageRow: 50,//每页条数
         },
-        roles: [],//角色列表
+        roles: [],//角色列表后台
+        weixnRoles: [],//角色列表小程序
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
@@ -106,7 +123,8 @@
           password: '',
           nickname: '',
           roleId: '',
-          userId: ''
+          userId: '',
+          weiixnRoleId:''
         }
       }
     },
@@ -114,6 +132,7 @@
       this.getList();
       if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
         this.getAllRoles();
+        this.getWeixinAllRoles();
       }
     },
     computed: {
@@ -125,9 +144,19 @@
       getAllRoles() {
         this.api({
           url: "/user/getAllRoles",
-          method: "get"
+          method: "get",
+          params:{type:'back'}
         }).then(data => {
           this.roles = data.list;
+        })
+      },
+      getWeixinAllRoles() {
+        this.api({
+          url: "/user/getAllRoles",
+          method: "get",
+          params:{type:'weixin'}
+        }).then(data => {
+          this.weixnRoles = data.list;
         })
       },
       getList() {

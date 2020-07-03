@@ -70,9 +70,10 @@ public class UserServiceImpl extends BaseService implements UserService {
 	 * 查询所有的角色 在添加/修改用户的时候要使用此方法
 	 */
 	@Override
-	public JSONObject getAllRoles() {
+	public JSONObject getAllRoles(String type) {
 		JSONObject js=new JSONObject();
 		getAppId(js);
+		js.put("type", type);
 		List<JSONObject> roles = userDao.getAllRoles(js);
 		return CommonUtil.successPage(roles);
 	}
@@ -90,9 +91,10 @@ public class UserServiceImpl extends BaseService implements UserService {
 	 * 角色列表
 	 */
 	@Override
-	public JSONObject listRole() {
+	public JSONObject listRole(String type) {
 		JSONObject js=new JSONObject();
 		getAppId(js);
+		js.put("type", type);
 		List<JSONObject> roles = userDao.listRole(js);
 		return CommonUtil.successPage(roles);
 	}
@@ -101,8 +103,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 	 * 查询所有权限, 给角色分配权限时调用
 	 */
 	@Override
-	public JSONObject listAllPermission() {
-		List<JSONObject> permissions = userDao.listAllPermission();
+	public JSONObject listAllPermission(String type) {
+		List<JSONObject> permissions = userDao.listAllPermission(type);
 		return CommonUtil.successPage(permissions);
 	}
 

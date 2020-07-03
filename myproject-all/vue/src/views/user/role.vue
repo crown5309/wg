@@ -114,7 +114,8 @@
         //查询所有权限
         this.api({
           url: "/user/listAllPermission",
-          method: "get"
+          method: "get",
+          params:{type:'back'}
         }).then(data => {
           this.allPermission = data.list;
         })
@@ -124,7 +125,8 @@
         this.listLoading = true;
         this.api({
           url: "/user/listRole",
-          method: "get"
+          method: "get",
+          params:{type:'back'}
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;
@@ -163,6 +165,7 @@
         if (!this.checkPermissionNum()) {
           return;
         }
+        this.tempRole.type='back'
         //添加新角色
         this.api({
           url: "/user/addRole",

@@ -40,14 +40,14 @@ public class UserController {
 	@RequiresPermissions("user:update")
 	@PostMapping("/updateUser")
 	public JSONObject updateUser(@RequestBody JSONObject requestJson) {
-		CommonUtil.hasAllRequired(requestJson, " nickname,   roleId, deleteStatus, userId");
+		CommonUtil.hasAllRequired(requestJson, " nickname, deleteStatus, userId");
 		return userService.updateUser(requestJson);
 	}
 
 	@RequiresPermissions(value = {"user:add", "user:update"}, logical = Logical.OR)
 	@GetMapping("/getAllRoles")
-	public JSONObject getAllRoles() {
-		return userService.getAllRoles();
+	public JSONObject getAllRoles(String type) {
+		return userService.getAllRoles(type);
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class UserController {
 	 */
 	@RequiresPermissions("role:list")
 	@GetMapping("/listRole")
-	public JSONObject listRole() {
-		return userService.listRole();
+	public JSONObject listRole(String type) {
+		return userService.listRole(type);
 	}
 
 	/**
@@ -64,8 +64,8 @@ public class UserController {
 	 */
 	@RequiresPermissions("role:list")
 	@GetMapping("/listAllPermission")
-	public JSONObject listAllPermission() {
-		return userService.listAllPermission();
+	public JSONObject listAllPermission(String type) {
+		return userService.listAllPermission(type);
 	}
 
 	/**

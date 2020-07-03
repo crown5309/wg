@@ -17,7 +17,7 @@ public interface UserService {
 	 * 查询所有的角色
 	 * 在添加/修改用户的时候要使用此方法
 	 */
-	JSONObject getAllRoles();
+	JSONObject getAllRoles(String type);
 
 	/**
 	 * 添加用户
@@ -32,12 +32,12 @@ public interface UserService {
 	/**
 	 * 角色列表
 	 */
-	JSONObject listRole();
+	JSONObject listRole(String type);
 
 	/**
 	 * 查询所有权限, 给角色分配权限时调用
 	 */
-	JSONObject listAllPermission();
+	JSONObject listAllPermission(String type);
 
 	/**
 	 * 添加角色

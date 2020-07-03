@@ -31,7 +31,7 @@ public class PermissionServiceImpl implements PermissionService {
 	 * 从数据库查询用户权限信息
 	 */
 	private JSONObject getUserPermissionFromDB(String username) {
-		JSONObject userPermission = permissionDao.getUserPermission(username);
+		JSONObject userPermission = permissionDao.getUserPermission(username,"back");
 		//管理员角色ID为1
 		int adminRoleId = 1;
 		//如果是管理员

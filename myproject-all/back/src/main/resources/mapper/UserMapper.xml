@@ -15,6 +15,7 @@
         <result column="nickname" property="nickname"/>
         <result column="roleId" property="roleId"/>
         <result column="roleName" property="roleName"/>
+        <result column="weixinRoleName" property="weixinRoleName"/>
         <result column="createTime" property="createTime"/>
         <result column="updateTime" property="updateTime"/>
         <result column="lastLoginTime" property="lastLoginTime"/>
@@ -27,6 +28,7 @@
         SELECT
             u.*,
             r.role_name                            roleName,
+             rp1.role_name                         weixinRoleName,
             CONCAT(p.menu_name, p.permission_name) permissionName
         FROM (
                  SELECT
@@ -36,7 +38,8 @@
                      role_id                                 roleId,
                      delete_status                           deleteStatus,
                      DATE_FORMAT(create_time, '%Y.%m.%d %T') createTime,
-                     DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime
+                     DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime,
+                     weixin_role_id
                  FROM sys_user
                  WHERE delete_status = '1' and app_id=#{appId}
                  ORDER BY id
@@ -44,6 +47,7 @@
              ) u
             LEFT JOIN sys_role r ON r.id = u.roleId
             LEFT JOIN sys_role_permission rp ON rp.role_id = r.id
+            LEFT JOIN sys_role rp1 ON rp1.id = u.weixin_role_id
             LEFT JOIN sys_permission p ON p.id = rp.permission_id
 
         ORDER BY u.userId
@@ -54,13 +58,13 @@
             id        roleId,
             role_name roleName
         FROM sys_role
-        WHERE delete_status='1' and app_id=#{appId}
+        WHERE delete_status='1' and app_id=#{appId} and type=#{type}
     </select>
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
-        (username, password, nickname, role_id,app_id) VALUES
-            (#{username}, #{password}, #{nickname}, #{roleId},#{appId})
+        (username, password, nickname, role_id,app_id,weixin_role_id) VALUES
+            (#{username}, #{password}, #{nickname}, #{roleId},#{appId},#{weiixnRoleId})
     </insert>
   <insert id="addUserfrontAuth" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
@@ -75,7 +79,7 @@
             , password = #{password}
         </if>
 
-        , role_id = #{roleId}
+        , role_id = #{roleId},weixin_role_id=#{weiixnRoleId}
         , delete_status = #{deleteStatus}
         WHERE id = #{userId} and id != 10001
     </update>
@@ -108,8 +112,8 @@
         FROM sys_role r
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
-            LEFT JOIN sys_permission p ON rp.permission_id = p.id
-        WHERE r.delete_status = '1' and r.app_id=#{appId}
+            LEFT JOIN sys_permission p ON rp.permission_id = p.id and p.type=#{type}
+        WHERE r.delete_status = '1' and r.app_id=#{appId} and r.type=#{type}
         ORDER BY r.id, p.id
     </select>
     <resultMap id="permissionMap" type="com.heeexy.example.util.model.One2Many">
@@ -126,13 +130,13 @@
             p.menu_name           menuName,
             p.permission_name     permissionName,
             p.required_permission requiredPerm
-        FROM sys_permission p;
+        FROM sys_permission p where p.type=#{type}
     </select>
 
     <insert id="insertRole" useGeneratedKeys="true" keyProperty="roleId">
         INSERT INTO sys_role
-        (role_name,app_id)
-        VALUES (#{roleName},#{appId})
+        (role_name,app_id,type)
+        VALUES (#{roleName},#{appId},#{type})
     </insert>
 
     <insert id="insertRolePermission">
