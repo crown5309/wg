@@ -47,20 +47,14 @@
       <el-table-column align="center" prop="createTime" label="添加时间" style="width: 60px;"></el-table-column>
       <el-table-column align="center" label="下架/上架" width="200" v-if="hasPerm('goods:upAndDown')">
         <template slot-scope="scope">
-          <el-switch style="display: block" active-value="2" inactive-value="3" v-model="scope.row.state" active-color="#13ce66"
-            inactive-color="#ff4949" active-text="上架" inactive-text="下架" @change="changeValue(scope.row.state,scope.$index)"
-            :disabled="scope.row.flag">
-          </el-switch>
-
+          <el-tag type="success"  @click="changeValue(2,scope.$index)" v-show="scope.row.state==1||scope.row.state==3">上架</el-tag>
+          <el-tag type="danger"  @click="changeValue(3,scope.$index)" v-show="scope.row.state==2">下架</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="审核" width="200" v-if="hasPerm('goods:audit')">
         <template slot-scope="scope">
-          <el-switch style="display: block" active-value="2" inactive-value="4" v-model="scope.row.state1" active-color="#13ce66"
-            inactive-color="#ff4949" active-text="通过" inactive-text="拒绝" @change="changeValue(scope.row.state1,scope.$index)"
-            :disabled="scope.row.auditFlag">
-          </el-switch>
-
+          <el-tag type="success"  @click="changeValue(1,scope.$index)" v-show="scope.row.state==0||scope.row.state==1||scope.row.state==2||scope.row.state==3">通过</el-tag>
+          <el-tag type="danger"  @click="changeValue(4,scope.$index)" v-show="scope.row.state==0||scope.row.state==4">拒绝</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="管理" width="200" v-if="hasPerm('goods:update')">
@@ -212,19 +206,6 @@
           this.listLoading = false;
           this.list = data.list;
           this.optionsClass = data.goodsClassList
-          this.list.forEach((item) => {
-            item.state1 = item.state
-            if (item.state == 0 || item.state == 4) {
-              item.flag = true
-            } else {
-              item.flag = false
-            }
-            if (item.state == 0) {
-              item.auditFlag = false
-            } else {
-              item.auditFlag = true
-            }
-          })
           this.totalCount = data.totalCount;
         })
       },
@@ -355,6 +336,11 @@
         const isLt2M = file.size / 1024 / 1024 < 2;
       },
       changeValue(value, index) {
+        if(value==1||value==4){
+          if(this.list[index].state==1||this.list[index].state==2||this.list[index].state==3||this.list[index].state==4){
+            return
+          }
+        }
         let name = ""
         if (value == 2) { //上架
           name = "上架"
@@ -509,4 +495,18 @@
   .inputSerach {
     width: 10%;
   }
+ .el-switch{
+      display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      position: relative;
+      font-size: 14px;
+      line-height: 20px;
+      height: 20px;
+      vertical-align: middle;
+      margin-bottom: 8px;
+ }
 </style>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.ShopClassDao">
+
+    <insert id="addShopClass" parameterType="com.alibaba.fastjson.JSONObject">
+        insert store_class(class_name,show_order,app_id)
+          values(#{className},#{showOrder},#{appId})
+     
+    </insert>
+
+    <select id="countShopClass" resultType="Integer" parameterType="com.alibaba.fastjson.JSONObject">
+        SELECT count(0)
+        FROM store_class w
+        WHERE w.app_id =#{appId}
+    </select>
+
+    <select id="listShopClass" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id                                      id,
+            w.class_name                              className,
+            w.show_order                              showOrder
+        FROM store_class w  WHERE w.app_id =#{appId} order by showOrder 
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+
+    <update id="updateShopClass" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE store_class
+        SET
+            class_name = #{className},show_order = #{showOrder}
+        WHERE id = #{id}
+    </update>
+  	<delete id="deleteShopClass">
+  		delete from store_class    WHERE id = #{id}
+  	</delete>
+</mapper>

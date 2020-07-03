@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.ShopDao">
+
+    <insert id="addShop" parameterType="com.alibaba.fastjson.JSONObject">
+        insert store(store_name,user_id,store_class_id,area_info,area_id_one,area_id_two,area_id_three,img_url,state,app_id)
+          values(#{storeName},#{userId},#{storeClassId},#{areaInfo},#{areaIdOne},#{areaIdTwo},#{areaIdThree},
+          #{imgUrl},#{state},#{appId}
+          )
+     
+    </insert>
+
+    <select id="countShop" resultType="Integer" parameterType="com.alibaba.fastjson.JSONObject">
+        SELECT count(0)
+        FROM store w
+        WHERE w.app_id =#{appId}
+    </select>
+
+    <select id="listShop" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            w.id                                      id,
+            w.store_name                              storeName,
+            w.state                                   state,
+            c.class_name                              className,
+            c.id                                      storeClassId,
+            w.area_info                               areaInfo ,
+            w.area_id_one                             areaIdOne ,
+            w.area_id_two                             areaIdTwo ,
+            w.area_id_three                           areaIdThree,
+            w.create_time                             createTime,
+            w.img_url                                 imgUrl,
+            w.logo_url                                logoUrl,
+            w.name,w.telephone
+        FROM store w  inner join store_class c on w.store_class_id=c.id WHERE w.app_id =#{appId} 
+        <if test="storeName !=null and storeName !=''">
+				 and  w.store_name like concat("%",#{storeName},"%") 
+			</if>
+			<if test="state !=null and state !=''">
+				and  w.state=#{state}  
+			</if>
+			<if test="createTime !=null and createTime  !=''">
+				and w.create_time between #{startTime} and  #{endTime}
+			</if>
+			<if test="storeClassId !=null and storeClassId  !=''">
+				and  c.id    = #{storeClassId}
+			</if>
+        order by w.create_time desc
+         LIMIT #{offSet}, #{pageRow} 
+    </select>
+
+    <update id="updateShop" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE store
+        SET
+           store_name= #{storeName},user_id=#{userId},store_class_id=#{storeClassId},
+           area_info=#{areaInfo},area_id_one=#{areaIdOne},area_id_two=#{areaIdTwo},area_id_three=#{areaIdThree},
+         img_url= #{imgUrl},logo_url=#{logoUrl},name=#{name},telephone=#{telephone}
+        WHERE id = #{id}
+    </update>
+  	<delete id="deleteShop">
+  		delete from store    WHERE id = #{id}
+  	</delete>
+</mapper>

@@ -72,6 +72,7 @@ public class GoodsServiceImpl  extends BaseService implements GoodsService{
 		for(JSONObject j:list) {
 			getStateName(j);
 			j.put("createTime", DateUtil.format(j.getDate("createTime"), DateUtil.DATE_TIME));
+		
 		}
 		//商品分类
 		JSONObject successPage = CommonUtil.successPage(request2Json, list, count);
