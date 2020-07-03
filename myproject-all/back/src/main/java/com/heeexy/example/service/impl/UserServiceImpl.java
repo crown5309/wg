@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 	 */
 	@Override
 	public JSONObject updateUser(JSONObject jsonObject) {
+		jsonObject.put("updateTime", new Date());
 		userDao.updateUser(jsonObject);
 		return CommonUtil.successJson();
 	}

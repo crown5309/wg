@@ -14,6 +14,7 @@
         <result column="username" property="username"/>
         <result column="nickname" property="nickname"/>
         <result column="roleId" property="roleId"/>
+        <result column="weiixnRoleId" property="weiixnRoleId"/>
         <result column="roleName" property="roleName"/>
         <result column="weixinRoleName" property="weixinRoleName"/>
         <result column="createTime" property="createTime"/>
@@ -29,6 +30,7 @@
             u.*,
             r.role_name                            roleName,
              rp1.role_name                         weixinRoleName,
+             rp1.id                                weiixnRoleId,
             CONCAT(p.menu_name, p.permission_name) permissionName
         FROM (
                  SELECT
@@ -42,6 +44,12 @@
                      weixin_role_id
                  FROM sys_user
                  WHERE delete_status = '1' and app_id=#{appId}
+                 <if test="username !=null and username !=''">
+				 and  username like concat("%",#{username},"%") 
+			</if>
+			<if test="createTime !=null and createTime  !=''">
+				and create_time between #{startTime} and  #{endTime}
+			</if>
                  ORDER BY id
                  LIMIT #{offSet}, #{pageRow}
              ) u
@@ -78,9 +86,13 @@
         <if test="password !='' and password !=null">
             , password = #{password}
         </if>
-
-        , role_id = #{roleId},weixin_role_id=#{weiixnRoleId}
-        , delete_status = #{deleteStatus}
+        <if test="roleId !='' and roleId !=null">
+           , role_id = #{roleId}
+        </if>
+		<if test="weiixnRoleId !='' and weiixnRoleId !=null">
+           ,weixin_role_id=#{weiixnRoleId}
+        </if>
+        , delete_status = #{deleteStatus},update_time=#{updateTime}
         WHERE id = #{userId} and id != 10001
     </update>
     <resultMap id="roleMap" type="com.heeexy.example.util.model.One2Many">

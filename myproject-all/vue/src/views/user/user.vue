@@ -3,6 +3,21 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
+          <div class="demo-input-size">
+            <span>用户名:</span>
+            <el-input placeholder="请输入用户名" v-model="listQuery.username" class="inputSerach" clearable>
+              <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <span>添加时间:</span>
+            <el-date-picker v-model="listQuery.createTime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
+              end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
+            <el-button type="primary" icon="el-icon-search" @click="getList" v-if="hasPerm('user:list')">搜索</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+      <el-form>
+        <el-form-item>
           <el-button type="primary" icon="plus" v-if="hasPerm('user:add')" @click="showCreate">添加
           </el-button>
         </el-form-item>
@@ -25,8 +40,7 @@
       </el-table-column>
       <el-table-column align="center" label="小程序角色" width="100">
         <template slot-scope="scope">
-          <el-tag type="success" v-text="scope.row.weixinRoleName" v-if="scope.row.roleId===1"></el-tag>
-          <el-tag type="primary" v-text="scope.row.weixinRoleName" v-else></el-tag>
+          <el-tag type="primary" v-text="scope.row.weixinRoleName"></el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
@@ -109,6 +123,10 @@
         listQuery: {
           pageNum: 1,//页码
           pageRow: 50,//每页条数
+          username:'',
+          createTime: [],
+          startTime: '',
+          endTime: ''
         },
         roles: [],//角色列表后台
         weixnRoles: [],//角色列表小程序
@@ -122,9 +140,9 @@
           username: '',
           password: '',
           nickname: '',
-          roleId: '',
+          roleId: 0,
           userId: '',
-          weiixnRoleId:''
+          weiixnRoleId:0
         }
       }
     },
@@ -161,6 +179,11 @@
       },
       getList() {
         //查询列表
+        if (this.listQuery.createTime != null && this.listQuery.createTime.length > 0) {
+          this.listQuery.startTime = this.listQuery.createTime[0]
+          this.listQuery.endTime = this.listQuery.createTime[1]
+          this.listQuery.createTime = this.listQuery.createTime.join(",")
+        }
         this.listLoading = true;
         this.api({
           url: "/user/list",
@@ -206,6 +229,7 @@
         this.tempUser.username = user.username;
         this.tempUser.nickname = user.nickname;
         this.tempUser.roleId = user.roleId;
+        this.tempUser.weiixnRoleId = user.weiixnRoleId;
         this.tempUser.userId = user.userId;
         this.tempUser.deleteStatus = '1';
         this.tempUser.password = '';
@@ -269,3 +293,9 @@
     }
   }
 </script>
+<style>
+ .inputSerach {
+   width: 10%;
+ }
+
+</style>
