@@ -62,6 +62,13 @@ export const asyncRouterMap = [
         meta: {title: '权限管理', icon: 'password'},
         menu: 'role'
       },
+      {
+        path: 'xiaochengxurole',
+        name: '小程序权限',
+        component: _import('user/xiaochengxurole'),
+        meta: {title: '小程序权限', icon: 'xiaochengxurolepassword'},
+        menu: 'xiaochengxurole'
+      },
     ]
   },
   {
