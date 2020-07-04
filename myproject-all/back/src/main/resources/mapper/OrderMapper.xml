@@ -44,6 +44,8 @@
 		<result column="imgUrl" property="imgUrl" />
 		<result column="addressId" property="addressId" />
 		<result column="state" property="state" />
+		<result column="logisticsNo" property="logisticsNo" />
+		<result column="logisticsType" property="logisticsType" />
 		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsId" property="goodsId" />
 			<result column="goodsName" property="goodsName" />
@@ -72,7 +74,9 @@
 		g.state goodsState,
 		g.banner_url bannerUrl,
 		s.img_url imgUrl,
-		o.address_id addressId
+		o.address_id addressId,
+		o.logistics_no logisticsNo,
+		o.logistics_type logisticsType
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -82,7 +86,7 @@
 	<foreach collection="orderIds" item="id" index="index" open="(" close=")" separator=",">
 		#{id}
 	</foreach> 
-	and o.user_id=#{userId}
+	
 	</select>
 	<update id="updateOrderState">
 	   update shop_order set state=#{state},out_trade_no=#{out_trade_no},address_id=#{addressId} where order_id in
@@ -127,7 +131,7 @@
 			AND g.store_id=#{storeId}
 			</when>
 			<otherwise>
-			 o.user_id=#{userId}
+			and  o.user_id=#{userId}
 			</otherwise>
 		</choose>
 	   <if test="state!=null and state !=''">
@@ -267,4 +271,7 @@
 		order by o.create_time desc
 		LIMIT #{offSet}, #{pageRow}
 	</select>
+	<update id="updateOrderStateByOrderId">
+		update shop_order set state=#{state} where order_id =#{orderId}
+	</update>
 </mapper>

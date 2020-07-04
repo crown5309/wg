@@ -38,4 +38,10 @@
             w.type                                    value
         FROM logistics w
     </select>
+    <select id="getKuaiDI" resultType="string">
+        SELECT
+        
+            w.name                                    label
+           FROM logistics w where w.type=#{type}
+    </select>
 </mapper>

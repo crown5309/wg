@@ -34,14 +34,18 @@ public class OrderController {
 	public Object submitOrder(String goodsId,String count,String cartIds) {
 		return  orderService.submitOrder(goodsId,count,cartIds);
 	}
+	@RequestMapping("/updateOrderState")
+	public Object updateOrderState(String orderId,String state) {
+		return  orderService.updateOrderState(orderId,state);
+	}
 	/**
 	 * 获取支付信息
 	 * @param orderIds
 	 * @return
 	 */
 	@RequestMapping("/getOrderInfo")
-	public Object getOrderInfo(String orderIds,String addressId) {
-		return  orderService.getOrderInfo(orderIds,addressId);
+	public Object getOrderInfo(String orderIds,String addressId,String type) {
+		return  orderService.getOrderInfo(orderIds,addressId,type);
 	}
 	/**
 	 * 支付

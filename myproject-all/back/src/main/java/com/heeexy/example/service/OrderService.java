@@ -10,11 +10,13 @@ public interface OrderService {
 
 	Object pay(String orderIds, String addressId,String remarks,HttpServletRequest request);
 
-	Object getOrderInfo(String orderIds,String addressId);
+	Object getOrderInfo(String orderIds,String addressId,String type);
 
 	void updateByOutTradeNo(String out_trade_no, int i);
 
 	Object getOrderInfoList(JSONObject request2Json);
 
 	Object getOrderInfoByState(String state,int pageNo,int pageSize, String type);
+
+	Object updateOrderState(String orderId, String state);
 }

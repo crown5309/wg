@@ -31,4 +31,6 @@ public interface ArticleDao {
 	int updateArticle(JSONObject jsonObject);
 
 	List<JSONObject> listWuLiu();
+
+	String getKuaiDI(String string);
 }

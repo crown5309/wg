@@ -31,7 +31,7 @@ public class ArticleController {
 	/**
 	 * 查询文章列表
 	 */
-	@GetMapping("/listWuLiu")
+	@RequestMapping("/listWuLiu")
 	public JSONObject listWuLiu(HttpServletRequest request) {
 		return areaService.listWuLiu(CommonUtil.request2Json(request));
 	}
@@ -41,6 +41,17 @@ public class ArticleController {
 	 */
 	@PostMapping("/updateOrder")
 	public JSONObject addArticle(@RequestBody JSONObject requestJson) {
+		return areaService.addArticle(requestJson);
+	}
+	/**
+	 * 新增文章
+	 */
+	@PostMapping("/updateOrderByOrderId")
+	public JSONObject updateOrder(String logisticsNo,String logisticsType,String orderId) {
+		JSONObject requestJson=new JSONObject();
+		requestJson.put("logisticsNo", logisticsNo);
+		requestJson.put("logisticsType", logisticsType);
+		requestJson.put("orderId", orderId);
 		return areaService.addArticle(requestJson);
 	}
 

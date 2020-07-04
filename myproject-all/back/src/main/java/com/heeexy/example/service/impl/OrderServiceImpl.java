@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import com.heeexy.example.service.BaseService;
+import com.heeexy.example.service.KuaiDi100Service;
 import com.heeexy.example.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.AddressDao;
+import com.heeexy.example.dao.ArticleDao;
 import com.heeexy.example.dao.CartDao;
 import com.heeexy.example.dao.GoodsDao;
 import com.heeexy.example.dao.OrderDao;
@@ -54,6 +56,10 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 	private SysParamDao sysParamDao;
 	@Value("${wei_xin_notify_url}")
 	private String base;
+	@Autowired
+	private KuaiDi100Service kuaiDi100Service;
+	@Autowired
+	private ArticleDao articleDao;
 
 	@Override
 	@Transactional
@@ -383,7 +389,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 	}
 
 	@Override
-	public Object getOrderInfo(String orderIds,String addressId) {
+	public Object getOrderInfo(String orderIds,String addressId,String type) {
 		JSONObject info = getOrderInfoByIds(orderIds);
 		// 从session获取用户信息
 		Session session = SecurityUtils.getSubject().getSession(); JSONObject
@@ -396,7 +402,21 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 		}else {
 			address=addressDao.getaddressById(addressId);
 		}
-		
+		JSONObject jSONObject=new JSONObject();
+		if("logisticsType".equals(type)) {
+			List<OrderInfo> orderList=(List<OrderInfo>)info.getJSONObject("info").get("OrderInfoList");
+			for(OrderInfo l:orderList) {
+				l.put("kuaidi",articleDao.getKuaiDI(l.getString("logisticsType")));
+				if(l.getString("logisticsNo")!=null) {
+					l.put("logisticsList", kuaiDi100Service.queryLogicInfo(l.getString("logisticsType"),l.getString("logisticsNo"),null)) ;
+				}
+				else {
+					jSONObject.put("code", "0");
+					l.put("logisticsList",jSONObject);
+				}
+						
+			}
+		}
 		info.put("address", address);
 		return info;
 	}
@@ -532,6 +552,14 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 			}else if(stateInt==12) {
 				sg.put("stateName", "退货中");
 			}
+	}
+
+
+	@Override
+	public Object updateOrderState(String orderId, String state) {
+		// TODO Auto-generated method stub
+		orderDao.updateOrderStateByOrderId(orderId,state);
+		return CommonUtil.successJson();
 	}
 
 }
