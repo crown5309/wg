@@ -12,6 +12,7 @@ public abstract class BaseService {
         String appId =userInfo.getString("appId");
         request2Json.put("appId", appId);
         request2Json.put("storeId", userInfo.getString("storeId"));
+        request2Json.put("userId", userInfo.getString("userId"));
 
     }
 }

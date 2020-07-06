@@ -270,4 +270,11 @@ public class UserServiceImpl extends BaseService implements UserService {
 		List<JSONObject> permissions = userDao.listPermission(jo.getString("appId"),type);
 		return CommonUtil.successPage(permissions);
 	}
+
+	@Override
+	public JSONObject getMyPermission(JSONObject request2Json) {
+		getAppId(request2Json);
+		List<JSONObject> permissions =userDao.getMyPermission(request2Json);
+		return CommonUtil.successJson(permissions);
+	}
 }

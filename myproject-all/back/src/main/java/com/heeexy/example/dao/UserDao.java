@@ -102,4 +102,10 @@ public interface UserDao {
 	void updateWeiRole(JSONObject jo);
 
 	void deleteWeiRole(JSONObject jo);
+
+    List<JSONObject> getMyPermission(JSONObject request2Json);
+
+	String getRoleIdByJson(JSONObject requestJson);
+
+	void updateStoreRole(JSONObject requestJson);
 }

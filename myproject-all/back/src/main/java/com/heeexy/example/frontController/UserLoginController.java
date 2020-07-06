@@ -21,9 +21,15 @@ public class UserLoginController {
 	private UserService userService;
     @PostMapping("/auth")
     public Object auth(HttpServletRequest request) {
-    	JSONObject weiXinUserInfo = userService.getWeiXinUserInfo(CommonUtil.request2Json(request));
-    	weiXinUserInfo.put("sessionId", request.getSession().getId());
-		return weiXinUserInfo;
+        JSONObject weiXinUserInfo = userService.getWeiXinUserInfo(CommonUtil.request2Json(request));
+        weiXinUserInfo.put("sessionId", request.getSession().getId());
+        return weiXinUserInfo;
+    }
+    @PostMapping("/getMyPermission")
+    public Object getMyPermission(HttpServletRequest request) {
+        JSONObject weiXinUserInfo = userService.getMyPermission(CommonUtil.request2Json(request));
+        weiXinUserInfo.put("sessionId", request.getSession().getId());
+        return weiXinUserInfo;
     }
     @PostMapping("/auth/phone")
     public Object authPhone(String encryptedData, String session_key, String iv) {

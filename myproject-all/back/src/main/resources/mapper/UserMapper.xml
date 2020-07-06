@@ -250,4 +250,29 @@ WHERE
     <delete id="deleteWeiRole" parameterType="com.alibaba.fastjson.JSONObject">
         delete from sys_per_img where app_id=#{appId} and sys_per_id=#{sysPerId}
     </delete>
+    <select id="getMyPermission" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+ SELECT
+p.permission_code permissionCode,
+img.show_order showOrder,
+img.img_url imgUrl
+FROM
+	sys_user u
+	INNER JOIN sys_role_permission rp ON u.weixin_role_id = rp.role_id
+	INNER JOIN sys_permission p ON rp.permission_id = p.id
+	AND rp.delete_status = '1'
+	AND p.type = 'weixin'
+	LEFT JOIN sys_per_img img ON p.id = img.sys_per_id
+	AND img.app_id = #{appId}
+WHERE
+	u.id = #{userId}
+	AND u.delete_status = '1'
+ORDER BY
+	showOrder
+    </select>
+     <select id="getRoleIdByJson" parameterType="com.alibaba.fastjson.JSONObject" resultType="string">
+        select id from sys_role where app_id=#{appId} and role_name='商家'
+    </select>
+    <update id="updateStoreRole" parameterType="com.alibaba.fastjson.JSONObject">
+        update sys_user set weixin_role_id=#{weixin_role_id} where id=#{userId}
+    </update>
 </mapper>

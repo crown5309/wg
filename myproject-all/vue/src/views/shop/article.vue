@@ -336,7 +336,7 @@
           this.api({
             url: "/shop/auditShop",
             method: "post",
-            params: this.list[index]
+            data: this.list[index]
           }).then(() => {
             this.listLoading = false;
             this.$message({

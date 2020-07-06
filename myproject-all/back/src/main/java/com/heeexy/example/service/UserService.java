@@ -63,4 +63,6 @@ public interface UserService {
     JSONObject updateWeiRole(String showOrder, String imgUrl,String id);
 
 	JSONObject listPermission(String type);
+
+	JSONObject getMyPermission(JSONObject request2Json);
 }

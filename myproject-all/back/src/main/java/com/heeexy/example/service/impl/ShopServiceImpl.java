@@ -2,6 +2,8 @@ package com.heeexy.example.service.impl;
 
 import java.util.List;
 
+import com.heeexy.example.dao.UserDao;
+import com.heeexy.example.util.StringTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.ShopService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.DateUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public  class ShopServiceImpl extends BaseService implements ShopService {
@@ -22,6 +25,8 @@ public  class ShopServiceImpl extends BaseService implements ShopService {
 	private AreaService areaService;
 	@Autowired
 	private ShopClassDao shopClassDao;
+	@Autowired
+	private UserDao userDao;
 	@Override
 	public JSONObject listShop(JSONObject request2Json) {
 		// TODO Auto-generated method stub
@@ -62,9 +67,19 @@ public  class ShopServiceImpl extends BaseService implements ShopService {
 	}
 
 	@Override
+	@Transactional
 	public JSONObject updateShop(JSONObject requestJson) {
 		// TODO Auto-generated method stub
 		shopDao.updateShop(requestJson);
+		if(requestJson.getIntValue("state")==2){
+			getAppId(requestJson);
+			String roleId=userDao.getRoleIdByJson(requestJson);
+			if(StringTools.isNullOrEmpty(roleId)){
+				return CommonUtil.errorJson("请先添加商家角色");
+			}
+			requestJson.put("weixin_role_id",roleId);
+			userDao.updateStoreRole(requestJson);
+		}
 		return CommonUtil.successJson();
 	}
 
