@@ -69,6 +69,13 @@ export const asyncRouterMap = [
         meta: {title: '小程序权限', icon: 'xiaochengxurolepassword'},
         menu: 'xiaochengxurole'
       },
+      {
+        path: 'xiaochengxuroleManager',
+        name: '小程序菜单',
+        component: _import('user/xiaochengxuroleManager'),
+        meta: {title: '小程序菜单', icon: 'xiaochengxurolepassword'},
+        menu: 'xiaochengxuroleManager'
+      },
     ]
   },
   {
@@ -111,7 +118,7 @@ export const asyncRouterMap = [
     children: [
        {
          path: 'article',
-         name: '文章',
+         name: '商铺列表',
          component: _import('shop/article'),
          meta: {title: '商铺列表', icon: 'shop'},
          menu: 'article'

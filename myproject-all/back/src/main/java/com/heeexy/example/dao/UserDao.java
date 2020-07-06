@@ -96,4 +96,10 @@ public interface UserDao {
 	String getUserByOppenId(String string);
 
 	void updateMobile(@Param("appid")String appid,@Param("phone") String phone);
+
+	List<JSONObject> listPermission(@Param("appid")String appid,@Param("type") String type);
+
+	void updateWeiRole(JSONObject jo);
+
+	void deleteWeiRole(JSONObject jo);
 }

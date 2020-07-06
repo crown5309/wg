@@ -249,4 +249,25 @@ public class UserServiceImpl extends BaseService implements UserService {
 		String access_token=jo.getString("access_token");
 		return CommonUtil.successJson(access_token);
 	}
+
+	@Override
+	public JSONObject updateWeiRole(String showOrder, String imgUrl,String id) {
+
+		JSONObject jo=new JSONObject();
+		jo.put("showOrder",showOrder);
+		jo.put("imgUrl",imgUrl);
+		jo.put("sysPerId",id);
+		getAppId(jo);
+		userDao.deleteWeiRole(jo);
+		userDao.updateWeiRole(jo);
+		return CommonUtil.successJson();
+	}
+
+	@Override
+	public JSONObject listPermission(String type) {
+		JSONObject jo=new JSONObject();
+		getAppId(jo);
+		List<JSONObject> permissions = userDao.listPermission(jo.getString("appId"),type);
+		return CommonUtil.successPage(permissions);
+	}
 }

@@ -59,4 +59,8 @@ public interface UserService {
 	void updateMobile(String appid, String phone);
 
 	JSONObject getPathCode(String path,String appid);
+
+    JSONObject updateWeiRole(String showOrder, String imgUrl,String id);
+
+	JSONObject listPermission(String type);
 }

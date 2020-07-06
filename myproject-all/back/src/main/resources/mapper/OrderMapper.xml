@@ -159,7 +159,8 @@
 		o.state state,
 		g.banner_url bannerUrl,
 		s.img_url imgUrl,
-		o.create_time createTime
+		o.create_time createTime,
+		o.send_out_goods_time sendOutGoodsTime
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -179,6 +180,7 @@
 		<result column="state" property="state" />
 		<result column="createTime" property="createTime" />
 		<result column="addressId" property="addressId" />
+		<result column="sendOutGoodsTime" property="sendOutGoodsTime" />
 		<collection property="goodsList" ofType="com.alibaba.fastjson.JSONObject">
 			<id column="goodsId" property="goodsId" />
 			<result column="goodsName" property="goodsName" />

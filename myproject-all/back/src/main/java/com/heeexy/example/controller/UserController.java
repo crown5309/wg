@@ -97,4 +97,20 @@ public class UserController {
 		CommonUtil.hasAllRequired(requestJson, "roleId");
 		return userService.deleteRole(requestJson);
 	}
+	/**
+	 * 修改哦
+	 */
+	@RequiresPermissions("weixin:update")
+	@PostMapping("/updateWeiRole")
+	public JSONObject updateWeiRole(String showOrder,String imgUrl,String id) {
+		return userService.updateWeiRole(showOrder,imgUrl,id);
+	}
+	/**
+	 * 查询所有权限, 给角色分配权限时调用
+	 */
+	@RequiresPermissions("weixin:list")
+	@GetMapping("/listPermission")
+	public JSONObject listPermission(String type) {
+		return userService.listPermission(type);
+	}
 }
