@@ -21,7 +21,7 @@ export const constantRouterMap = [
   }
 ]
 export default new Router({
-   mode: 'history', //后端支持可开 (部署改为hash)
+   mode: 'hash', //后端支持可开 (部署改为hash)
   scrollBehavior: () => ({y: 0}),
   routes: constantRouterMap
 })
@@ -73,7 +73,7 @@ export const asyncRouterMap = [
         path: 'xiaochengxuroleManager',
         name: '小程序菜单',
         component: _import('user/xiaochengxuroleManager'),
-        meta: {title: '小程序菜单', icon: 'xiaochengxurolepassword'},
+        meta: {title: '小程序菜单', icon: 'xiaochengxu'},
         menu: 'xiaochengxuroleManager'
       },
     ]
