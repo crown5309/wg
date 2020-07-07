@@ -54,7 +54,11 @@
         SET
            store_name= #{storeName},user_id=#{userId},store_class_id=#{storeClassId},
            area_info=#{areaInfo},area_id_one=#{areaIdOne},area_id_two=#{areaIdTwo},area_id_three=#{areaIdThree},
-         img_url= #{imgUrl},logo_url=#{logoUrl},name=#{name},telephone=#{telephone}
+         img_url= #{imgUrl},logo_url=#{logoUrl},name=#{name},
+         <if test="state!=null and state!=''">
+             state=#{state},
+         </if>
+         telephone=#{telephone}
         WHERE id = #{id}
     </update>
   	<delete id="deleteShop">
