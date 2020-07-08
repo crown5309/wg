@@ -65,8 +65,8 @@ public class AutoTask {
 		for (int i = 0; i < rate; i++) {
 			json.put("pageNo",i*json.getIntValue("pageSize"));
 			list=orderDao.getOrderInfoByNoPay(json);
-			long chaTime = 24 * 14 * 6000 * 60 * 60 * 1;// 60分x24x14为支付取消订单
-			for (OrderInfo sg : list) {// 取消订单
+			long chaTime = 24 * 14 * 6000 * 60 * 60 * 1;// 60分x24x14为自动收货
+			for (OrderInfo sg : list) {// 自动收货
 				if (new Date().getTime() - sg.getDate("sendOutGoodsTime").getTime() > chaTime) {
 					orderDao.cancelOrderState(sg.getString("orderId"), 5);
 				}
