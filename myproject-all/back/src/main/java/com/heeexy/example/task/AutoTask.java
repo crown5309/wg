@@ -24,7 +24,7 @@ public class AutoTask {
 
 	@Scheduled(cron = "0 0/30 * * * ?") // 订单取消
 	private void process() {
-		log.info("*************取消订单自動收穫定时任务start***************");
+		log.info("*************取消订单自動取消定时任务start***************");
 		List<OrderInfo> list = null;
 		List<JSONObject> goodsList=null;
 		JSONObject json=new JSONObject();
@@ -49,7 +49,7 @@ public class AutoTask {
 			}
 			
 		}
-		log.info("*************取消订单自動收穫定时任务结束***************");
+		log.info("*************取消订单自動取消定时任务结束***************");
 	}
 
 	@Scheduled(cron = "59 59 23 * * ? ") // 订单自動收穫 14天自動 每晚23:59:59 执行
