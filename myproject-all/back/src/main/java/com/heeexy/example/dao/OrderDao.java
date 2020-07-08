@@ -23,7 +23,7 @@ public interface OrderDao {
 
 	List<OrderInfo> getOrderInfoByState(@Param("state")String state,@Param("userId")String userId,@Param("pageNo") int pageNO,@Param("pageSize") int pageSize,@Param("storeId") String storeId,@Param("type") String type);
 
-	List<OrderInfo>  getOrderInfoByNoPay(int i);
+	List<OrderInfo>  getOrderInfoByNoPay(JSONObject json);
 
 	void cancelOrderState(@Param("orderId")String orderId,@Param("state") int state);
 
@@ -32,4 +32,6 @@ public interface OrderDao {
 	List<OrderInfo> getOrderInfoList(JSONObject request2Json);
 
 	void updateOrderStateByOrderId(@Param("orderId")String orderId,@Param("state") String state);
+
+	int countOrderByState(int state);
 }

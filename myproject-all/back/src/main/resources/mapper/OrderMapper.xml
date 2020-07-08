@@ -167,6 +167,7 @@
 		INNER JOIN goods g ON o_goods.goods_id = g.id
 		INNER JOIN store s ON g.store_id = s.id
 	where  o.state=#{state} 
+	limit #{pageNo},#{pageSize}
 	</select>
 	<resultMap id="orderMap1"
 			   type="com.heeexy.example.entity.OrderInfo">
@@ -276,4 +277,7 @@
 	<update id="updateOrderStateByOrderId">
 		update shop_order set state=#{state} where order_id =#{orderId}
 	</update>
+	<select id="countOrderByState" resultType="int">
+		select count(1) from shop_order where state=#{state}
+	</select>
 </mapper>
