@@ -10,8 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-//import com.alibaba.fastjson.JSONObject;
-//import com.heeexy.example.dao.GoodsDao;
 import com.heeexy.example.dao.OrderDao;
 import com.heeexy.example.entity.OrderInfo;
 
