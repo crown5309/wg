@@ -123,12 +123,12 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 				 
 			}
 			// 批量扣减库存
-//			for(JSONObject o:orderGoodList){
-//				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( o.getString("goodsId"), o.getInteger("count"));
-//				if(!(updateGoodStoreCount>0)) {
-//					return CommonUtil.errorJson("库存不足");
-//				}
-//			}
+			for(JSONObject o:orderGoodList){
+				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( o.getString("goodsId"), o.getInteger("count"));
+				if(!(updateGoodStoreCount>0)) {
+					return CommonUtil.errorJson("库存不足");
+				}
+			}
 			//订单表批量保存
 			orderDao.insertOrderBatch(orderList);
 			// 商品订单表批量保存
@@ -289,10 +289,10 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     			goodsList =(List<JSONObject>) sg.get("goodsList");
     			for(JSONObject goods:goodsList) {
     				//下单成功减库存
-    				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), goods.getInteger("count"));
-    				if(!(updateGoodStoreCount>0)) {//减库存
-    					return CommonUtil.errorJson("库存不足");
-    				}
+//    				int updateGoodStoreCount = goodsDao.updateGoodStoreCount( goods.getString("goodsId"), goods.getInteger("count"));
+//    				if(!(updateGoodStoreCount>0)) {//减库存
+//    					return CommonUtil.errorJson("库存不足");
+//    				}
     				//下单成功加销量
     				goodsDao.updateCountById(goods.getString("goodsId"),goods.getString("count"));
     				//删除购物车
