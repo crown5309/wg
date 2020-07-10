@@ -18,13 +18,13 @@
 	</resultMap>
 	<select id="getStoreList" resultMap="storeGoodsList">
 		SELECT
-		cart.count count,
+		cart.count    count,
 		cart.goods_id goodsId,
-		g.goods_name goodsName,
+		g.goods_name  goodsName,
 		g.price,
-		s.id store_id,
-		s.store_name storeName,
-		g.sku_store skuStore,
+		s.id          store_id,
+		s.store_name  storeName,
+		g.sku_store   skuStore,
 		g.state
 		FROM
 		shop_cart cart
@@ -59,14 +59,14 @@
 	</delete>
 	<select id="getMyCartList" resultType="com.alibaba.fastjson.JSONObject">
 		SELECT
-        cart.cart_id id,
-		cart.count count,
-		cart.goods_id goodsId,
-		g.goods_name goodsName,
+        cart.cart_id    id,
+		cart.count      count,
+		cart.goods_id   goodsId,
+		g.goods_name    goodsName,
 		g.price,
-		g.sku_store skuStore,
+		g.sku_store     skuStore,
 		g.state,
-		g.banner_url bannerUrl
+		g.banner_url    bannerUrl
 		FROM
 		shop_cart cart
 		INNER JOIN goods g ON cart.goods_id = g.id

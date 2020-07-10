@@ -31,7 +31,8 @@
             w.create_time                             createTime,
             w.img_url                                 imgUrl,
             w.logo_url                                logoUrl,
-            w.name,w.telephone
+            w.name,
+            w.telephone
         FROM store w  inner join store_class c on w.store_class_id=c.id WHERE w.app_id =#{appId} 
         <if test="storeName !=null and storeName !=''">
 				 and  w.store_name like concat("%",#{storeName},"%") 

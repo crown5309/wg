@@ -5,13 +5,13 @@
 
     <select id="getUser" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            u.id       userId,
-            u.username username,
-            u.password password,
-            u.nickname nickName,
-            u.app_id appId,
-            u.open_id openId,
-            u.store_id storeId,
+            u.id         userId,
+            u.username   username,
+            u.password   password,
+            u.nickname   nickName,
+            u.app_id     appId,
+            u.open_id    openId,
+            u.store_id   storeId,
             u.avatar_url avatarUrl
         FROM
             sys_user u

@@ -58,25 +58,25 @@
 	</resultMap>
 	<select id="getAllInfoOrderByOrderIds" resultMap="orderMap">
 		SELECT
-		o.order_id  orderId,
-		o.total_pay totalPay,
+		o.order_id          orderId,
+		o.total_pay         totalPay,
 		o.state,
-		o.discount_pay discountPay,
-		o.practice_pay practicePay,
-		s.store_name storeName,
+		o.discount_pay      discountPay,
+		o.practice_pay      practicePay,
+		s.store_name        storeName,
 		s.id storeId,
-		g.goods_name goodsName,
+		g.goods_name        goodsName,
 		g.price price,
-		o_goods.price orderPrice,
-		o_goods.goods_id goodsId,
-		g.banner_url  bannerUrl,
-		o_goods.count count,
-		g.state goodsState,
-		g.banner_url bannerUrl,
-		s.img_url imgUrl,
-		o.address_id addressId,
-		o.logistics_no logisticsNo,
-		o.logistics_type logisticsType
+		o_goods.price       orderPrice,
+		o_goods.goods_id    goodsId,
+		g.banner_url        bannerUrl,
+		o_goods.count       count,
+		g.state             goodsState,
+		g.banner_url        bannerUrl,
+		s.img_url           imgUrl,
+		o.address_id        addressId,
+		o.logistics_no      logisticsNo,
+		o.logistics_type    logisticsType
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -103,23 +103,23 @@
 	</select>
 	<select id="getOrderInfoByState" resultMap="orderMap1">
 		SELECT
-		o.order_id  orderId,
-		o.total_pay totalPay,
-		o.discount_pay discountPay,
-		o.practice_pay practicePay,
-		s.store_name storeName,
+		o.order_id        orderId,
+		o.total_pay       totalPay,
+		o.discount_pay    discountPay,
+		o.practice_pay    practicePay,
+		s.store_name      storeName,
 		s.id storeId,
-		g.goods_name goodsName,
-		o_goods.price price,
-		o_goods.goods_id goodsId,
-		o_goods.price orderPrice,
-		g.banner_url  bannerUrl,
-		o_goods.count count,
+		g.goods_name      goodsName,
+		o_goods.price     price,
+		o_goods.goods_id  goodsId,
+		o_goods.price     orderPrice,
+		g.banner_url      bannerUrl,
+		o_goods.count     count,
 		o.state state,
-		g.banner_url bannerUrl,
-		s.img_url imgUrl,
-		o.create_time createTime,
-		o.address_id addressId
+		g.banner_url      bannerUrl,
+		s.img_url         imgUrl,
+		o.create_time     createTime,
+		o.address_id      addressId
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id
@@ -144,22 +144,22 @@
 	</select>
 	<select id="getOrderInfoByNoPay" resultMap="orderMap1">
 		SELECT
-		o.order_id  orderId,
-		o.total_pay totalPay,
-		o.discount_pay discountPay,
-		o.practice_pay practicePay,
-		s.store_name storeName,
+		o.order_id            orderId,
+		o.total_pay           totalPay,
+		o.discount_pay        discountPay,
+		o.practice_pay        practicePay,
+		s.store_name          storeName,
 		s.id storeId,
-		g.goods_name goodsName,
-		o_goods.price price,
-		o_goods.goods_id goodsId,
-		o_goods.price orderPrice,
-		g.banner_url  bannerUrl,
-		o_goods.count count,
+		g.goods_name          goodsName,
+		o_goods.price         price,
+		o_goods.goods_id      goodsId,
+		o_goods.price         orderPrice,
+		g.banner_url          bannerUrl,
+		o_goods.count         count,
 		o.state state,
-		g.banner_url bannerUrl,
-		s.img_url imgUrl,
-		o.create_time createTime,
+		g.banner_url          bannerUrl,
+		s.img_url             imgUrl,
+		o.create_time         createTime,
 		o.send_out_goods_time sendOutGoodsTime
 		FROM
 		shop_order o
@@ -219,32 +219,32 @@
 	</select>
 	<select id="getOrderInfoList" resultMap="orderMap2" parameterType="com.alibaba.fastjson.JSONObject">
 		SELECT
-		o.order_id  orderId,
-		o.total_pay totalPay,
-		o.discount_pay discountPay,
-		o.practice_pay practicePay,
-		s.store_name storeName,
-		s.id storeId,
-		g.goods_name goodsName,
-		o_goods.price price,
-		o_goods.goods_id goodsId,
-		o_goods.price orderPrice,
-		g.banner_url  bannerUrl,
-		o_goods.count count,
-		o.state state,
-		g.banner_url bannerUrl,
-		s.img_url imgUrl,
-		o.create_time createTime,
-		o.address_id addressId,
+		o.order_id        orderId,
+		o.total_pay       totalPay,
+		o.discount_pay    discountPay,
+		o.practice_pay    practicePay,
+		s.store_name      storeName,
+		s.id              storeId,
+		g.goods_name      goodsName,
+		o_goods.price     price,
+		o_goods.goods_id  goodsId,
+		o_goods.price     orderPrice,
+		g.banner_url      bannerUrl,
+		o_goods.count     count,
+		o.state           state,
+		g.banner_url      bannerUrl,
+		s.img_url         imgUrl,
+		o.create_time     createTime,
+		o.address_id      addressId,
 		address.name,
 		address.province,
 		address.city,
 		address.country,
 		address.detail,
 		address.telephone,
-		o.logistics_no logisticsNo,
-		o.logistics_type logisticsType,
-		l.name wuLiu
+		o.logistics_no    logisticsNo,
+		o.logistics_type  logisticsType,
+		l.name            wuLiu
 		FROM
 		shop_order o
 		INNER JOIN order_goods o_goods ON o.order_id = o_goods.order_id

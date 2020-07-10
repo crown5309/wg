@@ -97,23 +97,20 @@
 	<select id="listGoods"
 		resultType="com.alibaba.fastjson.JSONObject">
 		SELECT
-		w.id id,
-		w.goods_name goodsName,
-		w.price price,
-		w.sku_store
-		skuStore,
-		w.banner_url bannerUrl,
-		w.detail_url detailUrl,
-		w.multi_index
-		multiIndex,
-		w.class_id1 classId1,
-		w.class_id2 classId2,
-		w.class_id3
-		classId3,
-		w.state state,
-		w.count count,
-		w.create_time createTime,
-		s.store_name storeName
+		w.id           id,
+		w.goods_name   goodsName,
+		w.price        price,
+		w.sku_store    skuStore,
+		w.banner_url   bannerUrl,
+		w.detail_url   detailUrl,
+		w.multi_index  multiIndex,
+		w.class_id1    classId1,
+		w.class_id2    classId2,
+		w.class_id3    classId3,
+		w.state        state,
+		w.count        count,
+		w.create_time  createTime,
+		s.store_name   storeName
 		FROM goods w INNER JOIN store s on w.store_id
 		=s.id
 		<where>
@@ -142,22 +139,19 @@
 	<select id="listIndexGoods"
 		resultType="com.alibaba.fastjson.JSONObject">
 		SELECT
-		w.id id,
-		w.goods_name goodsName,
-		w.price price,
-		w.sku_store
-		skuStore,
-		w.banner_url bannerUrl,
-		w.detail_url detailUrl,
-		w.multi_index
-		multiIndex,
-		w.class_id1 classId1,
-		w.class_id2 classId2,
-		w.class_id3
-		classId3,
-		w.state state,
-		w.create_time createTime,
-		s.store_name storeName
+		w.id            id,
+		w.goods_name    goodsName,
+		w.price         price,
+		w.sku_store     skuStore,
+		w.banner_url    bannerUrl,
+		w.detail_url    detailUrl,
+		w.multi_index   multiIndex,
+		w.class_id1     classId1,
+		w.class_id2     classId2,
+		w.class_id3     classId3,
+		w.state         state,
+		w.create_time   createTime,
+		s.store_name    storeName
 		FROM goods w INNER JOIN store s on w.store_id =s.id
 		where 1=1
 		<if test="appId !=null and appId !=''">

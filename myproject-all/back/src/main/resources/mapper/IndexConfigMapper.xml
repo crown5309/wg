@@ -24,9 +24,9 @@
 	<select id="listIndexAll" resultMap="orderMap">
 		SELECT
 	c.id,
-	g.class_name className,
+	g.class_name     className,
 	c.goods_class_id goodsClassId,
-	g.class_img_url classImgUrl,
+	g.class_img_url  classImgUrl,
 	(
 	SELECT
 		c2.class_name 

@@ -22,7 +22,7 @@
             u.nickname        nickname,
             u.role_id         roleId,
             r.role_name       roleName,
-            avatar_url         avatarUrl,
+            avatar_url        avatarUrl,
             p.menu_code       menuCode,
             p.permission_code permissionCode
         FROM sys_user u
