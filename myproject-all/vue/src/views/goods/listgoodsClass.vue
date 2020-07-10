@@ -166,25 +166,44 @@
       },
       createGoodsClass() {
         this.goodsClass.parentId = this.listQuery.parentId
+         this.listLoading = true;
         //保存新文章
         this.api({
           url: "/goods/addgoodsClass",
           method: "post",
           data: this.goodsClass
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+         this.$message({
+           message: "新增成功",
+           type: 'success',
+           duration: 1 * 1000,
+           onClose: () => {
+             this.getList();
+             this.dialogFormVisible = false
+             this.listLoading = false;
+           }
+         })
         })
       },
       updateArticle() {
+         this.listLoading = true;
         //修改文章
         this.api({
           url: "/goods/updategoodsClass",
           method: "post",
           data: this.goodsClass
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+          this.$message({
+            message: "修改成功",
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              this.getList();
+              this.dialogFormVisible = false
+              this.listLoading = false;
+            }
+          })
+        
         })
       },
       upload(e) {

@@ -12,4 +12,27 @@
          SELECT
            s1.value  from sys_param s1 where s1.app_id=#{appId} and s1.code=#{code}
     </select>
+    <select id="countParams" resultType="int" parameterType="com.alibaba.fastjson.JSONObject">
+        select count(1) from sys_param where app_id=#{appId}
+        and parent_id=#{parent_id}
+    </select>
+
+    <select id="listParams" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
+        select id,parent_id  parentId ,name ,value, code from sys_param where app_id=#{appId}
+        and parent_id=#{parentId} order by id desc
+       LIMIT #{offSet}, #{pageRow}
+    </select>
+    <insert id="addSysParams" parameterType="com.alibaba.fastjson.JSONObject">
+        insert into sys_param(value,code,parent_id,app_id,name)
+        values(#{value},#{code},#{parentId},#{appId},#{name})
+    </insert>
+    <update id="updateSysParams" parameterType="com.alibaba.fastjson.JSONObject">
+        update sys_param set value=#{value},name=#{name} where id=#{id}
+    </update>
+    <delete id="deleteSysParamsById">
+        delete from sys_param where id=#{id}
+    </delete>
+    <delete id="deleteSysParamsParentId">
+        delete from sys_param where parent_id=#{id}
+    </delete>
 </mapper>

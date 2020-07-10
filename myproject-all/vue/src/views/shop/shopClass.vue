@@ -120,22 +120,32 @@
         this.dialogFormVisible = true
       },
       createArticle() {
-        if(this.tempArticle.className=''){
+        debugger
+        if(this.tempArticle.className==''){
           this.$message.error("请输入商品名称");
           return
         }
-        if(this.tempArticle.showOrder=''){
+        if(this.tempArticle.showOrder==''){
           this.$message.error("请输入商品名称");
           return
         }
+        this.dialogFormVisible = true
         //保存新文章
         this.api({
           url: "/shopClass/addShopClass",
           method: "post",
           data: this.tempArticle
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+          this.$message({
+            message: "新增成功",
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              this.getList();
+              this.dialogFormVisible = false
+              this.listLoading = false;
+            }
+          })
         })
       },
       updateArticle() {
@@ -147,18 +157,28 @@
           this.$message.error("请输入商品名称");
           return
         }
+        this.listLoading = true;
         //修改文章
         this.api({
           url: "/shopClass/updateShopClass",
           method: "post",
           data: this.tempArticle
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+          this.$message({
+            message: "修改成功",
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              this.getList();
+              this.dialogFormVisible = false
+              this.listLoading = false;
+            }
+          })
         })
       },
       showDelete($index){
         let _vue = this;
+        this.listLoading = true;
         this.$confirm('确定删除?', '提示', {
           confirmButtonText: '确定',
           showCancelButton: false,
@@ -169,7 +189,16 @@
             method: "post",
             params: {id:this.list[$index].id}
           }).then(() => {
-            _vue.getList()
+            this.$message({
+              message: "删除成功",
+              type: 'success',
+              duration: 1 * 1000,
+              onClose: () => {
+                this.getList();
+                this.dialogFormVisible = false
+                this.listLoading = false;
+              }
+            })
           }).catch(() => {
             _vue.$message.error("删除失败")
           })

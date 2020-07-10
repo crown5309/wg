@@ -243,8 +243,16 @@
           method: "post",
           data: this.tempUser
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+         this.$message({
+           message: "添加成功",
+           type: 'success',
+           duration: 1 * 1000,
+           onClose: () => {
+             this.getList();
+             this.dialogFormVisible = false
+             this.listLoading = false;
+           }
+         })
         })
       },
       updateUser() {
@@ -284,7 +292,16 @@
             method: "post",
             data: user
           }).then(() => {
-            _vue.getList()
+            this.$message({
+              message: "删除成功",
+              type: 'success',
+              duration: 1 * 1000,
+              onClose: () => {
+                this.getList();
+                this.dialogFormVisible = false
+                this.listLoading = false;
+              }
+            })
           }).catch(() => {
             _vue.$message.error("删除失败")
           })

@@ -12,4 +12,15 @@ public interface SysParamDao {
 
 	String getValueByCode(@Param("appId")String appId ,@Param("code") String code);
 
+	int countParams(JSONObject request2Json);
+
+	List<JSONObject> listParams(JSONObject request2Json);
+
+	void addSysParams(JSONObject request2Json);
+
+	void updateSysParams(JSONObject request2Json);
+
+	void deleteSysParamsById(int id);
+
+	void deleteSysParamsParentId(int parentId);
 }

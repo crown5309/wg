@@ -132,5 +132,21 @@ export const asyncRouterMap = [
        }
     ]
   },
+  {
+    path: '/sysParams',
+    component: Layout,
+    redirect: '/sysParams/',
+    name: '',
+    meta: {title: '系统配置', icon: 'sys'},
+    children: [
+       {
+         path: 'sysParams',
+         name: '系统参数',
+         component: _import('sys/paramList'),
+         meta: {title: '系统参数', icon: 'sys_param'},
+         menu: 'sysParams'
+       },
+    ]
+  },
   {path: '*', redirect: '/404', hidden: true}
 ]

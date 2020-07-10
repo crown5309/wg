@@ -172,8 +172,16 @@
           method: "post",
           data: this.tempRole
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+          this.$message({
+            message: "新增成功",
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              this.getList();
+              this.dialogFormVisible = false
+              this.listLoading = false;
+            }
+          })
         })
       },
       updateRole() {
@@ -189,8 +197,16 @@
           method: "post",
           data: this.tempRole
         }).then(() => {
-          this.getList();
-          this.dialogFormVisible = false
+          this.$message({
+            message: "修改成功",
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              this.getList();
+              this.dialogFormVisible = false
+              this.listLoading = false;
+            }
+          })
         })
       },
       checkPermissionNum() {
@@ -234,7 +250,16 @@
               roleId: role.roleId
             }
           }).then(() => {
-            _vue.getList()
+            this.$message({
+              message: "删除成功",
+              type: 'success',
+              duration: 1 * 1000,
+              onClose: () => {
+                this.getList();
+                this.dialogFormVisible = false
+                this.listLoading = false;
+              }
+            })
           }).catch(e => {
           })
         })
