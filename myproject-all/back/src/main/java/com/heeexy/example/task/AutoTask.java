@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import com.heeexy.example.dao.OrderDao;
 import com.heeexy.example.entity.OrderInfo;
 
+/**
+ * 定时任务
+ */
 @EnableScheduling
 @Component
 public class AutoTask {
@@ -24,7 +27,7 @@ public class AutoTask {
 
 	@Scheduled(cron = "0 0/30 * * * ?") // 订单取消
 	private void process() {
-		log.info("*************取消订单自動取消定时任务start***************");
+		log.info("*************取消订单自动取消定时任务start***************");
 		List<OrderInfo> list = null;
 		List<JSONObject> goodsList=null;
 		JSONObject json=new JSONObject();
@@ -49,12 +52,12 @@ public class AutoTask {
 			}
 			
 		}
-		log.info("*************取消订单自動取消定时任务结束***************");
+		log.info("*************取消订单自动取消定时任务结束***************");
 	}
 
-	@Scheduled(cron = "59 59 23 * * ? ") // 订单自動收穫 14天自動 每晚23:59:59 执行
+	@Scheduled(cron = "59 59 23 * * ? ") // 订单自动收货 14天自动 每晚23:59:59 执行
 	private void processUpdateState() {
-		log.info("*************取消订单自動收穫定时任务start***************");
+		log.info("*************取消订单自动收货定时任务start***************");
 		List<OrderInfo> list = null;
 		JSONObject json=new JSONObject();
 		json.put("pageNo", 0);
@@ -74,7 +77,7 @@ public class AutoTask {
 			}
 			
 		}
-		log.info("*************取消订单自動收穫定时任务结束***************");
+		log.info("*************取消订单自动收货定时任务结束***************");
 	}
 
 }

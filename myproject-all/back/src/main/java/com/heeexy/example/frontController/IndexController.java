@@ -9,6 +9,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.IndexConfigService;
 import com.heeexy.example.util.CommonUtil;
 
+/**
+ * 首页配置
+ */
 @RestController
 @RequestMapping("/index")
 public class IndexController {

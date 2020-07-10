@@ -14,6 +14,9 @@ import com.heeexy.example.service.UserService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.WxUtils;
 
+/**
+ * 用户api
+ */
 @RestController
 @RequestMapping("/user")
 public class UserLoginController {

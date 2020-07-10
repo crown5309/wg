@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.heeexy.example.service.CartService;
 
+/**
+ * 购物车操作
+ */
 @RestController
 @RequestMapping("/front")
 public class CartFrontController {

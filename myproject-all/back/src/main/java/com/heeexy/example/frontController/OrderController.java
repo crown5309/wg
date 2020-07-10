@@ -17,6 +17,9 @@ import com.heeexy.example.service.OrderService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.XMLUtil;
 
+/**
+ * 订单
+ */
 @RestController
 @RequestMapping("/front")
 public class OrderController {

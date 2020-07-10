@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.heeexy.example.service.goodsClassService;
 import com.heeexy.example.util.CommonUtil;
 
+/**
+ * 商品分类列表
+ */
 @RestController
 @RequestMapping("/front")
 public class GoodsFrontClassController {

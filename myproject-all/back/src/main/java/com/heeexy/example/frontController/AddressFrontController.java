@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.heeexy.example.service.AddressService;
 import com.heeexy.example.util.CommonUtil;
 
+/**
+ * 收货地址操作
+ */
 @RestController
 @RequestMapping("/front")
 public class AddressFrontController {
