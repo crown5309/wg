@@ -8,17 +8,17 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface AreaService {
 	/**
-	 * 新增文章
+	 * 新增
 	 */
 	JSONObject addArticle(JSONObject jsonObject);
 
 	/**
-	 * 文章列表
+	 * 列表
 	 */
 	JSONObject listArticle(JSONObject jsonObject);
 
 	/**
-	 * 更新文章
+	 * 更新
 	 */
 	JSONObject updateArticle(JSONObject jsonObject);
 

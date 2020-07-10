@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/area")
-public class ArticleController {
+public class AreaController {
 
 	@Autowired
 	private AreaService areaService;
@@ -25,11 +25,11 @@ public class ArticleController {
 	 * 查询文章列表
 	 */
 	@GetMapping("/listArea")
-	public JSONObject listArticle(HttpServletRequest request) {
+	public JSONObject listArea(HttpServletRequest request) {
 		return areaService.listArticle(CommonUtil.request2Json(request));
 	}
 	/**
-	 * 查询文章列表
+	 * 查询物流列表
 	 */
 	@RequestMapping("/listWuLiu")
 	public JSONObject listWuLiu(HttpServletRequest request) {
@@ -37,14 +37,14 @@ public class ArticleController {
 	}
 
 	/**
-	 * 新增文章
+	 *
 	 */
 	@PostMapping("/updateOrder")
-	public JSONObject addArticle(@RequestBody JSONObject requestJson) {
+	public JSONObject updateOrder(@RequestBody JSONObject requestJson) {
 		return areaService.addArticle(requestJson);
 	}
 	/**
-	 * 新增文章
+	 *
 	 */
 	@PostMapping("/updateOrderByOrderId")
 	public JSONObject updateOrder(String logisticsNo,String logisticsType,String orderId) {
@@ -56,7 +56,7 @@ public class ArticleController {
 	}
 
 	/**
-	 * 修改文章
+	 * 修改收货地址
 	 */
 	@PostMapping("/updateArea")
 	public JSONObject updateArea(@RequestBody JSONObject requestJson) {
