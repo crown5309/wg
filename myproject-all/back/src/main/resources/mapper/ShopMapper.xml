@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.ShopDao">
 
-    <insert id="addShop" parameterType="com.alibaba.fastjson.JSONObject"  useGeneratedKeys="true" keyProperty="id">
+    <insert id="addShop" parameterType="com.alibaba.fastjson.JSONObject"  useGeneratedKeys="true" keyProperty="id"  keyColumn="id">
         insert store(store_name,user_id,store_class_id,area_info,area_id_one,area_id_two,area_id_three,img_url,state,app_id)
           values(#{storeName},#{userId},#{storeClassId},#{areaInfo},#{areaIdOne},#{areaIdTwo},#{areaIdThree},
           #{imgUrl},#{state},#{appId}

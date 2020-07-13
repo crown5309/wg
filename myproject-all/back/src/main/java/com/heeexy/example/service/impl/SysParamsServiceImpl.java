@@ -1,6 +1,7 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.LoginDao;
 import com.heeexy.example.dao.ShopDao;
 import com.heeexy.example.dao.SysParamDao;
 import com.heeexy.example.dao.UserDao;
@@ -22,6 +23,8 @@ public class SysParamsServiceImpl extends BaseService  implements SysParamsServi
     private ShopDao shopDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private LoginDao loginDao;
     @Override
     public JSONObject listSysParams(JSONObject request2Json) {
         CommonUtil.fillPageParam(request2Json);
@@ -42,17 +45,24 @@ public class SysParamsServiceImpl extends BaseService  implements SysParamsServi
         if(!StringTools.isNullOrEmpty(valueByCode)){
             return CommonUtil.errorJson("该code已存在");
         }
-        if("sys_param".equals(code)){
+        String username = request2Json.getString("username");
+        if("sys_param".equals(code)&&username==null){
+            String myName = request2Json.getString("myName");
+            int count=loginDao.getExitsUser(myName);
+            if(count>0){
+                return CommonUtil.errorJson("用户名已存在");
+            }
             //添加商户
             JSONObject shopJson=new JSONObject();
             shopJson.put("storeName",request2Json.getString("value"));
             shopJson.put("state",2);
             shopJson.put("appId",appId);
-            String storeId = shopDao.addShop(shopJson);
+            Integer storeId = shopDao.addShop(shopJson);
             //添加用户对应平台管理员
             JSONObject userJson=new JSONObject();
-            userJson.put("username","admin");
-            userJson.put("password","123456");
+
+            userJson.put("username", myName);
+            userJson.put("password",request2Json.getString("password"));
             userJson.put("roleId","1");
             userJson.put("appId",appId);
             userJson.put("storeId",storeId);

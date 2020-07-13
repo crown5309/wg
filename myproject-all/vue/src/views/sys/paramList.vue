@@ -22,7 +22,8 @@
       <el-table-column align="center" label="管理" width="300">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-iconedit" @click="showUpdate(scope.$index)" v-if="hasPerm('sysParams:update')">修改</el-button>
-          <el-button type="primary" icon="el-iconsearch" @click="showXia(scope.$index)" v-if="hasPerm('sysParams:list')" v-show="listQuery.parentId==0">下级</el-button>
+          <el-button type="primary" icon="el-iconsearch" @click="showXia(scope.$index)" v-if="hasPerm('sysParams:list')"
+            v-show="listQuery.parentId==0">下级</el-button>
           <el-button type="primary" icon="el-icondelete" @click="showDelete(scope.$index)" v-if="hasPerm('sysParams:delete')">删除</el-button>
         </template>
       </el-table-column>
@@ -33,17 +34,29 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="sysParams" label-position="left" label-width="80px" style='width: 300px; margin-left:80px;'>
         <el-form-item label="名称">
-          <el-input type="text" v-model="sysParams.name"  placeholder="请输入名称">
+          <el-input type="text" v-model="sysParams.name" placeholder="请输入名称">
           </el-input>
         </el-form-item>
         <el-form-item label="值">
-          <el-input type="text" v-model="sysParams.value"  placeholder="请输入值">
+          <el-input type="text" v-model="sysParams.value" placeholder="请输入值">
           </el-input>
         </el-form-item>
-       <el-form-item label="code" v-show="textMap[dialogStatus]=='创建'">
-         <el-input type="text" v-model="sysParams.code"  placeholder="请输入code">
-         </el-input>
-       </el-form-item>
+        <el-form-item label="appId" v-show="username=='root'">
+          <el-input type="text" v-model="sysParams.appId" placeholder="请输入appId">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="用户名" v-show="username=='root'">
+          <el-input type="text" v-model="sysParams.myName" placeholder="请输入用户名">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="密码" v-show="username=='root'">
+          <el-input type="text" v-model="sysParams.password" placeholder="请输入密码">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="code" v-show="textMap[dialogStatus]=='创建'">
+          <el-input type="text" v-model="sysParams.code" placeholder="请输入code">
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -54,6 +67,9 @@
   </div>
 </template>
 <script>
+  import {
+    mapGetters
+  } from 'vuex'
   export default {
     data() {
       return {
@@ -78,12 +94,20 @@
           name: "",
           value: "",
           code: "",
-          parentId: 0
+          parentId: 0,
+          appId: "",
+          myName: '',
+          password: ''
         },
       }
     },
     created() {
       this.getList();
+    },
+    computed: {
+      ...mapGetters([
+        'username'
+      ])
     },
     methods: {
       getList() {
@@ -91,7 +115,7 @@
         if (!this.hasPerm('sysParams:list')) {
           return
         }
-        this.listLoading = true;
+    //    this.listLoading = true;
         this.api({
           url: "/param/listSysParams",
           method: "get",
@@ -121,8 +145,12 @@
         this.sysParams.name = "";
         this.sysParams.code = "";
         this.sysParams.value = "";
-         this.sysParams.parentId =this.listQuery.parentId;
+        this.sysParams.parentId = this.listQuery.parentId;
+        this.sysParams.myName = ""
+        this.sysParams.password = ""
+        this.sysParams.appId = ""
         this.dialogStatus = "create"
+
         this.dialogFormVisible = true
       },
       showUpdate($index) {
@@ -135,7 +163,7 @@
         this.dialogFormVisible = true
       },
       createSysParams() {
-         this.listLoading = true;
+      //  this.listLoading = true;
         //保存
         this.api({
           url: "/param/addSysParams",
@@ -155,7 +183,7 @@
         })
       },
       updateSysParams() {
-        this.listLoading = true;
+     //   this.listLoading = true;
         //修改
         this.api({
           url: "/param/updateSysParams",
@@ -174,32 +202,32 @@
           })
         })
       },
-    showDelete($index){
-      this.sysParams.id=this.list[$index].id
-      let _vue = this;
-      this.$confirm('确定删除?', '提示', {
-        confirmButtonText: '确定',
-        showCancelButton: false,
-        type: 'warning'
-      }).then(() => {
-        _vue.api({
-          url: "/param/deleteSysParams",
-          method: "post",
-          params: this.sysParams
+      showDelete($index) {
+        this.sysParams.id = this.list[$index].id
+        let _vue = this;
+        this.$confirm('确定删除?', '提示', {
+          confirmButtonText: '确定',
+          showCancelButton: false,
+          type: 'warning'
         }).then(() => {
-          this.$message({
-            message: "删除成功",
-            type: 'success',
-            duration: 1 * 1000,
-            onClose: () => {
-              this.getList();
-            }
+          _vue.api({
+            url: "/param/deleteSysParams",
+            method: "post",
+            params: this.sysParams
+          }).then(() => {
+            this.$message({
+              message: "删除成功",
+              type: 'success',
+              duration: 1 * 1000,
+              onClose: () => {
+                this.getList();
+              }
+            })
+          }).catch(() => {
+            _vue.$message.error("删除失败")
           })
-        }).catch(() => {
-          _vue.$message.error("删除失败")
         })
-      })
-    },
+      },
       showXia($index) {
         this.listQuery.parentId = this.list[$index].id
         this.getList()

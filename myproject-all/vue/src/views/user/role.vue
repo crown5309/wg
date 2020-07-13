@@ -142,7 +142,7 @@
         this.tempRole.roleId = '';
         this.tempRole.permissions = [];
         this.dialogStatus = "create"
-        this.dialogFormVisible = true
+      //  this.dialogFormVisible = true
       },
       showUpdate($index) {
         let role = this.list[$index];
@@ -156,7 +156,7 @@
           }
         }
         this.dialogStatus = "update"
-        this.dialogFormVisible = true
+       // this.dialogFormVisible = true
       },
       createRole() {
         if (!this.checkRoleNameUnique()) {

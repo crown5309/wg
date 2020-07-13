@@ -10,7 +10,7 @@ public interface ShopDao {
 
 	List<JSONObject> listShop(JSONObject request2Json);
 
-	String addShop(JSONObject requestJson);
+	Integer addShop(JSONObject requestJson);
 
 	void updateShop(JSONObject requestJson);
 

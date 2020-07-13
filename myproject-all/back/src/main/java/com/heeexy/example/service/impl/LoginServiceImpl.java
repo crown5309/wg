@@ -72,6 +72,7 @@ public class LoginServiceImpl implements LoginService {
 		JSONObject info = new JSONObject();
 		JSONObject userPermission = permissionService.getUserPermission(username);
 		session.setAttribute(Constants.SESSION_USER_PERMISSION, userPermission);
+		userPermission.put("username", username);
 		info.put("userPermission", userPermission);
 		return CommonUtil.successJson(info);
 	}

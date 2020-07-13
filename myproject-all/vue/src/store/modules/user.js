@@ -19,6 +19,7 @@ const user = {
       state.userId = userInfo.userId;
       state.role = userInfo.roleName;
       state.menus = userInfo.menuList;
+      state.username = userInfo.username;
       state.permissions = userInfo.permissionList;
 	  state.avatar=userInfo.avatarUrl;
     },

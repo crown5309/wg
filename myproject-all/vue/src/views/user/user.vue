@@ -5,7 +5,7 @@
         <el-form-item>
           <div class="demo-input-size">
             <span>用户名:</span>
-            <el-input placeholder="请输入用户名" v-model="listQuery.username" class="inputSerach" clearable>
+            <el-input placeholder="请输入用户名" v-model="listQuery.myname" class="inputSerach" clearable>
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
             <span>添加时间:</span>
@@ -123,7 +123,7 @@
         listQuery: {
           pageNum: 1,//页码
           pageRow: 50,//每页条数
-          username:'',
+          myname:'',
           createTime: [],
           startTime: '',
           endTime: ''
@@ -222,7 +222,7 @@
         this.tempUser.roleId = "";
         this.tempUser.userId = "";
         this.dialogStatus = "create"
-        this.dialogFormVisible = true
+        
       },
       showUpdate($index) {
         let user = this.list[$index];
@@ -234,7 +234,7 @@
         this.tempUser.deleteStatus = '1';
         this.tempUser.password = '';
         this.dialogStatus = "update"
-        this.dialogFormVisible = true
+        
       },
       createUser() {
         //添加新用户

@@ -7,11 +7,11 @@
 		parameterType="com.alibaba.fastjson.JSONObject">
 		INSERT INTO goods
 		(goods_name,price,sku_store,banner_url,detail_url,
-		multi_index,class_id1,class_id2,class_id3,app_id
+		multi_index,class_id1,class_id2,class_id3,app_id,store_id
 		)
 		VALUES
 		(#{goodsName},#{price},#{skuStore},#{bannerUrl},#{detailUrl},
-		#{multiIndex},#{classId1},#{classId2},#{classId3},#{appId}
+		#{multiIndex},#{classId1},#{classId2},#{classId3},#{appId},#{storeId}
 		)
 	</insert>
 	<select id="getAllGoodsByState"
@@ -88,12 +88,10 @@
 		<where>
 			<if test="username !=null and username !=''">
 				<if test="appId !=null and appId !=''">
-					w.app_id=#{appId}
+					store_id=#{storeId}
 				</if>
 			</if>
-			<if test="storeId!=null and storeId !=''">
-				and store_id=#{storeId}
-			</if>
+
 		</where>
 	</select>
 	<select id="listGoods"
@@ -118,7 +116,7 @@
 		<where>
 		<if test="username !=null and username !=''">
 			<if test="appId !=null and appId !=''">
-				w.app_id=#{appId}
+				s.app_id=#{appId}
 			</if>
 		</if>
 			<if test="goodsName !=null and goodsName !=''">

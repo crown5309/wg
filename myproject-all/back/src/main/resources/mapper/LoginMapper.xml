@@ -16,8 +16,13 @@
         FROM
             sys_user u
         WHERE u.username = #{username}
-          AND u.password = #{password}
+        <if test="password !=null and password !='' ">
+            AND u.password = #{password}
+        </if>
           AND u.delete_status = '1'
     </select>
-
+    <select id="getExitsUser" resultType="integer">
+        select count(id) FROM
+            sys_user  where username = #{username}
+    </select>
 </mapper>

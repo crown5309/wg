@@ -109,6 +109,22 @@ export const asyncRouterMap = [
       },
     ]
   },
+  {
+     path: '/shop',
+     component: Layout,
+     redirect: '/shop/',
+     name: '',
+     meta: {title: '店员管理', icon: 'shopManager'},
+     children: [
+        {
+          path: 'shop',
+          name: '店员管理',
+          component: _import('shop/shop'),
+          meta: {title: '店员管理', icon: 'shop'},
+          menu: 'shop'
+       },
+     ]
+   },
   // {
   //   path: '/shop',
   //   component: Layout,

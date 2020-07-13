@@ -13,13 +13,23 @@
            s1.value  from sys_param s1 where s1.app_id=#{appId} and s1.code=#{code}
     </select>
     <select id="countParams" resultType="int" parameterType="com.alibaba.fastjson.JSONObject">
-        select count(1) from sys_param where app_id=#{appId}
-        and parent_id=#{parent_id}
+        select count(1) from sys_param where  1=1 <if test="username !=null and username !='' ">
+        and  app_id=#{appId}
+    </if>
+        <if test="parentId !=null and parentId !='' ">
+            and parent_id=#{parentId}
+        </if>
     </select>
 
     <select id="listParams" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
-        select id,parent_id  parentId ,name ,value, code from sys_param where app_id=#{appId}
-        and parent_id=#{parentId} order by id desc
+        select id,parent_id  parentId ,name ,value, code from sys_param where  1=1
+        <if test="username !=null and username !='' ">
+           and  app_id=#{appId}
+        </if>
+        <if test="parentId !=null and parentId !='' ">
+            and parent_id=#{parentId}
+        </if>
+         order by id desc
        LIMIT #{offSet}, #{pageRow}
     </select>
     <insert id="addSysParams" parameterType="com.alibaba.fastjson.JSONObject">

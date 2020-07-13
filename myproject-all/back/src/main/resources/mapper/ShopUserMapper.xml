@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.ShopUserDao">
+
+    <select id="countShopUser" resultType="Integer" parameterType="com.alibaba.fastjson.JSONObject">
+        SELECT count(0)
+        FROM sys_user u
+        WHERE u.delete_status = '1' and store_id=#{storeId}
+        <if test="username !=null and username !=''">
+            <if test="appId !=null and appId !=''">
+                and  u.app_id=#{appId}
+            </if>
+        </if>
+    </select>
+
+    <resultMap id="userMap" type="com.heeexy.example.util.model.One2Many">
+        <id column="userId"       property="userId"/>
+        <result column="username" property="username"/>
+        <result column="telephone" property="telephone"/>
+        <result column="nickname" property="nickname"/>
+        <result column="roleId"   property="roleId"/>
+        <result column="weiixnRoleId" property="weiixnRoleId"/>
+        <result column="roleName" property="roleName"/>
+        <result column="weixinRoleName" property="weixinRoleName"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="lastLoginTime" property="lastLoginTime"/>
+        <result column="deleteStatus" property="deleteStatus"/>
+        <collection property="permissionList" ofType="String">
+            <id column="permissionName" property="permissionName"/>
+        </collection>
+    </resultMap>
+    <select id="listShopUser" resultMap="userMap">
+        SELECT
+            u.*,
+            r.role_name                                    roleName,
+             rp1.role_name                                 weixinRoleName,
+             rp1.id                                        weiixnRoleId,
+            CONCAT(p.menu_name, p.permission_name)         permissionName
+        FROM (
+                 SELECT
+                     id                                      userId,
+                     username                                username,
+                     nickname                                nickname,
+                     role_id                                 roleId,
+                     delete_status                           deleteStatus,
+                     DATE_FORMAT(create_time, '%Y.%m.%d %T') createTime,
+                     DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime,
+                     weixin_role_id,
+                     telephone
+                 FROM sys_user
+                 WHERE delete_status = '1'  and store_id=#{storeId}
+                  <if test="username !=null and username !=''">
+                      <if test="appId !=null and appId !=''">
+                          and  app_id=#{appId}
+                       </if>
+                  </if>
+                 <if test="myname !=null and myname !=''">
+				 and  username like concat("%",#{username},"%") 
+			</if>
+			<if test="createTime !=null and createTime  !=''">
+				and create_time between #{startTime} and  #{endTime}
+			</if>
+                 ORDER BY id
+                 LIMIT #{offSet}, #{pageRow}
+             ) u
+            LEFT JOIN sys_role r ON r.id = u.roleId
+            LEFT JOIN sys_role_permission rp ON rp.role_id = r.id
+            LEFT JOIN sys_role rp1 ON rp1.id = u.weixin_role_id
+            LEFT JOIN sys_permission p ON p.id = rp.permission_id
+
+        ORDER BY u.userId
+    </select>
+    <select id="serachShopUser" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
+      select telephone,username,id   from sys_user where app_id=#{appId} and store_id!=#{storeId} and username like concat('%',#{world},'%') union
+      select telephone,username,id    from sys_user where app_id=#{appId} and store_id!=#{storeId} and telephone like concat('%',#{world},'%')
+    </select>
+    <update id="changeStoreId" parameterType="com.alibaba.fastjson.JSONObject">
+        update sys_user set store_id=#{storeId} WHERE id in
+        <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </update>
+    <update id="deleteShopUser">
+          update sys_user set store_id=0 where id=#{id}
+    </update>
+</mapper>
