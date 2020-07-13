@@ -1,7 +1,9 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.ShopDao;
 import com.heeexy.example.dao.SysParamDao;
+import com.heeexy.example.dao.UserDao;
 import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.SysParamsService;
 import com.heeexy.example.util.CommonUtil;
@@ -16,6 +18,10 @@ import java.util.List;
 public class SysParamsServiceImpl extends BaseService  implements SysParamsService {
     @Autowired
     private SysParamDao sysParamDao;
+    @Autowired
+    private ShopDao shopDao;
+    @Autowired
+    private UserDao userDao;
     @Override
     public JSONObject listSysParams(JSONObject request2Json) {
         CommonUtil.fillPageParam(request2Json);
@@ -27,11 +33,30 @@ public class SysParamsServiceImpl extends BaseService  implements SysParamsServi
     }
 
     @Override
+    @Transactional
     public Object addSysParams(JSONObject request2Json) {
         getAppId(request2Json);
-        String valueByCode = sysParamDao.getValueByCode(request2Json.getString("appId"), request2Json.getString("code"));
+        String code = request2Json.getString("code");
+        String appId = request2Json.getString("appId");
+        String valueByCode = sysParamDao.getValueByCode(appId, code);
         if(!StringTools.isNullOrEmpty(valueByCode)){
             return CommonUtil.errorJson("该code已存在");
+        }
+        if("sys_param".equals(code)){
+            //添加商户
+            JSONObject shopJson=new JSONObject();
+            shopJson.put("storeName",request2Json.getString("value"));
+            shopJson.put("state",2);
+            shopJson.put("appId",appId);
+            String storeId = shopDao.addShop(shopJson);
+            //添加用户对应平台管理员
+            JSONObject userJson=new JSONObject();
+            userJson.put("username","admin");
+            userJson.put("password","123456");
+            userJson.put("roleId","1");
+            userJson.put("appId",appId);
+            userJson.put("storeId",storeId);
+            userDao.addUser(userJson);
         }
         sysParamDao.addSysParams(request2Json);
         return CommonUtil.successJson();

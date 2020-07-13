@@ -209,8 +209,10 @@
 		SELECT count(o.order_id)
 		FROM shop_order o inner join sys_user s on o.user_id =s.id
 		<where>
-			<if test="appId!=null and appId !=''">
-				s.app_id=#{appId}
+			<if test="username !=null and username !=''">
+				<if test="appId !=null and appId !=''">
+					s.app_id=#{appId}
+				</if>
 			</if>
 			<if test="storeId!=null and storeId !=''">
 				and s.store_id=#{storeId}
@@ -263,8 +265,10 @@
 			<if test="orderId !=null and orderId  !=''">
 				and o.order_id =#{orderId}
 			</if>
-			<if test="appId!=null and appId !=''">
-				and u.app_id=#{appId}
+			<if test="username !=null and username !=''">
+				<if test="appId !=null and appId !=''">
+					u.app_id=#{appId}
+				</if>
 			</if>
 			<if test="storeId!=null and storeId !=''">
 				and u.store_id=#{storeId}

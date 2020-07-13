@@ -13,6 +13,13 @@ public abstract class BaseService {
         request2Json.put("appId", appId);
         request2Json.put("storeId", userInfo.getString("storeId"));
         request2Json.put("userId", userInfo.getString("userId"));
+        String username = userInfo.getString("username");
+        if("root".equals(username)){
+            request2Json.put("username",username );
+        }else{
+            request2Json.put("username",null );
+        }
+
 
     }
 }

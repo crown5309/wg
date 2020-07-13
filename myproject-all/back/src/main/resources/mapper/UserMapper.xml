@@ -6,7 +6,12 @@
     <select id="countUser" resultType="Integer" parameterType="com.alibaba.fastjson.JSONObject">
         SELECT count(0)
         FROM sys_user u
-        WHERE u.delete_status = '1' and app_id=#{appId}
+        WHERE u.delete_status = '1' and
+        <if test="username !=null and username !=''">
+            <if test="appId !=null and appId !=''">
+                u.app_id=#{appId}
+            </if>
+        </if>
     </select>
 
     <resultMap id="userMap" type="com.heeexy.example.util.model.One2Many">
@@ -43,7 +48,12 @@
                      DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime,
                      weixin_role_id
                  FROM sys_user
-                 WHERE delete_status = '1' and app_id=#{appId}
+                 WHERE delete_status = '1' and
+                  <if test="username !=null and username !=''">
+                      <if test="appId !=null and appId !=''">
+                        app_id=#{appId}
+                       </if>
+                  </if>
                  <if test="username !=null and username !=''">
 				 and  username like concat("%",#{username},"%") 
 			</if>

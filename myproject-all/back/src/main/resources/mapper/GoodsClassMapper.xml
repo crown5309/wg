@@ -12,7 +12,11 @@
 
     <select id="countGoodsClass" resultType="Integer">
         SELECT count(0)
-        FROM goods_class w where w.app_id=#{appId}
+        FROM goods_class w where 1=1 and <if test="username !=null and username !=''">
+        <if test="appId !=null and appId !=''">
+            w.app_id=#{appId}
+        </if>
+    </if>
     </select>
 
     <select id="listGoodsClass" resultType="com.alibaba.fastjson.JSONObject">
@@ -25,7 +29,11 @@
             w.show_order    showOrder
         FROM goods_class w
         <where>
-            w.app_id=#{appId}
+            <if test="username !=null and username !=''">
+                <if test="appId !=null and appId !=''">
+                    w.app_id=#{appId}
+                </if>
+            </if>
         	  <choose>
 		        <when test="parentId!=0">
 		          and 	parent_id=#{parentId}

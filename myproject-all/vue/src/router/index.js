@@ -109,29 +109,29 @@ export const asyncRouterMap = [
       },
     ]
   },
-  {
-    path: '/shop',
-    component: Layout,
-    redirect: '/shop/',
-    name: '',
-    meta: {title: '商铺管理', icon: 'shopManager'},
-    children: [
-       {
-         path: 'article',
-         name: '商铺列表',
-         component: _import('shop/article'),
-         meta: {title: '商铺列表', icon: 'shop'},
-         menu: 'article'
-       },
-       {
-         path: 'shop',
-         name: '商铺分类',
-         component: _import('shop/shopClass'),
-         meta: {title: '商铺分类', icon: 'shopClass'},
-         menu: 'shopClass'
-       }
-    ]
-  },
+  // {
+  //   path: '/shop',
+  //   component: Layout,
+  //   redirect: '/shop/',
+  //   name: '',
+  //   meta: {title: '商铺管理', icon: 'shopManager'},
+  //   children: [
+  //      {
+  //        path: 'article',
+  //        name: '商铺列表',
+  //        component: _import('shop/article'),
+  //        meta: {title: '商铺列表', icon: 'shop'},
+  //        menu: 'article'
+  //      },
+  //      {
+  //        path: 'shop',
+  //        name: '商铺分类',
+  //        component: _import('shop/shopClass'),
+  //        meta: {title: '商铺分类', icon: 'shopClass'},
+  //        menu: 'shopClass'
+  //      }
+  //   ]
+  // },
   {
     path: '/sysParams',
     component: Layout,

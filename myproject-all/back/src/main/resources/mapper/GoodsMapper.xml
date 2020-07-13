@@ -86,8 +86,10 @@
 		SELECT count(0)
 		FROM goods
 		<where>
-			<if test="appId!=null and appId !=''">
-				app_id=#{appId}
+			<if test="username !=null and username !=''">
+				<if test="appId !=null and appId !=''">
+					w.app_id=#{appId}
+				</if>
 			</if>
 			<if test="storeId!=null and storeId !=''">
 				and store_id=#{storeId}
@@ -114,9 +116,11 @@
 		FROM goods w INNER JOIN store s on w.store_id
 		=s.id
 		<where>
+		<if test="username !=null and username !=''">
 			<if test="appId !=null and appId !=''">
-				w.app_id=#{appId} 
+				w.app_id=#{appId}
 			</if>
+		</if>
 			<if test="goodsName !=null and goodsName !=''">
 				 and  goods_name like concat("%",#{goodsName},"%") 
 			</if>

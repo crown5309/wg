@@ -19,6 +19,7 @@ public  class SysParamsController {
 	@Autowired
 	private SysParamsService sysParamsService;
 
+
 	/**
 	 * 查询列表
 	 */
