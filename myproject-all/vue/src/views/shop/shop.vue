@@ -242,7 +242,7 @@
             url: "/shop/deleteShopUser",
             method: "post",
             params: {
-              id: this.list[$index].id
+              id: this.list[$index].userId
             }
           }).then(() => {
             this.$message({
