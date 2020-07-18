@@ -58,8 +58,8 @@
           <span>订单号:</span> <span>{{good.orderId}}</span>
           <span>状态:</span> <span>{{good.stateName}}</span>
           <span>总价(元):</span> <span>{{good.totalPay}}</span>
-          <span>优惠(元):</span> <span>{{good.practicePay}}</span>
-          <span>实付(元):</span> <span>{{good.orderId}}</span>
+          <span>优惠(元):</span> <span>{{good.discountPay}}</span>
+          <span>实付(元):</span> <span>{{good.practicePay}}</span>
         </div>
       </div>
       <el-divider></el-divider>

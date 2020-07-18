@@ -88,11 +88,26 @@
 		<where>
 			<if test="username !=null and username !=''">
 				<if test="appId !=null and appId !=''">
-					store_id=#{storeId}
+					app_id=#{appId}
 				</if>
 			</if>
-
+			<if test="goodsName !=null and goodsName !=''">
+				and  goods_name like concat("%",#{goodsName},"%")
+			</if>
+			<if test="state !=null and state !=''">
+				and  state=#{state}
+			</if>
+			<if test="createTime !=null and createTime  !=''">
+				and create_time between #{startTime} and  #{endTime}
+			</if>
+			<if test="classId !=null and classId  !=''">
+				and class_id3 = #{classId}
+			</if>
+			<if test="storeId!=null and storeId !=''">
+				and store_id=#{storeId}
+			</if>
 		</where>
+
 	</select>
 	<select id="listGoods"
 		resultType="com.alibaba.fastjson.JSONObject">
