@@ -222,7 +222,7 @@
         this.tempUser.roleId = "";
         this.tempUser.userId = "";
         this.dialogStatus = "create"
-        
+        this.dialogFormVisible=true
       },
       showUpdate($index) {
         let user = this.list[$index];
@@ -233,8 +233,9 @@
         this.tempUser.userId = user.userId;
         this.tempUser.deleteStatus = '1';
         this.tempUser.password = '';
+        this.dialogFormVisible=true
         this.dialogStatus = "update"
-        
+
       },
       createUser() {
         //添加新用户

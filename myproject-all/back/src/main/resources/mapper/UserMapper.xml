@@ -264,7 +264,8 @@ WHERE
  SELECT
     p.permission_code permissionCode,
     img.show_order    showOrder,
-    img.img_url       imgUrl
+    img.img_url       imgUrl,
+    p.permission_name permissionName
 FROM
 	sys_user u
 	INNER JOIN sys_role_permission rp ON u.weixin_role_id = rp.role_id
