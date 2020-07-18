@@ -1,142 +1,3 @@
-page {
-    background-color: #f3f3f3;
-}
-.order_address {
-   display: flex;
-  justify-content: space-between;
-  align-items: center;
-margin: 25rpx 20rpx 20rpx;
-height: 98rpx;
-line-height: 200rpx;
-background: white;
-border-radius: 10rpx;
-padding: 30rpx;
-
-}
-.Receiving_address {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20rpx;
-    height: 200rpx;
-    background: white;
-    border-radius: 10rpx;
-    padding: 30rpx;
-}
-.name_iphone {
-    color: #7e7e7e;
-    font-size: 24rpx;
-}
-.address {
-    font-size: 32rpx;
-    padding: 20rpx 0;
-}
-.select_address {
-    color: #7e7e7e;
-}
-.icon-arrowright {
-    font-size: 28rpx;
-}
-.icon-map_line- {
-    margin-right: 10rpx;
-}
-.goods_msg {
-    display: flex;
-    margin: 20rpx;
-    background: white;
-    border-radius: 10rpx;
-    padding: 30rpx;
-    align-items: center;
-}
-.goods_img {
-    width: 100rpx;
-    height: 100rpx;
-    overflow: hidden;
-    margin-right: 20rpx;
-    flex-shrink: 0;
-}
-.goods_img image {
-    width: 100%;
-    border-radius: 50%;
-}
-.goods_content {
-    flex: 1;
-    text-align: right;
-    font-size: 24rpx;
-}
-.msg_list {
-    margin: 20rpx;
-    background: white;
-    border-radius: 10rpx;
-}
-.msg_item {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 20rpx;
-    padding: 30rpx 0;
-    border-bottom: 2rpx solid #f3f3f3;
-}
-.Total {
-    text-align: right;
-    margin: 0 20rpx;
-    padding: 30rpx 0;
-    font-size: 32rpx;
-}
-.Total_price {
-    color: #ad0e12;
-    font-size: 32rpx;
-}
-.order_pay {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 93rpx;
-    line-height: 93rpx;
-    justify-content: space-between;
-    background: white;
- 
-}
-.submit_order {
-    width: 32%;
-    background: #ad0e12;
-    color: white;
-    font-size: 32rpx;
-    text-align: center;
-}
-.pay_money {
-    font-size: 32rpx;
-    margin-left: 30rpx;
-}
-/* sku选择 */
-.dialog__mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.7);
-  display: none;
-}
-.dialog__container {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  transform: translateY(150%);
-  transition: all 0.4s ease;
-  z-index: 11;
-  text-align: center;
-
-}
-.dialog--show .dialog__container {
-  transform: translateY(0);
-}
-.dialog--show .dialog__mask {
-  display: block;
-}
 .swiper-tab{  
     width: 100%;  
     border-top: 2rpx solid #eee;  
@@ -218,7 +79,6 @@ page{
 }
 .orderList{
   width: 710rpx;
-  height: 574rpx;
   border-radius:16rpx;
   background-color: #fff; 
   margin:20rpx auto 0; 
@@ -311,11 +171,115 @@ page{
   border-top: 2rpx solid #eee;
   white-space: nowrap;
 }
-.image-close {
-  width: 40rpx;
-  height: 40rpx;
-  position: fixed;
-  right: 20rpx;
-  top: 10rpx;
-  z-index: 11;
+.orderNum text{
+  position: relative;
+  font-size: 32rpx;
+  color: #000; 
 }
+.orderNum button{
+display: block
+}
+/*button*/ 
+.btn { 
+ width: 80%; 
+ padding: 20rpx 0; 
+ border-radius: 10rpx; 
+ text-align: center; 
+ margin: 40rpx 10%; 
+ background: #000; 
+ color: #fff; 
+} 
+ 
+/*mask*/ 
+.drawer_screen { 
+ width: 100%; 
+ height: 100%; 
+ position: fixed; 
+ top: 0; 
+ left: 0; 
+ z-index: 1000; 
+ background: #000; 
+ opacity: 0.5; 
+ overflow: hidden; 
+} 
+ 
+/*content*/ 
+.drawer_box { 
+ width: 650rpx; 
+ overflow: hidden; 
+ position: fixed; 
+ top: 50%; 
+ left: 0; 
+ z-index: 1001; 
+ background: #FAFAFA; 
+ margin: -150px 50rpx 0 50rpx; 
+ border-radius: 3px; 
+} 
+ 
+.drawer_title{ 
+ padding:15px; 
+ font: 20px "microsoft yahei"; 
+ text-align: center; 
+} 
+.drawer_content {  
+ overflow-y: scroll; /*超出父盒子高度可滚动*/ 
+} 
+ 
+.btn_ok{ 
+ padding: 10px; 
+ font: 20px "microsoft yahei"; 
+ text-align: center; 
+ border-top: 1px solid #E8E8EA; 
+ color: #3CC51F; 
+} 
+ 
+.top{ 
+  padding-top:8px; 
+} 
+.bottom { 
+  padding-bottom:8px; 
+} 
+.title { 
+  height: 30px; 
+  line-height: 30px; 
+  width: 160rpx; 
+  text-align: center; 
+  display: inline-block; 
+  font: 300 28rpx/30px "microsoft yahei"; 
+} 
+ 
+.input_base { 
+  border: 2rpx solid #ccc; 
+  padding-left: 10rpx; 
+  margin-right: 50rpx; 
+} 
+.input_h30{ 
+  height: 30px; 
+  line-height: 30px; 
+} 
+.input_h60{ 
+  height: 60px; 
+} 
+.input_view{ 
+  font: 12px "microsoft yahei"; 
+  background: #fff; 
+  color:#000; 
+  line-height: 30px; 
+} 
+ 
+input { 
+  font: 12px "microsoft yahei"; 
+  background: #fff; 
+  color:#000 ; 
+} 
+radio{ 
+  margin-right: 20px; 
+} 
+.grid { display: -webkit-box; display: box; } 
+.col-0 {-webkit-box-flex:0;box-flex:0;} 
+.col-1 {-webkit-box-flex:1;box-flex:1;} 
+.fl { float: left;} 
+.fr { float: right;}
+.section{font-size:28rpx}
+.on{display: block}
+.off{display: none}

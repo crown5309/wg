@@ -34,17 +34,44 @@
             </view>
           </view>
         </view>
+         </view>
         <view class="orderNum">
           <view>订单号:({{item.orderId}})</view>
           <view>实付:<text>￥{{item.practicePay}}</text></view>
         </view>
-          <view class="orderNum">
-          <view catchtap="powerDrawer" data-statu="open" wx:if="{{item.state==3}}" data-id="{{item.orderId}}"><button size="mini" type="primary">收货</button></view>
+           <view class="orderNum">
+          <view bindtap="powerDrawer" data-statu="open" wx:if="{{item.state==2}}" data-id="{{item.orderId}}"><button size="mini" type="primary">发货</button></view>
         </view>
  </view>
-      </view>
+     
  
      <!-- <view class="no-more" wx:if="{{isNoMoreData}}">------------ 已经到底了 ------------</view>  -->
     </scroll-view>
   </swiper-item>
 </swiper>
+
+<view class="drawer_screen" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}"></view> 
+<!--content--> 
+<!--使用animation属性指定需要执行的动画--> 
+<view animation="{{animationData}}" class="drawer_box" wx:if="{{showModalStatus}}"> 
+ 
+ <!--drawer content--> 
+ <view class="drawer_title">发货</view> 
+ <view class="drawer_content"> 
+  <view class="top grid"> 
+   <label class="title col-0">选择物流</label> 
+   <picker bindchange="bindCasPickerChange" range="{{casArray}}" mode='selector'>
+      <view>         
+          <view >     
+              <input class="order-input" placeholder-style="color:gary"  placeholder="请输入快递公司" bindinput="inputServerName" value='{{casArray[casIndex]}}' />  
+           </view>
+       </view>
+    </picker>
+  </view> 
+  <view class="top grid"> 
+   <label class="title col-0">快递单号</label> 
+   <input id="start_input" class="weui-input" bindblur="inputVillage" name="other" placeholder="请输入快递单号"  type="text"/>
+  </view> 
+ </view> 
+ <view class="btn_ok" bindtap="powerDrawer1" data-statu="close">确定</view> 
+</view>

@@ -1,0 +1,288 @@
+.product-name-wrap {
+  background-color: #fff;
+ 
+  margin: 38rpx auto 0;
+
+  font-size: 14px;
+  padding: 3rpx 24rpx 30rpx 24rpx;
+
+}
+
+.ui-list-item-info {
+  margin: 5px 0px;
+  margin-left: 51rpx;
+}
+
+.ui-list-item-address {
+  color: #585c64;
+  margin-left: 51rpx;
+}
+
+.on_taobao {
+  position: relative;
+  color: #ff4b0a;
+}
+
+.on_taobao::after {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  width: 120rpx;
+  height: 6rpx;
+  content: '';
+  background: linear-gradient(98deg, rgba(252, 111, 3, 1), rgba(255, 143, 3, 1), rgba(253, 93, 17, 1));
+  border-radius: 3rpx;
+}
+
+.on_jd {
+  position: relative;
+  color: #d32835;
+}
+
+.on_jd::after {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  width: 120rpx;
+  height: 6rpx;
+  content: '';
+  background: linear-gradient(265deg, rgba(238, 82, 94, 1), rgba(211, 40, 53, 1));
+  border-radius: 3rpx;
+}
+
+.on_pdd {
+  position: relative;
+  color: #e22e1f;
+}
+
+.on_pdd::after {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  width: 120rpx;
+  height: 6rpx;
+  content: '';
+  background: linear-gradient(262deg, rgba(255, 94, 81, 0.88), rgba(226, 46, 31, 0.88));
+  border-radius: 3rpx;
+}
+
+.swiper-box {
+  display: block;
+  height: 100%;
+  width: 100%;
+  margin-top: 90rpx;
+  overflow: hidden;
+  background-color: #f8f8f8;
+}
+
+page {
+  background-color: #f2f2f2;
+}
+
+.orderList {
+
+  background-color: #fff;
+  margin: 38rpx auto 0;
+
+  padding: 30rpx 24rpx 0 24rpx;
+
+}
+
+.shop, .proInfo, .orderNum {
+  display: flex;
+  justify-content: space-between;
+}
+
+.shop_name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.shop_name image {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 15rpx;
+  position: relative;
+  top: 8rpx;
+  /* margin-top: 15rpx; */
+}
+
+.shop .state {
+  font-size: 26rpx;
+}
+
+.shop .state_taobao {
+  color: #ff4b0a;
+}
+
+.shop .state_pdd {
+  color: #e22e1f;
+}
+
+.shop .state_jd {
+  color: #d32835;
+}
+
+.proInfo {
+  padding: 30rpx 0;
+  box-sizing: border-box;
+}
+
+.proInfo_img {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 10rpx;
+  overflow: hidden;
+  /* background-color: pink; */
+}
+
+.proInfo_right {
+  width: 522rpx;
+  padding-top: 12rpx;
+  box-sizing: border-box;
+}
+
+.proInfo_text {
+  display: flex;
+  justify-content: space-between;
+  justify-items: middle;
+}
+
+.proInfo_text_title {
+  font-size: 28rpx;
+  color: #000;
+  line-height: 45rpx;
+  white-space: nowrap;
+  max-width: 480rpx;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+
+.proInfo_text_title .iconfont {
+  font-size: 30rpx;
+}
+
+.icon-qianjinjiantou {
+  font-size: 25rpx;
+  color: #000;
+  font-weight: bold;
+}
+
+.proInfo_text_dtt {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.proInfo_text_acount {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.proInfo_text_acount text {
+  font-size: 32rpx;
+  color: #000;
+}
+
+.orderNum {
+  font-size: 24rpx;
+  color: #333;
+  line-height: 82rpx;
+  border-top: 2rpx solid #eee;
+  white-space: nowrap;
+}
+
+.orderNum text {
+  position: relative;
+  font-size: 32rpx;
+  color: #000;
+}
+.xbq-express{
+width: 100%;
+height: 100rpx;
+background: white;
+
+}
+/* .xbq-greencar{
+width: 50rpx;
+height: 50rpx;
+background: green
+margin-top:20rpx;
+margin-left: 20rpx;
+float: left
+} */
+
+.kuaidiInfo{
+background: #fff;
+width: 100%;
+height:220rpx;
+margin-top: 30rpx;
+}
+.kuaidiInfo .kuaidiIcon{
+float: left;
+width: 120rpx;
+height: 120rpx;
+margin: 50rpx;
+}
+.kuaidiInfo .kuaidiIcon image{
+width: 100%;
+height: 100%;
+}
+.kuaidiInfo .kuaidiDetails{
+float: left;margin-top: 33rpx;
+}
+.kuaidiInfo .kuaidiDetails .company{
+line-height: 70rpx;
+}
+.kuaidiInfo .kuaidiDetails .satus{
+color: #f23b4d;
+}
+.xbq-bar{
+width: 100%;
+height: 20rpx;
+background: #f3f3f3;
+}
+/*物理跟踪*/
+.kuaidi_follow{
+width: 100%;
+background: #fff;
+padding-left: 40rpx;
+box-sizing: border-box;
+font-size: 28rpx;
+
+}
+.kuaidi_follow .follow_satus{
+border-left: 1rpx solid #d5d5d5;}
+.kuaidi_follow .follow_satus .follow_address{
+border-bottom:1rpx solid #d5d5d5;
+margin: 0 20rpx;
+margin-top: 25rpx;
+padding-bottom: 25rpx;
+position: relative;
+}
+
+.kuaidi_follow .follow_satus .follow_address .address{
+line-height: 60rpx;
+}
+.kuaidi_follow .follow_satus .follow_address .label{
+width: 25rpx;
+height: 25rpx;
+border-radius: 50%;
+position: absolute;
+left: -30rpx;
+top: -5rpx;
+background: #d5d5d5;
+}
+.kuaidi_follow .follow_satus .follow_address .label.default{
+background: #f23b4d;
+}
+.kuaidi_follow .follow_satus .follow_address .default{
+color: #f23b4d;
+}
+

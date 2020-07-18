@@ -11,26 +11,35 @@ Page({
   },
 
   /*生命周期函数--监听页面加载*/
-
-  onLoad: function (options) {
-let that=this
-    var source = options.source
-    netUtil.requestLoading(app.globalData.baseUrl + "/front/getAddressList", "", '数据加载中', function (res) {
-      if (res.code == '100') {
-        that.setData({
-          addressList:res.info,
-          source: source,
-          orderIds: options.orderIds
-        })
-      } else {
-        app.Tips({ title: res.msg, icon: 'success' });
-      }
-    }, function () {
-      wx.showToast({
-        title: '失败',
+onShow:function(){
+  let that=this
+  netUtil.requestLoading(app.globalData.baseUrl + "/front/getAddressList", "", '数据加载中', function (res) {
+    if (res.code == '100') {
+      that.setData({
+        addressList: res.info,
+       
       })
+    } else {
+      wx.showToast({
+        title: res.msg
+      })
+    }
+  }, function () {
+    wx.showToast({
+      title: '失败',
     })
-
+  })
+},
+  onLoad: function (options) {
+    let that=this
+    var source=""
+    if (options.source!=undefined){
+      source = options.source
+    }
+    that.setData({
+      source: source,
+       orderIds: options.orderIds
+    })
   },
 
   change:function(e){
@@ -42,14 +51,6 @@ let that=this
     }
     console.log("11" + id)
   },
-
-  /**生命周期函数--监听页面显示 */
-  onShow: function () {
-
-    this.onLoad();
-
-  },
-
   addAddress: function () {
 
     wx.navigateTo({ url: '../address/address' });

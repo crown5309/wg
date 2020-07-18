@@ -79,7 +79,6 @@ page{
 }
 .orderList{
   width: 710rpx;
-  height: 313rpx;
   border-radius:16rpx;
   background-color: #fff; 
   margin:20rpx auto 0; 

@@ -35,21 +35,30 @@ Page({
     isMore:true,
     goodsName:"",
     type:'',
-    priceFlag:true
+    priceFlag:true,
+    foucs: false
   },
   onLoad: function (option) {
+    var foucs=false;
+    if (option.foucs!=undefined){
+      foucs=true
+    }
     wx.getSystemInfo({
       success: (res) => {
         let ww = res.windowWidth;
         let imgWidth = ww * 0.48;
         this.setData({
           imgWidth: imgWidth,
-          classId: option.id
+          classId: option.id,
+          foucs:foucs
         });
-        //加载首组图片
-        this.onReachBottom();
+      
       }
     })
+  },
+  onShow:function(){
+    //加载首组图片
+    this.onReachBottom();
   },
   onReady: function () {
     //获得dialog组件

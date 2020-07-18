@@ -40,14 +40,22 @@ Page({
       //res就是我们请求接口返回的数据
       if (res.code == '100') {
         var arr = that.data.orderList
-        if (arr.length==0){
+        if (arr.length == 0 || pageNo==1){
           arr = res.info
         }else{
-          for (var i = 0; i < res.info.length;i++){
-            arr.push(i)
+          if (res.info.length == 0) {
+            that.setData({
+              isNoMoreData:true
+            })
+          }else{
+            for (var i = 0; i < res.info.length; i++) {
+              arr.push(res.info[i])
+            }
           }
          
+         
         }
+       
         that.setData({
           orderList: arr,
           pageNo: pageNo
@@ -77,11 +85,9 @@ Page({
     let isSelect = e.detail.current;
     this.initData(isSelect)
   },
-  toDetail(val) {
-    console.log(val.detail)
-    let obj = JSON.stringify(val.detail);
+  toDetail(e) {
     wx.navigateTo({
-      url: '../orderDetail/orderDetail?item=' + encodeURIComponent(obj)
+      url: '../orderDetail/orderDetail?orderIds=' + this.data.orderList[e.currentTarget.dataset.id].orderId + "&addressId=" + this.data.orderList[e.currentTarget.dataset.id].addressId
     })
   },
 
@@ -105,11 +111,49 @@ Page({
   * 页面上拉触底事件的处理函数
   */
   onReachBottom: function () {    //上拉加载分页
-    this.setData({
-      loading: true
-    })
-    if (!this.data.isNoMoreData && this.data.orderList.length > 0) {
-      this.initData(++this.data.currentPage);
+    console.log(this.data.isNoMoreData)
+    if (!this.data.isNoMoreData) {
+      this.setData({
+        loading: true
+      })
+      this.initData(this.data.currentPage);
     }
+  },
+  powerDrawer: function (e) {
+    var that=this
+    var order = e.currentTarget.dataset.id;
+    var params={
+      orderId: order,
+      state:5
+    }
+    wx.showModal({
+      title: '提示',
+      content: '确认收货',
+      cancelText: "取消",
+      confirmText: "通过",
+      success(res) {
+        if (res.confirm) {
+          netUtil.requestLoading(app.globalData.baseUrl + "/front/updateOrderState", params, '加载中', function (res) {
+            //res就是我们请求接口返回的数据
+            console.log(res)
+            if (res.code == '100') {
+              wx.showToast({
+                title: '成功',
+              })
+              that.setData({ pageNo:0})
+              that.initData(that.data.currentTab)
+            } else {
+              wx.showToast({
+                title: res.msg
+              })
+            }
+          }, function () {
+            wx.showToast({
+              title: '加载失败',
+            })
+          })
+        } 
+      }
+    })
   },
 })

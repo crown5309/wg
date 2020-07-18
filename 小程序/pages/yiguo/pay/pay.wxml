@@ -12,13 +12,18 @@
 </view>
  
 <view class="goods_msg"  wx:if="{{!oneGoodsShow}}">
-    <view class="goods_img"><image src="{{goods.bannerUrl[0]}}" mode="widthFix"></image></view>
-    <view class="goods_content">共1件 <text class="iconfont icon-arrowright">></text></view>
+    <view class="goods_img" wx:for="{{orderinfo.imgList}}">
+    <image src="{{item}}" mode="widthFix" wx:if="{{index<4}}"></image> 
+    <block wx:if="{{index==4}}">....</block>
+    </view>
+    <view  bindtap="shareDialog" class="goods_content">共{{count}}件 <text class="iconfont icon-arrowright">></text></view>
 </view>
  <view class="goods_msg" wx:if="{{oneGoodsShow}}">
-    <view class="goods_img"><image src="{{goods.bannerUrl[0]}}" mode="widthFix"></image></view>
+    <view class="goods_img" >
+    <image src="{{goods.bannerUrl[0]}}" mode="widthFix"></image>
+    </view>
      <view class="goods_img">{{goods.goodsName}}</view>
-    <view class="goods_content">共1件 <text class="iconfont icon-arrowright">></text></view>
+    <view class="goods_content">共{{count}}件 <text class="iconfont icon-arrowright">></text></view>
 </view>
 <view class="msg_list">
     <view class="msg_item">
@@ -38,7 +43,52 @@
     <view class="pay_money">付款 <text class="Total_price">{{orderinfo.practicePay}}</text></view>
     <view class="submit_order" bindtap="bindSubmitOrder">支付</view>
 </view>
+<view class="dialog {{ shareDialog ? 'dialog--show' : '' }}">
+  <view class="dialog__mask" bindtap="shareDialog" />
+  <view class="dialog__container">
+  <view class="shareCss2">
+       <icon bindtap="shareDialog" class="image-close" type="cancel" size="25" />
+      </view>
+      <!--生成海报-->
 
+<view class="c_t60"></view> 
+    <scroll-view class="scrollWrap" scroll-y="true" style='height:{{winHeight}}px;'>
+      <my-noData wx:if="{{orderList.length<1&&!loading}}" nodata="{{nodataType}}"></my-noData>
+      <view class="orderList" wx:for="{{orderinfo.OrderInfoList}}" wx:key="index" data-item="{{item}}" bindtap='toDetail'>
+        <view class="shop">
+          <view class="shop_name">
+            <image src='{{item.imgUrl}}' mode='widthFix' lazy-load='true'></image>
+            {{item.storeName}}
+          </view>
+          <text class="state {{item.origin=='TaoBao' ? 'state_taobao' : item.origin=='PinDuoDuo' ? 'state_pdd' : item.origin=='JDCOM' ? 'state_jd' : ''}}">{{item.stateName}}</text>
+        </view>
+        <view class="proInfo"  wx:for="{{item.goodsList}}" wx:for-item="goods">
+          <image class="proInfo_img" src='{{goods.bannerUrl==""?defaultImg:goods.bannerUrl[0]}}' mode='widthFix' lazy-load='true' binderror="errorFn" data-errorimg="{{index}}"></image>
+          <view class="proInfo_right">
+            <view class="proInfo_text">
+              <view class="proInfo_text_title">
+                <text wx:if="{{item.origin==='TaoBao'}}" class="iconfont icon-tianmaot"></text>
+                <text wx:elif="{{item.origin==='PinDuoDuo'}}" class="iconfont icon-pin"></text>
+                <text wx:elif="{{item.origin==='JDCOM'}}" class="iconfont icon-JD"></text>
+                {{goods.goodsName}}
+              </view>
+              <text class="iconfont icon-qianjinjiantou"></text>
+            </view>
+             <view class="proInfo_text">
+              <view class="proInfo_text_dtt"> ￥{{goods.price}}</view> 
+              <text class="proInfo_text_acount">×{{goods.count}}</text>
+            </view>
+          </view>
+        </view>
+       
+ 
+      </view>
+ 
+      
+    </scroll-view>
+    
+  </view>
+</view>
 
 
 

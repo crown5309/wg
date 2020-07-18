@@ -6,7 +6,7 @@ App({
     sysParam: { appId: wx.getAccountInfoSync().miniProgram.appId},
     appsecret:"fb7207fded21b11f75701f9f3cba0944",
     userPermission:[],
-    baseUrl:"http://192.168.0.107:8080",
+    baseUrl:"http://81.68.73.72/api",
     sessionId:"",
     wxapi: wxapi,
   },
@@ -14,6 +14,7 @@ App({
     console.log(wx.getAccountInfoSync().miniProgram)
   },
   Tips:function(param){
+    param.duration=2000
     wx.showToast(param)
   }
 })

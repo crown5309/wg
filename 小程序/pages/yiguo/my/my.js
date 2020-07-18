@@ -5,38 +5,10 @@ Page({
     userInfo: {},
     hasUserInfo: true,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    mine_list: [
-      {
-        "pic_url": "/images/icons/iocn_home_01.png",
-        "title": "商品添加",
-        "router": "../addGoods/addGoods"
-      },
-      {
-        "pic_url": "/images/icons/iocn_home_02.png",
-        "title": "商品审核",
-        "router": "../goodsManager/goodsManager"
-      },
-      {
-        "pic_url": "/images/icons/iocn_home_03.png",
-        "title": "商品上架",
-        "router": "../goodsUpDown/goodsUpDown"
-      },
-      {
-        "pic_url": "/images/icons/iocn_home_04.png",
-        "title": "订单管理",
-        "router": "../goods/goods"
-      },
-      {
-        "pic_url": "/images/icons/iocn_home_04.png",
-        "title": "商家审核",
-        "router": "../addGoods/addGoods"
-      },
-      {
-        "pic_url": "/images/icons/iocn_home_04.png",
-        "title": "商品审核",
-        "router": "../addGoods/addGoods"
-      }
-    ],
+    mine_list: [],
+    params:{
+      appid:""
+    },
     orderItems: [
       {
         typeId: 1,
@@ -147,6 +119,7 @@ Page({
                     console.log(res)
                     if (res.code == '100') {
                       app.globalData.sessionId = res.sessionId
+                      that.getWeiXinMeNu()
                       that.setData({
                         userInfo: res.info,
                         hasUserInfo: false
@@ -178,5 +151,25 @@ Page({
   ,
   myAddress:function(e){
     wx.navigateTo({ url: '../addressList/addressList' });
+  },
+  getWeiXinMeNu(){
+    let that=this
+     that.data.params.appid= app.globalData.appId
+    netUtil.requestLoading(app.globalData.baseUrl + "/user/getMyPermission", that.data.params, '', function (res) {
+      //res就是我们请求接口返回的数据
+      console.log(res)
+      if (res.code == '100') {
+        that.setData({
+          mine_list:res.info
+        })
+      } else {
+      
+      }
+    }, function () {
+      
+    })
+  },
+  onShow:function(){
+    this.getWeiXinMeNu()
   }
 })

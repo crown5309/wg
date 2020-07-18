@@ -48,7 +48,7 @@ swiper-item image {
 /*=================分类导航====================*/
 .navy {
   display: flex; 
-  justify-content: center; 
+  /* justify-content: center;  */
   flex-direction: row;
   flex-wrap: wrap;  
 }
@@ -122,7 +122,7 @@ swiper-item image {
 .welfares-good{
   height: 560rpx; 
   width: 47%;
-  margin:0px auto;
+  /* margin:0px auto; */
   margin-bottom: 20px;
   position: relative;
   display: inline-block;

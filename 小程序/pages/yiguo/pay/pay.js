@@ -21,7 +21,11 @@ Page({
     addressShow:true,
     address:null,
     orderIds:"",
-    addressId:""
+    addressId:"",
+    count:0,
+    imgList:[],
+    showDialog: false,
+    shareDialog: false,
   },
   // 跳到购物车
   bindSubmitOrder(e) {
@@ -120,7 +124,17 @@ Page({
         }
         that.setData({
           orderinfo: res.info,
+          count: res.info.count,
+          orderIds: options.orderIds,
+          addressShow: show,
+          address: address,
         })
+        if (that.data.orderinfo.imgList.length>1){
+          that.setData({
+            oneGoodsShow: false
+          })
+        }
+        console.log(that.data.orderinfo.imgList)
        for(var i=0;i<result.length;i++){
           
        }
@@ -133,5 +147,10 @@ Page({
       })
     })
 
-  }
+  },
+  shareDialog: function () {
+    this.setData({
+      shareDialog: !this.data.shareDialog,
+    });
+  },
 })

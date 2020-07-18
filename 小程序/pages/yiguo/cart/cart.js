@@ -138,11 +138,6 @@ Page({
         title: '加载失败',
       })
     })
-    wx.showToast({
-      title: '去结算111111111111',
-      icon: 'success',
-      duration: 3000
-    });
     this.setData({
       showDialog: !this.data.showDialog
     });

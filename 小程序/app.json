@@ -14,7 +14,9 @@
     "pages/yiguo/goods/goods",
     "pages/yiguo/goodsManager/goodsManager",
     "pages/yiguo/goodsUpDown/goodsUpDown",
-    "pages/yiguo/pay/pay"
+    "pages/yiguo/pay/pay",
+    "pages/yiguo/orderDetail/orderDetail",
+    "pages/yiguo/orderStore/orderStore"
   ],
   "tabBar": {
     "color": "#858585",

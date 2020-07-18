@@ -46,7 +46,7 @@
       </view> -->
       <view class='header_ss'>
         <image class="ss_img" src="../../../images/sousuo.png"></image>
-        <input class='ss_input' placeholder='请输入搜索的商品' bindinput='spxx_input'></input>
+        <input focus="{true}" class='ss_input' placeholder='请输入搜索的商品' bindinput='spxx_input'></input>
       </view>
       <button class='ss_btn' bindtap='tap_search'>搜索</button>
     </view>
@@ -76,7 +76,7 @@
             </view>
             <view class="product-price-wrap">
               <p class="product-price-new">￥{{item.price}}</p>  
-              <image class='jrgwc' src='../../images/cart1.png"' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.goodsName}}' data-price='{{item.price}}'></image>
+              <!-- <image class='jrgwc' src='../../images/cart1.png"' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.goodsName}}' data-price='{{item.price}}'></image> -->
             </view>
           </view>
         </view>
@@ -90,7 +90,7 @@
             </view>
             <view class="product-price-wrap">
               <p class="product-price-new">￥{{item.price}}</p>  
-              <image class='jrgwc' src='../../../image/jrgwc.png' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.goodsName}}' data-price='{{item.price}}'></image>
+              <!-- <image class='jrgwc' src='../../../image/jrgwc.png' bindtap='tap_jrgwc' data-url='{{item.imageurl}}' data-name='{{item.goodsName}}' data-price='{{item.price}}'></image> -->
             </view>
           </view>
         </view>

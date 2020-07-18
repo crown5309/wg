@@ -3,14 +3,14 @@
 <!--search start-->
 <view class="wxSearch-section">
    <view class="wxSearch-pancel">
-      <input bindinput="wxSearchInput" bindfocus="wxSerchFocus" value="{{wxSearchData.value}}" bindblur="wxSearchBlur" class="wxSearch-input" placeholder='面膜'/>
+      <input bindinput="wxSearchInput" bindfocus="wxSerchFocus" value="{{wxSearchData.value}}" bindblur="wxSearchBlur" class="wxSearch-input" placeholder='搜索'/>
 
       <view class="placeholder">
                         <icon class="weui-icon-search_in-box" type="search" size="14"></icon> 
       </view> 
-      <view class='wxSearch-button'>
+      <!-- <view class='wxSearch-button'>
         <text>商品分类</text>
-      </view>  
+      </view>   -->
    </view>
 </view>
 <!--引入模板，注意 is="wxSearch" 和模板template name名称相对应-->
@@ -72,17 +72,17 @@
   <scroll-view scroll-y="true">
       <view class="welfares">
          <block wx:for-items="{{goodsWelfareItems}}" wx:key="name">
-          <view class="welfares-good" catchtap="catchTapCategory" data-type="{{item.name}}" data-typeid="{{item.typeId}}">
+          <view class="welfares-good" catchtap="catchTapCategory" data-type="{{item.goodsName}}" data-typeid="{{item.typeId}}">
             <view>
-              <image src="{{item.imageurl}}" class="welfares-image" mode="widthFix"/> 
+              <image  bindtap='toGo' data-id="{{item.id}}" src="{{item.bannerUrl[0]}}" class="welfares-image" mode="widthFix"/> 
             </view>
             <view class="product-name">
-              {{item.name}}
+              {{item.goodsName}}
             </view>
             <view class="product-price-wrap">
-              <p class="product-price-new">￥{{item.newprice}}</p>  
-              <p class="product-price-old">￥{{item.oldprice}}</p> 
-              <p class="discount">{{item.discount}}折</p>  
+              <p class="product-price-new">￥{{item.price}}</p>  
+              <!-- <p class="product-price-old">￥{{item.oldprice}}</p> 
+              <p class="discount">{{item.discount}}折</p>   -->
             </view>
             
           </view>
@@ -91,9 +91,9 @@
   </scroll-view>  
 </view> 
 <!--福利专场 end-->
-<view class="weui-loadmore" hidden="{{isHideLoadMore}}">
+<!-- <view class="weui-loadmore" hidden="{{isHideLoadMore}}">
     <view class="weui-loading"></view>
     <view class="weui-loadmore__tips">努力加载中</view>
-  </view>
+  </view> -->
 
 
