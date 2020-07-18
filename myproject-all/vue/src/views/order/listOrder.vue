@@ -30,7 +30,7 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="orderId" label="订单号" ></el-table-column>
+      <el-table-column align="center" prop="orderId" label="订单号" width="250"></el-table-column>
       <el-table-column align="center" prop="storeName" label="商家" ></el-table-column>
       <el-table-column align="center" prop="stateName" label="状态" ></el-table-column>
       <el-table-column align="center" prop="count" label="购买数量" ></el-table-column>

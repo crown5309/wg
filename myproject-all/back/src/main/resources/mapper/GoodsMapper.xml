@@ -170,7 +170,7 @@
 		w.create_time   createTime,
 		s.store_name    storeName
 		FROM goods w INNER JOIN store s on w.store_id =s.id
-		where 1=1
+		where w.state=2
 		<if test="appId !=null and appId !=''">
 			and w.app_id=#{appId}
 		</if>
