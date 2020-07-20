@@ -85,6 +85,10 @@
             param.push(item.id)
           }
         })
+        if(param.length==0){
+          this.$message.error("请至少选择一个");
+          return false
+        }
         this.listLoading = true;
         this.api({
           url: "/index/addIndexClass",
