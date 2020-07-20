@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.GoodsDao;
+import com.heeexy.example.dao.OrderLogDao;
+import com.heeexy.example.util.OrderLogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +26,8 @@ public class AutoTask {
 	private OrderDao orderDao;
 	@Autowired
 	private GoodsDao goodsDao;
-
+	@Autowired
+	private OrderLogDao orderLogDao;
 	@Scheduled(cron = "0 0/30 * * * ?") // 订单取消
 	private void process() {
 		log.info("*************取消订单自动取消定时任务start***************");
@@ -46,6 +49,7 @@ public class AutoTask {
 					goodsList = (List<JSONObject>) sg.get("goodsList");
 					for (JSONObject goods : goodsList) {
 						goodsDao.addSkuCount(goods.getString("goodsId"), goods.getString("count"));
+						OrderLogUtil.inserOrderLog(sg.getString("orderId"), "系统自动",0,"取消订单",null,orderLogDao,null);
 					}
 				}
 
@@ -72,6 +76,7 @@ public class AutoTask {
 			for (OrderInfo sg : list) {// 自动收货
 				if (new Date().getTime() - sg.getDate("sendOutGoodsTime").getTime() > chaTime) {
 					orderDao.cancelOrderState(sg.getString("orderId"), 5);
+					OrderLogUtil.inserOrderLog(sg.getString("orderId"), "系统自动",5,"收货成功",null,orderLogDao,null);
 				}
 
 			}

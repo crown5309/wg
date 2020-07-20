@@ -178,7 +178,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 			orderDao.insertOrder(order);
 			JSONObject orderLog = new JSONObject();
 			orderLog.put("state", "1");
-			orderLog.put("stateName", "提交提单");
+			orderLog.put("stateName", "提交订单");
 			orderLog.put("userId", userId);
 			orderLog.put("orderId", orderId);
 			//插入订单日志
