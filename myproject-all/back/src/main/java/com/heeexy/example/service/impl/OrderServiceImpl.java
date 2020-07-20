@@ -281,7 +281,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
             //得到paySign
             String paySign = PayCommonUtil.createSign("UTF-8", packageP, key);
             packageP.put("paySign", paySign);
-            inserOrderLog(orderIds, userId,6,"下单成功",address);
+			OrderLogUtil.inserOrderLog(orderIds, userId,6,"下单成功",address,orderLogDao,addressDao);
             //
             List<OrderInfo> OrderInfoList =(List<OrderInfo>) info.get("OrderInfoList");
             List<JSONObject> goodsList=null;
@@ -308,44 +308,10 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         //将packageP数据返回给小程序
         //更新订单信息
         orderDao.updateOrderState(orderIds.split(","),did,7,addressId);
-        inserOrderLog(orderIds, userId,7,"下单失败",address);
+		OrderLogUtil.inserOrderLog(orderIds, userId,7,"下单失败",address,orderLogDao,addressDao);
 		return CommonUtil.errorJson(map.get("return_msg").toString());
 	}
 
-	private void inserOrderLog(String orderIds, String userId,int state,String stateName,JSONObject address) {
-		List<JSONObject> orderLogList=new ArrayList<JSONObject>();//需要插入的订单日志集合
-		JSONObject orderLog=null;
-		List<JSONObject> orderAddressList=new ArrayList<JSONObject>();//需要插入的订单日志集合
-		JSONObject orderAddress=null;
-		for(String s:orderIds.split(",")) {
-			orderLog=new JSONObject();
-			orderLog.put("state", state);
-			orderLog.put("stateName", stateName);
-			orderLog.put("userId", userId);
-			orderLog.put("orderId", s);
-			orderLogList.add(orderLog);
-			if(address!=null) {
-				orderAddress=new JSONObject();
-				orderAddress.put("name", address.get("name"));
-				orderAddress.put("province", address.get("province"));
-				orderAddress.put("city", address.get("city"));
-				orderAddress.put("country", address.get("country"));
-				orderAddress.put("detail", address.get("detail"));
-				orderAddress.put("userId", address.get("userId"));
-				orderAddress.put("telephone", address.get("telephone"));
-				orderAddress.put("orderId", s);
-				orderAddressList.add(orderAddress);
-			}
-	
-		}
-        //订单日志
-		 orderLogDao.insertOrderLogBatch(orderLogList);
-		 //
-		 if(address!=null) {
-			 addressDao.insertOrderAddressBatch(orderAddressList); 
-		 }
-		
-	}
 
 	private JSONObject getOrderInfoByIds(String orderIds) {
 		 Session session = SecurityUtils.getSubject().getSession(); JSONObject
@@ -464,9 +430,10 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 		// TODO Auto-generated method stub
 		//获取orderId 集合
 		 List<String> list=orderDao.getOrderIdsByOutTradeNo(out_trade_no);
-	
-		inserOrderLog(StringUtils.join(list, ","), "0",2,"支付成功",null);
-		
+		Session session = SecurityUtils.getSubject().getSession(); JSONObject
+				userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		String userId =userInfo.getString("userId");
+		OrderLogUtil.inserOrderLog(StringUtils.join(list, ","), userId,2,"支付成功",null,orderLogDao,addressDao);
 	     orderDao.updateByOutTradeNo(out_trade_no,state);
 	}
 

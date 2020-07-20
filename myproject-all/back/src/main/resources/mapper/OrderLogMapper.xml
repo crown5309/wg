@@ -4,24 +4,26 @@
 <mapper namespace="com.heeexy.example.dao.OrderLogDao">
 	<insert id="insertOrderLogBatch" parameterType="java.util.List" useGeneratedKeys="false">
     			insert into shop_order_log
-    			(state,state_name,user_id)
+    			(state,state_name,user_id,order_id)
     			values
     			<foreach collection="list" item="item" index="index" separator=",">
     				(
     					#{item.state},
     					#{item.stateName},
-    					#{item.userId}
+    					#{item.userId},
+    					#{orderId}
     				)
     		     </foreach>		
     </insert>    
     <insert id="insertOrderLog" parameterType="com.alibaba.fastjson.JSONObject" >
     			insert into shop_order_log
-    			(state,state_name,user_id)
+    			(state,state_name,user_id,order_id)
     			values
     				(
     					#{state},
     					#{stateName},
-    					#{userId}
+    					#{userId},
+    					#{orderId}
     				)	
     </insert>
 </mapper>

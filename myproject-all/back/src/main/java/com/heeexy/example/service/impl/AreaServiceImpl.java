@@ -3,8 +3,14 @@ package com.heeexy.example.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.config.redis.RedisClient;
 import com.heeexy.example.dao.ArticleDao;
+import com.heeexy.example.dao.OrderLogDao;
 import com.heeexy.example.service.AreaService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.OrderLogUtil;
+import com.heeexy.example.util.constants.Constants;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +29,8 @@ public class AreaServiceImpl implements AreaService {
 	private ArticleDao articleDao;
 	@Autowired
 	private RedisClient redisClient;
-
+	@Autowired
+	private OrderLogDao orderLogDao;
 	/**
 	 * 新增文章
 	 */
@@ -31,6 +38,9 @@ public class AreaServiceImpl implements AreaService {
 	@Transactional(rollbackFor = Exception.class)
 	public JSONObject addArticle(JSONObject jsonObject) {
 		articleDao.addArticle(jsonObject);
+		Session session = SecurityUtils.getSubject().getSession(); JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
+		String userId =userInfo.getString("userId");
+		OrderLogUtil.inserOrderLog(jsonObject.getString("orderId"), userId,3,"发货成功",null,orderLogDao,null);
 		return CommonUtil.successJson();
 	}
 
