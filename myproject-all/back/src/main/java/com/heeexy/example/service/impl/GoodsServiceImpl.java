@@ -38,7 +38,7 @@ public class GoodsServiceImpl  extends BaseService implements GoodsService{
 			split = list.get(i).getString("bannerUrl").split(",");
 			list.get(i).put("bannerUrl",split);
 			list.get(i).put("imageurl",split[0]);
-		list.get(i).put("isSelect",false);
+			list.get(i).put("isSelect",false);
 		}
 		return list;
 	}
