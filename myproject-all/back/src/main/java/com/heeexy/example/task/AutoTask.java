@@ -1,6 +1,7 @@
 package com.heeexy.example.task;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -95,27 +96,32 @@ public class AutoTask {
 	/**
 	 * 图片资源删除定时任务
 	 */
+	//@Scheduled(cron = "0/5 * * * * * ")
 	@Scheduled(cron = "0 0 3 * * ? ")
 	private void deleteAllImg() {
-		File file = null;
-		List<JSONObject> list = null;
+		File file = null;//文件
+		List<JSONObject> list = null;//数据集合
+		List<Integer> ids = new ArrayList<>();//删除的数据集合
 		JSONObject json=new JSONObject();
 		json.put("pageNo", 0);
 		json.put("pageSize", 100);
 		json.put("state", 0);
-		int count = imgPathDao.countImgByState(1);
+		int count = imgPathDao.countImgByState(1);//总共数量
 		int rate = (int) Math.ceil(count /json.getDoubleValue("pageSize"));
 		for (int i = 0; i < rate; i++) {
-			json.put("pageNo",i*json.getIntValue("pageSize"));
-			list=imgPathDao.getImgByState(json);
+			json.put("pageNo",i*json.getIntValue("pageSize"));//分页参数
+			list=imgPathDao.getImgByState(json);//数据集合查询
 			for (JSONObject sg : list) {
-				String img = imgPath+sg.getString("img_id");
+				String img = imgPath+sg.getString("img_id");//文件路径
 				file=new File(img);// 读取
-				if(file.delete()) {
-					imgPathDao.deleteByImgId(sg.getIntValue("id"));
+				if(file.delete()) {//删除
+					ids.add(sg.getIntValue("id"));//加入删除的数据集合
 				}
 			}
 
+		}
+		if(ids.size()>0){//删除的数据集合长度大于0
+			imgPathDao.deleteBatch(ids);//批量删除
 		}
 
 	}

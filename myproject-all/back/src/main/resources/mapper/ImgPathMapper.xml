@@ -24,7 +24,10 @@
     <select id="getImgByState" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
       select img_id,id from img_path where  state=#{state} limit #{pageNo},#{pageSize}
     </select>
-    <delete id="deleteByImgId">
-        delete from img_path where id=#{id}
+    <delete id="deleteBatch">
+        delete from img_path where id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </delete>
 </mapper>

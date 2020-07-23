@@ -16,5 +16,5 @@ public interface ImgPathDao {
 
     List<JSONObject> getImgByState(JSONObject json);
 
-    void deleteByImgId(int id);
+    void deleteBatch(@Param("ids")List<Integer> ids);
 }
