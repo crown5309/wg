@@ -3,7 +3,10 @@ package com.heeexy.example.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.heeexy.example.dao.ImgPathDao;
+import com.heeexy.example.util.ImgPathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -11,11 +14,17 @@ import com.heeexy.example.dao.GoodsClassDao;
 import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.goodsClassService;
 import com.heeexy.example.util.CommonUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class goodsClassServiceImpl extends BaseService implements goodsClassService {
 	@Autowired
 	private GoodsClassDao goodsClassDao;
+
+	@Autowired
+	private ImgPathDao imgPathDao;
+	@Value("${imgServerUrl}")
+	private String imgServerUrl;
 
 	@Override
 	public JSONObject listGoodsClass(JSONObject request2Json) {
@@ -30,16 +39,23 @@ public class goodsClassServiceImpl extends BaseService implements goodsClassServ
 	}
 
 	@Override
+	@Transactional
 	public JSONObject addGoodsClass(JSONObject requestJson) {
 		getAppId(requestJson);
 		goodsClassDao.addGoodsClass(requestJson);
+		String classImgUrl = requestJson.getString("classImgUrl");
+		ImgPathUtils.updateImgPath(classImgUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 
 	@Override
+	@Transactional
 	public JSONObject updateGoodsClass(JSONObject requestJson) {
 		// TODO Auto-generated method stub
 		goodsClassDao.updateGoodsClass(requestJson);
+		//关联图片
+		String classImgUrl = requestJson.getString("classImgUrl");
+		ImgPathUtils.updateImgPath(classImgUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 

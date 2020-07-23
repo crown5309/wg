@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.heeexy.example.dao.ImgPathDao;
+import com.heeexy.example.util.ImgPathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -15,17 +18,28 @@ import com.heeexy.example.service.BaseService;
 import com.heeexy.example.service.GoodsService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.DateUtil;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class GoodsServiceImpl  extends BaseService implements GoodsService{
 	@Autowired
 	private GoodsDao goodsDao;
 	@Autowired
 	private GoodsClassDao goodsClassDao;
+	@Autowired
+	private ImgPathDao imgPathDao;
+	@Value("${imgServerUrl}")
+	private String imgServerUrl;
 	@Override
+	@Transactional
 	public Object addGoods(JSONObject request2Json) {
 		// TODO Auto-generated method stub
 		getAppId(request2Json);
 		goodsDao.addGoods(request2Json);
+		String bannerUrl = request2Json.getString("bannerUrl");
+		ImgPathUtils.updateImgPath(bannerUrl,imgPathDao,1,imgServerUrl);
+		String detailUrl = request2Json.getString("detailUrl");
+		ImgPathUtils.updateImgPath(detailUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 	@Override
@@ -80,9 +94,15 @@ public class GoodsServiceImpl  extends BaseService implements GoodsService{
 		return successPage;
 	}
 	@Override
+	@Transactional
 	public JSONObject updateGoods(JSONObject jsonObject) {
 		// TODO Auto-generated method stub
 		goodsDao.updateGoods(jsonObject);
+		//关联关联图片
+		String bannerUrl1 = jsonObject.getString("bannerUrl");
+		ImgPathUtils.updateImgPath(bannerUrl1,imgPathDao,1,imgServerUrl);
+		String detailUrl1 = jsonObject.getString("detailUrl");
+		ImgPathUtils.updateImgPath(detailUrl1,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 

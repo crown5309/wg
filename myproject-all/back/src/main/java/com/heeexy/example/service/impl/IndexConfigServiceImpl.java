@@ -5,9 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.heeexy.example.dao.ImgPathDao;
+import com.heeexy.example.service.ImgPathService;
+import com.heeexy.example.util.ImgPathUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,13 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 	private GoodsClassDao goodsClassDao;
 	@Autowired
 	private GoodsDao goodsDao;
+
+	@Autowired
+	private ImgPathDao imgPathDao;
+	@Autowired
+	private ImgPathService imgPathService;
+	@Value("${imgServerUrl}")
+	private String imgServerUrl;
 	@Override
 	public List<JSONObject> listIndexConfig(JSONObject request2Json) {
 		// TODO Auto-generated method stubrequest2Json
@@ -170,6 +181,7 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 	}
 
 	@Override
+	@Transactional
 	public JSONObject addBanner(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		String showOrder = request.getParameter("showOrder");
@@ -184,11 +196,13 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
 		userInfo.put("showOrder", showOrder);
 		userInfo.put("imgUrl", imgUrl);
+		ImgPathUtils.updateImgPath(imgUrl,imgPathDao,1,imgServerUrl);
 		indexConfigDao.addBanner(userInfo);
 		return CommonUtil.successJson();
 	}
 
 	@Override
+	@Transactional
 	public JSONObject updateBanner(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		String showOrder = request.getParameter("showOrder");
@@ -204,14 +218,16 @@ public class IndexConfigServiceImpl implements IndexConfigService {
 		userInfo.put("showOrder", showOrder);
 		userInfo.put("imgUrl", imgUrl);
 		userInfo.put("id", request.getParameter("id"));
+		ImgPathUtils.updateImgPath(imgUrl,imgPathDao,1,imgServerUrl);
 		indexConfigDao.updateBanner(userInfo);
 		return CommonUtil.successJson();
 	}
 
 	@Override
-	public JSONObject deleteBanner(String id) {
+	public JSONObject deleteBanner(String id,String oldImg) {
 		// TODO Auto-generated method stub
 		indexConfigDao.deleteBanner(id);
+		imgPathService.addImgPath(null,oldImg,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 

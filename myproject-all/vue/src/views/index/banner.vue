@@ -33,7 +33,8 @@
           </el-input>
         </el-form-item>
         <el-form-item label="图片">
-          <el-upload class="avatar-uploader" action="" :show-file-list="false" :before-upload="beforeAvatarUpload" :on-change="upload">
+          <el-upload class="avatar-uploader" action="" :show-file-list="false"
+            :auto-upload="false" :before-upload="beforeAvatarUpload" :on-change="upload">
             <img v-if="goodsClass.imgUrl" :src="goodsClass.imgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -179,7 +180,10 @@
           _vue.api({
             url: "/index/deleteBanner",
             method: "post",
-            params: this.deId
+            params: {
+              id:user.id,
+              oldImg:user.imgUrl
+            }
           }).then(() => {
             _vue.getList()
           }).catch(() => {
@@ -190,7 +194,9 @@
       upload(e) {
         console.log(e)
         let formData1 = new FormData();
-        formData1.append("file", e.raw)
+        let oldImg=this.goodsClass.imgUrl
+        formData1.append("file",  e.raw)
+        formData1.append("oldImg",  oldImg)
         this.api({
           url: "/uploadimg",
           method: "post",

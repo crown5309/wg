@@ -383,8 +383,10 @@
         })
       },
       upload(e) {
+        console.log(e)
         let formData1 = new FormData();
-        formData1.append("file", e.raw)
+        formData1.append("file", e.raw);
+        let oldImg=
         this.listLoading = true;
         this.api({
           url: "/uploadimg",
@@ -420,11 +422,33 @@
       },
       //删除图片的方法
       delimgback(i) {
+        this.api({
+          url: "/updateImg",
+          method: "post",
+          params: {oldImg:this.imgsback[i]},
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then((data) => {
+          
+        })
         this.imgsback.splice(i, 1)
+        
       },
       //删除图片的方法
       delimgback1(i) {
+        this.api({
+          url: "/updateImg",
+          method: "post",
+          params: {oldImg:this.imgsback1[i]},
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then((data) => {
+          
+        })
         this.imgsback1.splice(i, 1)
+    
       },
       getClassIndex() { //获取所选商品分类的下标，回显小程序
         let classArray = this.goods.classId

@@ -28,7 +28,7 @@ public interface IndexConfigService {
 
 	JSONObject updateBanner(HttpServletRequest request);
 
-	JSONObject deleteBanner(String id);
+	JSONObject deleteBanner(String id,String oldImg);
 
 	Object listIndexGoods(String appId, String classId, int pageNo, int pageSize);
 

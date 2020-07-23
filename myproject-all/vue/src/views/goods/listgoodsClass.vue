@@ -208,7 +208,9 @@
       },
       upload(e) {
         let formData1 = new FormData();
+        let oldImg=this.goodsClass.classImgUrl
         formData1.append("file",  e.raw)
+        formData1.append("oldImg",  oldImg)
         this.api({
           url: "/uploadimg",
           method: "post",

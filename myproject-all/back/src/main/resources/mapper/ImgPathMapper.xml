@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.ImgPathDao">
+
+    <insert id="addImgPath" parameterType="com.alibaba.fastjson.JSONObject">
+       insert into img_path(img_id,state) values(#{imgId},#{state})
+    </insert>
+    <update id="updateImgPath" parameterType="com.alibaba.fastjson.JSONObject">
+       update  img_path set state = #{state} where img_id=#{imgId}
+    </update>
+    <update id="updateImgPathBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            update img_path
+            <set>
+                state=#{item.state}
+            </set>
+            where  img_id=#{item.imgId}
+        </foreach>
+    </update>
+    <select id="countImgByState" resultType="int">
+        select count(1) from img_path where state=#{state}
+    </select>
+    <select id="getImgByState" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+      select img_id,id from img_path where  state=#{state} limit #{pageNo},#{pageSize}
+    </select>
+    <delete id="deleteByImgId">
+        delete from img_path where id=#{id}
+    </delete>
+</mapper>

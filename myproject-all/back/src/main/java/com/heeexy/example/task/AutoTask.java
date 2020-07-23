@@ -1,13 +1,16 @@
 package com.heeexy.example.task;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.GoodsDao;
+import com.heeexy.example.dao.ImgPathDao;
 import com.heeexy.example.dao.OrderLogDao;
 import com.heeexy.example.util.OrderLogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,10 @@ public class AutoTask {
 	private GoodsDao goodsDao;
 	@Autowired
 	private OrderLogDao orderLogDao;
+	@Autowired
+	private ImgPathDao imgPathDao;
+	@Value("${imgPath}")
+	private String imgPath;
 	@Scheduled(cron = "0 0/30 * * * ?") // 订单取消
 	private void process() {
 		log.info("*************取消订单自动取消定时任务start***************");
@@ -84,5 +91,28 @@ public class AutoTask {
 		}
 		log.info("*************取消订单自动收货定时任务结束***************");
 	}
+	@Scheduled(cron = "0 0 03 * * ? ")
+	private void deleteAllImg() {
+		File file = null;
+		List<JSONObject> list = null;
+		JSONObject json=new JSONObject();
+		json.put("pageNo", 0);
+		json.put("pageSize", 100);
+		json.put("state", 0);
+		int count = imgPathDao.countImgByState(1);
+		int rate = (int) Math.ceil(count /json.getDoubleValue("pageSize"));
+		for (int i = 0; i < rate; i++) {
+			json.put("pageNo",i*json.getIntValue("pageSize"));
+			list=imgPathDao.getImgByState(json);
+			for (JSONObject sg : list) {
+				String img = imgPath+sg.getString("img_id");
+				file=new File(img);// 读取
+				if(file.delete()) {
+					imgPathDao.deleteByImgId(sg.getIntValue("id"));
+				}
+			}
 
+		}
+
+	}
 }

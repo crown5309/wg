@@ -72,7 +72,7 @@ public class IndexClassController {
 	}
 	@RequiresPermissions("banner:delete")
 	@RequestMapping("/deleteBanner")
-	public JSONObject deleteBanner(String  id) {
-		return indexConfigService.deleteBanner(id);
+	public JSONObject deleteBanner(String  id,String oldImg) {
+		return indexConfigService.deleteBanner(id,oldImg);
 	}
 }

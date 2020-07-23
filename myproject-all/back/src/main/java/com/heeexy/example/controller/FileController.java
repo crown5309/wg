@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.heeexy.example.service.ImgPathService;
+import com.sun.deploy.nativesandbox.comm.Request;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +29,8 @@ public class FileController {
 	private String imgPath;
 	@Value("${imgServerUrl}")
 	private String imgServerUrl;
+	@Autowired
+	private ImgPathService imgPathService;
 	@RequestMapping(value="/uploadimg", method = RequestMethod.POST)
     public @ResponseBody JSONObject uploadImg(@RequestParam("file") MultipartFile[] file,
             HttpServletRequest request) {
@@ -36,7 +41,7 @@ public class FileController {
 		String url = scheme+"://"+serverName+":"+serverPort+contextPath;//http://127.0.0.1:8080/test
 		List<String> fiList=new ArrayList<String>();
 		for(MultipartFile f:file) {
-			 String contentType = f.getContentType();
+			    String contentType = f.getContentType();
 		        String fileName = f.getOriginalFilename();
 		        String format = DateUtil.format(new Date(), "yyyMMdd")+"/";
 				String filePath = imgPath+format;
@@ -44,6 +49,7 @@ public class FileController {
 		        try {
 					uploadFile(f.getBytes(), filePath,substring);
 					fiList.add(imgServerUrl+"/img"+"/"+format+substring);
+					imgPathService.addImgPath(format+substring, request.getParameter("oldImg"),imgServerUrl);
 		        } catch (Exception e) {
 		            // TODO: handle exception
 		        }
@@ -52,6 +58,12 @@ public class FileController {
         //返回json
         return CommonUtil.successJson(fiList);
     }
+	@RequestMapping(value="/updateImg", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject updateImg(String oldImg) {
+		imgPathService.addImgPath(null,oldImg,imgServerUrl);
+		return CommonUtil.successJson();
+	}
 	public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception { 
         File targetFile = new File(filePath);  
         if(!targetFile.exists()){    
