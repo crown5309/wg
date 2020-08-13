@@ -1,0 +1,743 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="renderer" content="webkit">
+<meta name="force-rendering" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<script type="text/javascript"
+	src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="js/jSoup.min.js"></script>
+<style>
+.swipslider {
+	position: relative;
+	overflow: hidden;
+	display: block;
+	/*padding-top: 60%;*/
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	height: 160px;
+}
+
+.swipslider .sw-slides {
+	display: block;
+	padding: 0;
+	list-style: none;
+	width: 100%;
+	height: 100%;
+	white-space: nowrap;
+	font-size: 0;
+	-webkit-transform: translateX(0);
+	transform: translateX(0);
+	position: absolute;
+	bottom: 0;
+}
+
+.swipslider .sw-slide {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+	display: inline-block;
+	position: relative;
+}
+
+.swipslider .sw-slide>a>img {
+	width: 94%;
+	height: 90%;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	max-height: 100%;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.swipslider .sw-slide .sw-content {
+	width: 100%;
+	height: 100%;
+	margin-left: 0;
+	margin-right: 0;
+	font-size: 14px;
+}
+
+.sw-next-prev {
+	display: none;
+	font-family: "Courier New", Courier, monospace;
+	height: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;
+	line-height: 50px;
+	font-size: 30px;
+	font-weight: bolder;
+	color: rgba(160, 160, 160, 0.53);
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	background-color: rgba(255, 255, 255, 0);
+	border-radius: 50%;
+	text-decoration: none;
+	transition: all .2s ease-out;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.sw-next-prev:hover {
+	background-color: rgba(255, 255, 255, 0.74);
+}
+
+.sw-next-prev:active {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.sw-prev {
+	left: 2%;
+}
+
+.sw-prev::after {
+	content: '<';
+}
+
+.sw-next {
+	right: 2%;
+}
+
+.sw-next::after {
+	content: '>';
+}
+
+.sw-bullet {
+	/*display: none;
+    position: absolute;
+    bottom: 2%;*/
+	list-style: none;
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	margin-top: 135px;
+}
+
+.sw-bullet li {
+	width: 8px;
+	height: 8px;
+	background-color: rgba(160, 160, 160, 0.53);
+	border-radius: 50%;
+	display: inline-block;
+	cursor: pointer;
+	transition: all .2s ease-out;
+}
+
+.sw-bullet li:hover {
+	background-color: rgba(255, 255, 255, 0.74);
+}
+
+.sw-bullet li.active {
+	background-color: rgba(255, 255, 255, 0.5);
+	box-shadow: 0 0 2px rgba(160, 160, 160, 0.53);
+}
+
+.sw-bullet li:not (:last-child ) {
+	margin-right: 5px;
+}
+</style>
+<script type="text/javascript"
+	src="js/common.js?v=666"></script>
+	<script type="text/javascript"
+			src="js/1.js?v=666"></script>
+<script type="text/javascript"
+	src="js/swipeslider.js?v=666"></script>
+<script type="text/javascript"
+	src="js/scrollLoad.js?v=666"></script>
+<link rel="icon" type="image/x-icon"
+	href="images/favicon.ico">
+<link rel="stylesheet" type="text/css"
+	href="css/common.css?v=666">
+<link rel="stylesheet" type="text/css"
+	href="css/banner.css">
+<link rel="stylesheet" type="text/css"
+	href="css/style.css?v=666">
+<!-- <script type="text/javascript"
+	src="js/index.js?v=123"></script> -->
+<style>
+.topMc {
+	width: 40px;
+	position: fixed;
+	margin-left: 86%;
+	bottom: 8%;
+}
+
+.topLogo {
+	width: 50px;
+	position: fixed;
+	margin-left: 4%;
+	bottom: 45%;
+}
+</style>
+<style>
+body, p {
+	margin: 0;
+	padding: 0;
+}
+
+.concent {
+	width: 100%;
+	max-width: 640px;
+	background: #fff;
+	font-size: 0.9rem;
+	border-top: 1px solid #eee;
+	text-align: center;
+}
+
+.box {
+	white-space: nowrap;
+	overflow-x: auto;
+	background: #fff;
+}
+
+.box::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	display: none;
+}
+
+.box div {
+	list-style: none;
+	display: inline-block;
+	width: auto;
+	line-height: 2.5rem;
+	text-align: center;
+	height: 2.5rem;
+	margin-right: 10px;
+	margin-left: 10px;
+	color: #333;
+}
+
+.box p {
+	width: 100%;
+	height: 50px;
+	background: pink;
+}
+
+.filter {
+	float: left;
+	width: 33.33%;
+	text-align: center;
+	color: #666;
+	font-size: 0.9rem;
+	font-weight: bold;
+}
+
+.chooseBtn {
+	color: #df3033;
+}
+/*清除边距*/
+div,ul,li{
+	margin: 0;
+	padding: 0;
+}
+
+/*首先准备一个放图片的容器*/
+.container1{
+	position: relative;
+	height: 160px;
+	/*border: 1px solid #ccc;*/
+}
+
+/*图片样式*/
+.container1 img{
+	position: absolute;        /*把所有图片放在同一个位置*/
+	width: 100%;
+	transition-duration: 1s;    /*设置过渡时间*/
+	opacity: 0;                /*把所有图片变透明*/
+}
+/*图片显示开关*/
+.container1 img.on{
+	opacity: 1;                /*用于显示图片*/
+}
+
+/*左右按钮 按钮用图片更好点,这里为了简便就用大于小于号*/
+.left, .right{
+	position: absolute;
+	top: 30%;
+	width: 53px;
+	height: 36px;
+	line-height: 36px;
+	/* line-height: 100px; */
+	background-color: #666;
+	opacity: 0.5;
+	/* text-align: center; */
+	font-size: 54px;
+	color: #ccc;
+	 display: none;
+	cursor: pointer;
+}
+.left{
+	left: 0;
+}
+.right{
+	right: 0;
+}
+.container1:hover .left, .container:hover .right{
+	display: block;            /*鼠标悬停才容器范围内时显示按钮*/
+}
+.left:hover, .right:hover{
+	color: #fff;
+}
+
+/*焦点*/
+.container1 ul{
+	position: absolute;
+	position: absolute;
+	bottom: 5px;
+	margin: auto;
+	left: 35%;
+}
+.container1 ul li{
+	list-style: none;
+	float: left;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin-left: 10px;
+	background-color: #ccc;
+	cursor: pointer;
+}
+.container1 ul li.active{
+	background-color: #fff;        /*焦点激活时的样式*/
+}
+
+</style>
+<title>品质家电 乐享生活</title>
+</head>
+<body>
+	<img src="/images/618.jpg" class="topLogo hidden" id="jd618"
+		onclick="topJDMarket()">
+	<img src="images/top_mc.png" id="top"
+		class="topMc hidden" onclick="topNow()">
+	<div class="headerbox">
+		<div class="header">
+			<div class="headerC0" style="width: 94%;">
+				<div class="ssdiv">
+					<img src="images/ssss.png" class="newSS"
+						onclick="topNow()"> <input id="keyWord" type="text" value=""
+						placeholder="请输入您要搜索的内容" style="color: #333;"> <img
+						src="images/sss_button.png"
+						style="float: right; border-left: 1px solid darkgray;"
+						onclick="searchTheProduct()">
+				</div>
+			</div>
+		</div>
+	</div>
+	<article class="container">
+		<section>
+			<figure id="full_feature" class="swipslider"
+				style="padding-top: 0px;">
+				<div class="container1" >
+					<!-- 图片 -->
+					<!-- 先把第一张图片显示出来 -->
+					<div id="container1">
+
+					</div>
+					<!-- 左右按钮 -->
+					<div class="left"><</div>
+					<div class="right">></div>
+
+					<!-- 焦点 -->
+					<ul id="focus">
+					</ul>
+				</div>
+				<span class="sw-next-prev sw-next"></span>
+				<span class="sw-next-prev sw-prev"></span>
+			</figure>
+		</section>
+	</article>
+	<div id="data">
+		<div id="js">
+			<div class="hotTit">
+				<div class="hotTitL">
+					<img src="images/hotit.png">
+				</div>
+				<div class="hotTitR">
+					<strong style="font-size: 0.85rem;" id="noticeMsg">8.10卡萨帝，海尔品牌日！！！</strong>
+				</div>
+			</div>
+			<div class="typeNav">
+				<ul id="menuList">
+					<li><a href="/pages/autoBuy.html" target="_blank"><img
+							src="images/zyg.png">
+						<p>券享购</p></a></li>
+					<li><a href="/pages/act.html" target="_blank"><img
+							src="images/rmmc.png">
+						<p>热门卖场</p></a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="concent" style="position: static; top: 3.2rem;">
+			<div class="box" id="category" style="background: white;">
+				<div>
+					<b id="filter_1" title="737,794,798" onclick="filterProduct(this)">平板电视</b>
+				</div>
+				<div>
+					<b id="filter_2" title="737,794,878" onclick="filterProduct(this)"
+						>冰箱</b>
+				</div>
+				<div>
+					<b id="filter_3" title="737,794,880" onclick="filterProduct(this)">洗衣机</b>
+				</div>
+				<div>
+					<b id="filter_4" title="737,13297,1300"
+						onclick="filterProduct(this)">油烟机</b>
+				</div>
+				<div>
+					<b id="filter_5" title="737,794,870" onclick="filterProduct(this)">空调</b>
+				</div>
+				<div>
+					<b id="filter_6" title="737,13297,13298"
+						onclick="filterProduct(this)">燃气灶</b>
+				</div>
+				<div>
+					<b id="filter_7" title="737,13297,13881"
+						onclick="filterProduct(this)">集成灶</b>
+				</div>
+				<div>
+					<b id="filter_8" title="737,13297,13691"
+						onclick="filterProduct(this)">燃气热水器</b>
+				</div>
+				<div>
+					<b id="filter_9" title="737,13297,13690"
+						onclick="filterProduct(this)">电热水器</b>
+				</div>
+				<div>
+					<b id="filter_10" title="737,794,12392"
+						onclick="filterProduct(this)">冷柜/冰吧</b>
+				</div>
+				<div>
+					<b id="filter_11" title="cfxd" onclick="filterProduct(this)">厨房小电</b>
+				</div>
+				<div>
+					<b id="filter_12" title="shdq" onclick="filterProduct(this)">生活电器</b>
+				</div>
+			</div>
+		</div>
+		<div class="likeTit"
+			style="width: 100%; position: static; background: white; top: 5.7rem;">
+			<span> <img src="/images/heart.png"
+				style="margin-left: 0.5rem; margin-left: 0.3rem; margin-top: -0.2rem;">
+				<strong id="wx">专业代下 帮您省钱</strong>
+			</span> <span style="float: right"> <!--<img id="switchMode"
+				src="images/tb.png"
+				style="height: 1.8rem; float: right; margin-right: 0.5rem;"
+				onclick="switchMode(this)">--> <img id="switchPrice"
+				src="images/sort.png"
+				style="height: 1.8rem; margin-right: 1rem; float: right;"
+				onclick="switchPrice(this)"> <img id="switchSale"
+				src="images/sale_on.png"
+				style="height: 1.8rem; margin-right: 1rem; float: right;"
+				onclick="switchSale(this)">
+			</span>
+		</div>
+		<div class="likebox">
+			<ul id="itemList" class="hidden">
+				<li style="width: 100%;"><a href="https://u.jd.com/z8Q5dh"
+					target="_blank"><p class="itemTit">容声(Ronshen) 529升 对开门冰箱
+							矢量双变频 纤薄机身 风冷无霜 节能静音 沐光金 BCD-529WD11HP</p>
+						<p class="itemPrice">
+							￥2669<span>京东价￥3299</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/kDRJ4n"
+					target="_blank"><p class="itemTit">美的(Midea)638升 对开门冰箱
+							智能双变频无霜 一级能效 雷达感温 电冰箱 芙蓉金 BCD-638WKPZM(E)</p>
+						<p class="itemPrice">
+							￥3539<span>京东价￥4099</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/lfNfoO"
+					target="_blank"><p class="itemTit">美的(Midea) 213升
+							节能静音家用三门小冰箱 阳光米 BCD-213TM(E)</p>
+						<p class="itemPrice">
+							￥1349<span>京东价￥1699</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/Mo8Vra"
+					target="_blank"><p class="itemTit">美的(Midea)226升 风冷无霜
+							电脑控温三门冰箱 中门宽幅变温 芙蓉金 BCD-226WTM(E)</p>
+						<p class="itemPrice">
+							￥1749<span>京东价￥2099</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/h9LHPE"
+					target="_blank"><p class="itemTit">TCL 205升 三门电冰箱 中门宽幅变温
+							小型冰箱 节能养鲜 冰箱小型便捷 环保内胆（星空银） BCD-205TF1</p>
+						<p class="itemPrice">
+							￥989<span>京东价￥1199</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/V90sKQ"
+					target="_blank"><p class="itemTit">美菱(MELING) 359升 多门四门冰箱
+							双变频风冷无霜 彩晶玻璃面板 法式多门电冰箱 BCD-359WPBX</p>
+						<p class="itemPrice">
+							￥3169<span>京东价￥3799</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/oYHGcH"
+					target="_blank"><p class="itemTit">云米（VIOMI）456升大容量
+							风冷无霜家用对开门大冰箱 智能WIFI操控 静音保鲜 BCD-456WMSD</p>
+						<p class="itemPrice">
+							￥1849<span>京东价￥2199</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/9XXWlr"
+					target="_blank"><p class="itemTit">美的(Midea)190升 家用双门冰箱
+							节能静音 持久锁冷 HIPS环保内胆 阳光米 BCD-190CM(E)</p>
+						<p class="itemPrice">
+							￥1119<span>京东价￥1399</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/kmlh9H"
+					target="_blank"><p class="itemTit">容声(Ronshen) 217升 小型三门冰箱
+							中门软冷冻 静音节能 家用租房电冰箱 璀璨金 BCD-217D11N</p>
+						<p class="itemPrice">
+							￥1119<span>京东价￥1399</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/21XtRH"
+					target="_blank"><p class="itemTit">美菱(MELING)569升 对开门冰箱
+							一级能效 变频节能风冷无霜 双门大空间分储 玫瑰金 BCD-569WPCX</p>
+						<p class="itemPrice">
+							￥2849<span>京东价￥3999</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/DgKbxg"
+					target="_blank"><p class="itemTit">统帅（Leader）海尔出品
+							206升小型三门冰箱 雅韵白时尚外观 007软冷冻 BCD-206LSTPF</p>
+						<p class="itemPrice">
+							￥1059<span>京东价￥1299</span>
+						</p></a></li>
+				<li style="width: 100%;"><a href="https://u.jd.com/Ybuqhn"
+					target="_blank"><p class="itemTit">海尔 （Haier）160升风冷无霜 两门冰箱
+							DEO保鲜 大冷冻家用小型冰箱宿舍租房小巧不占地方 BCD-160WDPT</p>
+						<p class="itemPrice">
+							￥1259<span>京东价￥1399</span>
+						</p></a></li>
+			</ul>
+			<ul id="listMsg" class="">
+				
+			</ul>
+			<ul id="emptyMsg" class="hidden">
+				<li style="width: 100%;"><img
+					src="images/empty.jpg" class="proimg"
+					style="margin-left: 25%; width: 50%; height: 50%"></li>
+			</ul>
+			<div id="loading"></div>
+		</div>
+		<div class="space">苏ICP备20011968号</div>
+	</div>
+
+	<script>
+		var pageSize=10;
+		var pageNo=1;
+		var keyword=''
+		var key=''
+		var flag=true
+		window.onload=function(){
+			 var mydiv=document.getElementById("filter_1");
+	          //修改类选择
+	          mydiv.className="chooseBtn";
+	          getBanner();
+	          getProduction();
+
+		}
+		function filterProduct(option){
+			flag=false
+			pageNo=1
+			keyword=''
+			for(var i=1;i<13;i++){
+				var mydiv=document.getElementById("filter_"+i);
+		          //修改类选择
+		          mydiv.className="";
+			}
+			option.className='chooseBtn';
+			$("#listMsg").html("")
+			key=option.id
+			getProduction(option.id,'');
+		}
+		function getBanner(){
+			$.ajax({
+				//请求方式
+				type : "get",
+				//请求的媒体类型
+				contentType: "application/json;charset=UTF-8",
+				//请求地址
+				url : "/index/getBanner",
+				//数据，json字符串
+				//请求成功
+				success : function(result) {
+					var html=""
+					var ul=""
+					for(var i=0;i<result.length;i++){
+						if(i==0){
+							html=html+'<a href='+result[i].jingdong_link+'><img class="on"  class="" src='+result[i].img_url+' /></a>'
+							ul=ul+'<li class="active"></li>'
+						}else{
+							html=html+'<a href='+result[i].jingdong_link+'><img   class="" src='+result[i].img_url+' /></a>'
+							ul=ul+'<li></li>'
+						}
+
+					}
+					$("#container1").append(html)
+					$("#focus").append(ul)
+				},
+				//请求失败，包含具体的错误信息
+				error : function(e){
+					console.log(e.status);
+					console.log(e.responseText);
+				}
+			});
+		}
+		function searchTheProduct(){
+			flag=false
+			pageNo=1
+			for(var i=1;i<13;i++){
+				var mydiv=document.getElementById("filter_"+i);
+		          //修改类选择
+		          mydiv.className="";
+			}
+			keyword=$("#keyWord").val()
+			if(keyword==''){
+				alert('请输入搜索内容')
+			}else{
+				$("#listMsg").html("")
+				getProduction('',keyword);
+			}
+		}
+		function getProduction(key,value){
+			  $.ajax({
+		            //请求方式
+		            type : "get",
+		            //请求的媒体类型
+		            contentType: "application/json;charset=UTF-8",
+		            //请求地址
+		            url : "/index/getProduct",
+		            //数据，json字符串
+		            data :{
+		            	pageNo:pageNo,
+		            	pageSize:10,
+		            	type:key,
+						keyword:value
+		            },
+		            //请求成功
+		            success : function(result) {
+		            	if(result.length==0){
+							flag=false
+						}
+		            	$("#loading").attr("style","dispaly:none")
+		            	var html=""
+		               for(var i=0;i<result.length;i++){
+		            	    html=html+'<li><a href='+result[i].jingdong_link+ 'target="_blank">'+
+							 '<img class="proimg" src='+result[i].img_url+'>'+
+							 '<p class="tit">'+result[i].title+'</p></a>'+
+						     '<p class="price">￥'+result[i].price+'<span>京东价￥'+result[i].jingdong_price+'</span></p>'+
+							 '<div class="ig" ><img src="images/sku.png" data-clipboard-text='+result[i].sku+' class="copySku"></div>'+
+							 '<div class="ig"><img src="images/copy.png"'+
+							 'data-clipboard-text='+"\""+result[i].text+"\""+
+							 'class="copySkuInfo"></div></li>' 
+		               }
+		            	$("#listMsg").append(html)
+		            },
+		            //请求失败，包含具体的错误信息
+		            error : function(e){
+		                console.log(e.status);
+		                console.log(e.responseText);
+		            }
+		        });
+			
+		}
+		var clipboard = new ClipboardJS('.ig img',{
+			text: function(trigger) {
+				console.log(trigger)
+				alert("复制成功！"+trigger.getAttribute('data-clipboard-text'));
+				return trigger.getAttribute('data-clipboard-text');
+			}
+		});
+		var btnLeft = document.querySelector('.container .left');
+		var btnRight = document.querySelector('.container .right');
+		//1、找到container下的所有img标签,li标签,左右按钮
+
+		// //检验是否找到
+		// console.log(aImgs);
+		// console.log(aLis);
+		// console.log(btnLeft);
+		// console.log(btnRight);
+
+		//点击事件
+		//点击按钮图片切换
+		var index = 0;        //当前图片下标
+		var lastIndex = 0;
+		btnRight.onclick = function(){
+			right()
+		}
+		function right(){
+			var aImgs = document.querySelectorAll('.container img');
+			var aLis = document.querySelectorAll('.container li');
+
+			//记录上一张图片的下标
+			lastIndex = index;
+			//清除上一张图片的样式
+			aImgs[lastIndex].className = '';
+			aLis[lastIndex].className = '';
+
+			index++;
+			index %= aImgs.length;    //实现周期性变化
+			//设置当前图片的样式
+			aImgs[index].className = 'on';
+			aLis[index].className = 'active';
+		}
+		//左边按钮类似
+		btnLeft.onclick = function(){
+			var aImgs = document.querySelectorAll('.container img');
+			var aLis = document.querySelectorAll('.container li');
+
+			//记录上一张图片的下标
+			lastIndex = index;
+			//清除上一张图片的样式
+			aImgs[lastIndex].className = '';
+			aLis[lastIndex].className = '';
+
+			index--;
+			if (index < 0) {
+				index = aImgs.length - 1;
+			}
+			//设置当前图片的样式
+			aImgs[index].className = 'on';
+			aLis[index].className = 'active';
+		}
+		// 定时器，间隔3s切换图片
+		setInterval("right()", 3000);
+		$(window).scroll(function () {
+			if ($(document).scrollTop() > 0 && ($(document).scrollTop() + $(window).height() + 100 >= $(document).height())) {
+				if(flag){
+					pageNo++;
+					getProduction(key,keyword)
+				}
+
+			}
+		});
+	</script>
+	<div id="loading"
+		style="position: absolute; border-radius: 8px; width: 30%; height: 60px; top: 459px; margin-left: 35%; text-align: center; display: none;">
+		<img style="width: 30px; margin-top: 14px;"
+			src="/images/loading_new.gif">
+	</div>
+</body>
+</html>

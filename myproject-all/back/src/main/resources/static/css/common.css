@@ -1,0 +1,111 @@
+
+.space {
+    background: white;
+    text-align: center;
+    height: 5rem;
+    line-height: 5rem;
+    color: black;
+    font-size: 0.75rem
+}
+
+.spaceTrend {
+    background: white;
+    text-align: center;
+    height: 2rem;
+    line-height: 2rem;
+    color: black;
+    font-size: 0.75rem;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -55.5px
+}
+
+.choose {
+    background: lightblue;
+}
+
+.hidden {
+    display: none;
+}
+
+.newSS {
+    margin-top: 0.22rem;
+    max-height: 80%;
+    margin-left: 0.22rem;
+}
+
+.copySku {
+
+}
+
+.trend {
+
+}
+
+.copySkuInfo {
+
+}
+
+.ig {
+    display: table;
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+
+.ig img {
+    margin: auto;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+.zy {
+    color: #fff;
+    margin-right: 0.2rem;
+    background: #e4393c;
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: 0.85rem;
+}
+.ms {
+    color: #e4393c;
+    margin-right: 0.2rem;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    border: 1px solid;
+}
+.menu {
+    overflow: hidden;
+    padding: 3.5rem 0 0.3rem 0;
+    background: #f9f9f9;
+}
+
+.menu ul {
+    overflow: hidden;
+}
+
+.menu ul li {
+    width: 16.66%;
+    float: left;
+    text-align: center;
+    /*margin-top: 0.1rem;*/
+}
+
+.menu ul li img {
+    width: 35%;
+    display: block;
+    margin: 5px auto;
+}
+
+.menu ul li p {
+    color: #666666;
+    text-align: center;
+    font-family: "PingFang SC Regular";
+}
+
+ul li {
+    list-style: none;
+}

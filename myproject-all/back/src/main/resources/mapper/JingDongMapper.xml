@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.JingDongDao">
+	<select id="getProduct" resultType="java.util.Map">
+		select * from jingdong_product 
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				title like concat('%',keyword,'%')
+			</if>
+			<if test="type!=null and type!=''">
+				type =#{type}
+			</if>
+		</where>
+		limit #{pageNo},#{pageSize}
+	</select>
+	<select id="getBanner" resultType="java.util.Map">
+		select * from jingdong_banner order by sort
+	</select>
+	<select id="countGoods" resultType="Integer">
+		SELECT count(0)
+		FROM jingdong_product
+	</select>
+	<select id="listGoods" resultType="com.alibaba.fastjson.JSONObject">
+		SELECT *,
+		img_url  imgUrl
+		FROM jingdong_product w
+		LIMIT #{offSet}, #{pageRow}
+	</select>
+	<insert id="addgoods" parameterType="com.alibaba.fastjson.JSONObject">
+		INSERT INTO jingdong_product(title,price,jingdong_price,sku,img_url,jingdong_link,`type`) VALUES (#{title},#{price},#{jingdong_price},#{sku},#{img_url},#{jingdong_link},#{type})
+	</insert>
+	<update id="updategoods"  parameterType="com.alibaba.fastjson.JSONObject">
+		update jingdong_product set title=#{title},price=#{price},jingdong_price=#{jingdong_price},sku=#{sku},img_url=#{img_url},
+		jingdong_link=#{jingdong_link},type=#{type} where id=#{id}
+	</update>
+	<delete id="deletegoods">
+		delete from jingdong_product where id=#{id}
+	</delete>
+	<select id="countMyBanner" resultType="Integer">
+		SELECT count(0)
+		FROM jingdong_banner
+	</select>
+	<select id="listMyBanner" resultType="com.alibaba.fastjson.JSONObject">
+		SELECT *,
+		img_url  imgUrl
+		FROM jingdong_banner w
+		LIMIT #{offSet}, #{pageRow}
+	</select>
+	<insert id="addMyBanner" parameterType="com.alibaba.fastjson.JSONObject">
+		INSERT INTO jingdong_banner(img_url,jingdong_link,show_order) VALUES (#{img_url},#{jingdong_link},#{show_order})
+	</insert>
+	<update id="updateMyBanner"  parameterType="com.alibaba.fastjson.JSONObject">
+		update jingdong_banner set img_url=#{img_url},
+		jingdong_link=#{jingdong_link},show_order=#{show_order} where id=#{id}
+	</update>
+	<delete id="deleteMyBanner">
+		delete from jingdong_banner where id=#{id}
+	</delete>
+</mapper>

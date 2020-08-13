@@ -164,5 +164,28 @@ export const asyncRouterMap = [
        },
     ]
   },
+  {
+    path: '/jingdong',
+    component: Layout,
+    redirect: '/jingdong/',
+    name: '',
+    meta: {title: '京东', icon: 'sys'},
+    children: [
+       {
+         path: 'jingdong',
+         name: '京东商品',
+         component: _import('jingdong/product'),
+         meta: {title: '京东商品', icon: 'sys_param'},
+         menu: 'jingdong'
+       },
+       {
+         path: 'banner',
+         name: 'banner',
+         component: _import('jingdong/banner'),
+         meta: {title: 'banner', icon: 'sys_param'},
+         menu: 'banner'
+       },
+    ]
+  },
   {path: '*', redirect: '/404', hidden: true}
 ]

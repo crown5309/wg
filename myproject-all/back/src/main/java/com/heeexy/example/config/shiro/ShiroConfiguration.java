@@ -52,6 +52,9 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/user/auth", "anon");
 		filterChainDefinitionMap.put("/uploadimg", "anon");
 		filterChainDefinitionMap.put("/img/**", "anon");
+		filterChainDefinitionMap.put("/js/**", "anon");
+		filterChainDefinitionMap.put("/css/**", "anon");
+		filterChainDefinitionMap.put("/images/**", "anon");
 		filterChainDefinitionMap.put("/front/getGoodsById", "anon");
 		filterChainDefinitionMap.put("/front/getAllGoodsClass", "anon");
 		filterChainDefinitionMap.put("/user/getPathCode", "anon");

@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.heeexy.example.service.ImgPathService;
-import com.sun.deploy.nativesandbox.comm.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.service.ImgPathService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.DateUtil;
 import com.heeexy.example.util.OrderIdFactory;
