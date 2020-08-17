@@ -106,7 +106,7 @@ public class AutoTask {
 		json.put("pageNo", 0);
 		json.put("pageSize", 100);
 		json.put("state", 0);
-		int count = imgPathDao.countImgByState(1);//总共数量
+		int count = imgPathDao.countImgByState(0);//总共数量
 		int rate = (int) Math.ceil(count /json.getDoubleValue("pageSize"));
 		for (int i = 0; i < rate; i++) {
 			json.put("pageNo",i*json.getIntValue("pageSize"));//分页参数
