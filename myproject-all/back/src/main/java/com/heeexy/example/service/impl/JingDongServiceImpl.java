@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.ImgPathDao;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.ImgPathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.heeexy.example.dao.JingDongDao;
@@ -15,6 +18,11 @@ import com.heeexy.example.service.JingDongService;
 public class JingDongServiceImpl implements JingDongService {
 	@Autowired
 	private JingDongDao jingDongDao;
+	@Autowired
+	private ImgPathDao imgPathDao;
+
+	@Value("${imgServerUrl}")
+	private String imgServerUrl;
 	private static  Map<String,Object> map=new HashMap<>();
 	static {
 		map.put("filter_1","平板电视");
@@ -62,12 +70,16 @@ public class JingDongServiceImpl implements JingDongService {
 	@Override
 	public JSONObject addgoods(JSONObject requestJson) {
 		jingDongDao.addgoods(requestJson);
+		String classImgUrl = requestJson.getString("img_url");
+		ImgPathUtils.updateImgPath(classImgUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 
 	@Override
 	public JSONObject updategoods(JSONObject requestJson) {
 		jingDongDao.updategoods(requestJson);
+		String classImgUrl = requestJson.getString("img_url");
+		ImgPathUtils.updateImgPath(classImgUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 
@@ -91,12 +103,16 @@ public class JingDongServiceImpl implements JingDongService {
 	@Override
 	public JSONObject addMyBanner(JSONObject requestJson) {
 		jingDongDao.addMyBanner(requestJson);
+		String classImgUrl = requestJson.getString("img_url");
+		ImgPathUtils.updateImgPath(classImgUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 
 	@Override
 	public JSONObject updateMyBanner(JSONObject requestJson) {
 		jingDongDao.updateMyBanner(requestJson);
+		String classImgUrl = requestJson.getString("img_url");
+		ImgPathUtils.updateImgPath(classImgUrl,imgPathDao,1,imgServerUrl);
 		return CommonUtil.successJson();
 	}
 

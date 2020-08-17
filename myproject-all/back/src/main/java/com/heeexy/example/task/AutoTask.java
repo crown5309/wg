@@ -91,12 +91,12 @@ public class AutoTask {
 			
 		}
 		log.info("*************取消订单自动收货定时任务结束***************");
-	}
+}
 
 	/**
 	 * 图片资源删除定时任务
 	 */
-	//@Scheduled(cron = "0/5 * * * * * ")
+	//@Scheduled(cron = "0/20 * * * * * ")
 	@Scheduled(cron = "0 0 3 * * ? ")
 	private void deleteAllImg() {
 		File file = null;//文件

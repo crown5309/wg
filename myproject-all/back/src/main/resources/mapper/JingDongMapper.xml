@@ -15,7 +15,7 @@
 		limit #{pageNo},#{pageSize}
 	</select>
 	<select id="getBanner" resultType="java.util.Map">
-		select * from jingdong_banner order by sort
+		select * from jingdong_banner order by show_order
 	</select>
 	<select id="countGoods" resultType="Integer">
 		SELECT count(0)
